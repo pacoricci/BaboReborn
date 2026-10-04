@@ -5,7 +5,8 @@ for module responsibilities and [deployment](../deployment/DEPLOYMENT.md) for ho
 
 ## Prerequisites
 
-- Node.js matching [package.json](../../package.json); Docker builds use Node 24.
+- Node.js 24 or newer, as declared in [package.json](../../package.json).
+  CI and Docker builds use Node 24; `@types/node` follows that minimum runtime.
 - Go matching [go.mod](../../go.mod).
 - Make, a POSIX shell, `curl`, and `rg` (ripgrep).
 - PostgreSQL tools on `PATH`: `initdb`, `pg_ctl`, `psql`, `createdb`, `pg_dump`,
@@ -25,6 +26,10 @@ make dev
 `make setup` installs dependencies, quality tools, and Git hooks; use
 `make dependencies` to omit hooks. Linux runners may also need Playwright's system
 dependencies.
+
+Dependabot updates Babylon core and loaders together. Node type major updates are
+handled with the minimum runtime, CI, and Docker versions; minor and patch type
+updates remain automatic.
 
 The pre-commit hook checks the staged snapshot: formatting, lint, typecheck,
 `npm test` for non-documentation changes, and Go tests without the race detector

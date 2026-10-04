@@ -9,6 +9,14 @@ updates:
     directories:
       - /
       - /scripts/checks
+    groups:
+      babylonjs:
+        patterns:
+          - '@babylonjs/*'
+    # Node type majors follow the minimum runtime, upgraded with CI and Docker.
+    ignore:
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
