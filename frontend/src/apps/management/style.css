@@ -1,0 +1,760 @@
+.management {
+  margin: 0;
+  min-height: 100dvh;
+  overflow: auto;
+  background: #141619;
+  color: var(--text);
+  font:
+    17px/1.45 'Barlow Condensed',
+    sans-serif;
+}
+.management *,
+.management *::before,
+.management *::after {
+  box-sizing: border-box;
+}
+.management [hidden] {
+  display: none !important;
+}
+.management :is(h2, h3, button, .button) {
+  text-transform: none;
+  letter-spacing: normal;
+}
+.management :where(a) {
+  color: inherit;
+}
+.management :is(button, input, select):disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.management :is(a, button, input, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid #ffa3a3;
+  outline-offset: 3px;
+}
+.management .management-main {
+  padding: 24px 0 48px;
+}
+.management .back-link {
+  display: inline-block;
+  color: var(--muted);
+  margin: 0;
+  font-size: 16px;
+  text-decoration: none;
+}
+.management .management-heading,
+.management .panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 16px;
+}
+.management .server-heading {
+  justify-content: flex-start;
+}
+.management .server-heading > div {
+  min-width: 0;
+  border-left: 1px solid var(--line);
+  padding-left: 16px;
+}
+.management .server-heading .back-link {
+  flex-shrink: 0;
+}
+.management .management-heading h1 {
+  margin: 0;
+  font:
+    40px/1.2 Anton,
+    sans-serif;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.management .eyebrow {
+  margin: 0 0 2px;
+  color: var(--muted);
+  font:
+    600 14px/1.5 'Barlow Condensed',
+    sans-serif;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.management h2 {
+  margin: 0;
+  font:
+    26px/1.25 Anton,
+    sans-serif;
+  font-weight: 400;
+}
+.management h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.management p {
+  margin: 8px 0;
+}
+.management .muted {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.4;
+}
+.management .mono,
+.management code {
+  font:
+    13px/1.5 ui-monospace,
+    monospace;
+  overflow-wrap: anywhere;
+}
+.management .error {
+  color: #ffac98;
+}
+.management .feedback {
+  margin: 12px 0;
+  padding: 10px 14px;
+  border-left: 3px solid #8aa68c;
+  background: #8aa68c10;
+  overflow-wrap: anywhere;
+}
+.management .feedback.error {
+  border-color: #ff8e72;
+  background: #ff40400b;
+}
+.management .feedback:empty {
+  display: none;
+}
+.management .state-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border: 1px solid #656764;
+  color: #d3d3ca;
+  font-size: 14px;
+  line-height: 1.4;
+  white-space: nowrap;
+  text-transform: capitalize;
+}
+.management .state-badge[data-online='true'] {
+  color: #b9d5ab;
+  border-color: #57744b;
+}
+.management .management-toolbar,
+.management .management-summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  color: var(--muted);
+}
+.management .management-toolbar > button,
+.management .management-summary > button {
+  margin-left: auto;
+}
+.management .management-toolbar label {
+  max-width: 360px;
+  flex: 1;
+}
+.management #owned-servers {
+  display: grid;
+  border-top: 1px solid var(--line);
+}
+.management .account-card.server-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px 20px;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 16px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+}
+.management .server-row h2 {
+  font-size: 24px;
+}
+.management .server-row .server-identity {
+  min-width: 0;
+}
+.management .server-row .server-identity p {
+  margin: 6px 0 0;
+  overflow-wrap: anywhere;
+}
+.management .server-row .server-detail {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  grid-column: 1 / -1;
+  margin: 0;
+}
+.management .inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.management .empty-state {
+  margin: 16px 0;
+  padding: 28px;
+  border: 1px dashed #57595a;
+  color: #c7c7c0;
+}
+.management .management-workspace {
+  min-width: 0;
+}
+.management .section-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 16px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 20px;
+}
+body.management .section-nav button {
+  border: 0;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  padding: 12px 8px;
+  color: var(--muted);
+}
+body.management .section-nav button[aria-pressed='true'] {
+  border-bottom-color: var(--accent);
+  color: var(--accent);
+}
+.management .management-panel {
+  min-width: 0;
+}
+.management .panel-heading p {
+  margin-bottom: 0;
+}
+.management .panel-heading label {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.management .table-scroll {
+  position: relative;
+  overflow-x: auto;
+}
+.management .management-table,
+.management #managed-rooms {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 17px;
+  text-align: left;
+}
+.management .management-table th,
+.management .management-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+  font-weight: 400;
+}
+.management .management-table th:first-child,
+.management .management-table td:first-child {
+  padding-left: 0;
+}
+.management .management-table th:last-child,
+.management .management-table td:last-child {
+  padding-right: 0;
+}
+.management .management-table thead th {
+  padding-top: 0;
+  color: #b8b9b7;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.management #managed-rooms th:first-child {
+  width: 28%;
+  min-width: 150px;
+}
+.management #managed-rooms td:last-child .inline-actions {
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  white-space: nowrap;
+}
+.management .management-table h3 {
+  overflow-wrap: anywhere;
+}
+.management .row-feedback {
+  font-size: 15px;
+  color: #c1d5b9;
+  max-width: 320px;
+}
+.management .row-feedback.error {
+  color: #ffac98;
+}
+.management .search-field {
+  max-width: 440px;
+  margin-bottom: 24px;
+}
+.management :is(label, #staff-content label, #room-editor label) {
+  display: grid;
+  gap: 6px;
+  font-size: 16px;
+}
+.management :is(input, select, textarea) {
+  width: 100%;
+  min-width: 0;
+  padding: 9px 12px;
+  border: 1px solid #70716f;
+  border-radius: 2px;
+  color: var(--text);
+  background: #15171a;
+  font: inherit;
+}
+.management :is(input, select, textarea):focus {
+  border-color: #f49372;
+}
+.management :is(fieldset, #room-editor fieldset) {
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+.management :is(.management-form, #staff-content .management-form) {
+  display: grid;
+  gap: 14px;
+  max-width: none;
+  margin: 0;
+}
+.management .management-form fieldset {
+  display: grid;
+  gap: 14px;
+}
+.management .management-form fieldset > button {
+  justify-self: start;
+}
+.management .field-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.management .staff-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+.management .staff-row > div {
+  margin-right: auto;
+}
+.management .staff-row code {
+  display: block;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.management #role-form {
+  padding: 24px;
+  margin-top: 32px;
+  max-width: 760px;
+  background: #202226;
+  border: 1px solid var(--line);
+}
+.management .restriction-row {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+.management .restriction-row .state-badge {
+  margin-left: 12px;
+}
+.management .activity-row {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+.management .activity-row time {
+  color: var(--muted);
+  font-size: 15px;
+}
+.management .activity-row details {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.management summary {
+  cursor: pointer;
+}
+.management dialog {
+  width: min(620px, calc(100vw - 48px));
+  max-height: calc(100dvh - 64px);
+  margin: auto;
+  padding: 28px;
+  overflow-y: auto;
+  background: #202226;
+  color: var(--text);
+  border: 1px solid #777870;
+  border-top: 3px solid var(--accent);
+  box-shadow: 0 24px 100px #0009;
+}
+.management dialog::backdrop {
+  background: #090a0dde;
+}
+.management #registry-dialog {
+  width: min(680px, calc(100vw - 48px));
+}
+.management #registry-dialog > .management-form {
+  margin-top: 24px;
+}
+.management .dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.management .maintenance {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.management .maintenance summary {
+  color: var(--muted);
+}
+.management .maintenance button {
+  margin: 10px 10px 0 0;
+}
+.management .setup-steps {
+  margin: 0;
+  padding-left: 24px;
+}
+.management .setup-steps li {
+  padding: 4px 0 4px 4px;
+}
+.management .pairing-code,
+.management .setup-command {
+  display: block;
+  padding: 16px;
+  background: #141619;
+  border: 1px solid var(--line);
+  user-select: all;
+}
+.management .confirmation-message {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.management #room-dialog {
+  width: min(980px, calc(100vw - 64px));
+  max-height: calc(100dvh - 64px);
+  padding: 0;
+  overflow: hidden;
+}
+.management #room-editor {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 68px);
+  max-width: none;
+  margin: 0;
+  gap: 0;
+}
+.management .dialog-heading {
+  flex: none;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--line);
+}
+.management .dialog-body {
+  overflow-y: auto;
+  min-height: 0;
+  padding: 20px 24px;
+}
+.management #room-editor .dialog-actions {
+  flex: none;
+  margin: 0;
+  padding: 16px 24px;
+  background: var(--panel);
+}
+.management #room-editor .room-editor-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  align-items: start;
+  gap: 24px;
+}
+.management .room-editor-grid section > :is(label, .field-pair, details) {
+  margin-top: 14px;
+}
+.management .advanced-settings {
+  padding-block: 14px;
+  border-block: 1px solid var(--line);
+}
+.management .advanced-settings label {
+  margin-top: 16px;
+}
+.management #room-editor .check-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.management .check-label input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+.management .rotation-summary,
+.management .rotation-editor {
+  padding-left: 24px;
+  border-left: 1px solid var(--line);
+}
+.management .rotation-summary h3,
+.management .rotation-editor h3 {
+  display: flex;
+  justify-content: space-between;
+}
+.management .rotation-summary small,
+.management .rotation-editor small {
+  font-size: 14px;
+  font-weight: 400;
+}
+.management .rotation-editor ol {
+  padding-left: 20px;
+}
+.management .rotation-editor li {
+  padding: 12px 0 16px 4px;
+  border-bottom: 1px solid var(--line);
+}
+.management .rotation-editor li small {
+  display: block;
+}
+.management .rotation-editor .inline-actions {
+  margin-top: 8px;
+}
+.management .rotation-editor button {
+  min-height: 32px;
+  padding: 4px 10px;
+  font-size: 15px;
+}
+.management .notice {
+  padding: 16px;
+  background: #ff404013;
+  border-left: 3px solid var(--accent);
+}
+.management .visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+@media (max-width: 1050px) {
+  .management .management-main {
+    width: calc(100% - 48px);
+  }
+  .management .management-table :is(th, td) {
+    padding-inline: 8px;
+  }
+}
+@media (max-width: 700px) {
+  .management .management-main {
+    width: calc(100% - 32px);
+  }
+  .management .management-heading {
+    align-items: start;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .management .management-heading h1 {
+    font-size: 32px;
+  }
+  .management .section-nav {
+    gap: 0 8px;
+  }
+  body.management .section-nav button {
+    padding-inline: 4px;
+    font-size: 15px;
+  }
+  .management .management-toolbar {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .management .management-toolbar label {
+    flex-basis: 100%;
+    max-width: none;
+  }
+  .management .management-toolbar > button {
+    margin-left: auto;
+  }
+  .management .account-card.server-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 14px 0;
+    gap: 12px;
+  }
+  .management .server-row > .inline-actions {
+    grid-column: 1 / -1;
+  }
+  .management .server-row > .state-badge {
+    align-self: start;
+    white-space: normal;
+    max-width: 130px;
+  }
+  .management .management-summary {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .management .panel-heading {
+    gap: 12px;
+  }
+  .management .staff-row {
+    flex-wrap: wrap;
+  }
+  .management .staff-row > div {
+    flex-basis: 100%;
+  }
+  .management .activity-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .management dialog,
+  .management #registry-dialog {
+    width: calc(100vw - 24px);
+    padding: 20px;
+    max-height: calc(100dvh - 32px);
+  }
+  .management #room-dialog {
+    width: calc(100vw - 24px);
+    max-height: calc(100dvh - 32px);
+  }
+  .management #room-editor {
+    max-height: calc(100dvh - 36px);
+  }
+  .management #room-editor .room-editor-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .management .rotation-summary,
+  .management .rotation-editor {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding: 24px 0 0;
+  }
+  .management .dialog-heading,
+  .management .dialog-body {
+    padding: 20px;
+  }
+  .management #room-editor .dialog-actions {
+    padding: 16px 20px;
+  }
+}
+
+.management .rotation-summary p {
+  overflow-wrap: anywhere;
+  line-height: 1.8;
+}
+.management .map-picker-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(240px, 1fr);
+  gap: 24px;
+}
+.management .map-catalog {
+  min-width: 0;
+}
+.management .map-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.management .map-card {
+  display: block;
+  padding: 0;
+  text-align: left;
+  min-width: 0;
+  overflow: hidden;
+  background: #141619;
+  border: 1px solid var(--line);
+}
+.management .map-card.selected {
+  border-color: var(--accent);
+}
+.management .map-preview {
+  position: relative;
+  aspect-ratio: 8 / 5;
+  background: #101215;
+}
+.management .map-preview canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.management .map-preview > span {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+.management .map-card-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+}
+.management .map-card-caption strong {
+  font-weight: 400;
+}
+.management .map-card-caption > span {
+  color: var(--accent);
+  font-size: 14px;
+}
+.management .map-picker .rotation-editor {
+  position: sticky;
+  top: 0;
+  align-self: start;
+}
+.management .rotation-position {
+  border: 0;
+  background: transparent;
+  cursor: grab;
+  text-align: left;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+.management .rotation-editor .rotation-position {
+  padding: 0;
+  font-size: 17px;
+}
+.management .rotation-editor .is-dragging {
+  opacity: 0.45;
+}
+.management .map-picker-tabs {
+  display: none;
+}
+@media (max-width: 700px) {
+  .management .map-picker-layout {
+    display: block;
+  }
+  .management .map-picker-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .management .map-picker-tabs button {
+    flex: 1;
+  }
+  .management .map-picker-tabs [aria-pressed='true'] {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .management .map-picker-layout[data-panel='catalog'] .rotation-editor,
+  .management .map-picker-layout[data-panel='rotation'] .map-catalog {
+    display: none;
+  }
+  .management .map-picker .rotation-editor {
+    position: static;
+    border: 0;
+    padding: 0;
+  }
+}

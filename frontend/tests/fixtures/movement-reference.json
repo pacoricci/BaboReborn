@@ -1,0 +1,2150 @@
+{
+  "schemaVersion": 1,
+  "reference": {
+    "repository": "BaboViolent2",
+    "url": "https://github.com/Daivuk/BaboViolent2",
+    "copyright": "Copyright 2012 bitHeads inc.",
+    "license": "GPL-3.0-or-later",
+    "notice": "../../public/licenses/BaboViolent2.txt",
+    "revision": "20acde0961966f36e14caaa680792bad5013992c",
+    "profile": "Pro + Minibot, distributed bv2.cfg, sv_serverType=1",
+    "evidence": "source-derived analytic expectations; not captured original-game replays"
+  },
+  "units": {
+    "position": "cells",
+    "velocity": "cells/second",
+    "time": "seconds",
+    "angle": "radians counterclockwise from +X"
+  },
+  "tolerances": {
+    "positionAbsolute": 0.00001,
+    "velocityAbsolute": 0.00001
+  },
+  "parameters": {
+    "movement": {
+      "acceleration": 12.5,
+      "friction": 4,
+      "maxSpeed": 3.25,
+      "radius": 0.25,
+      "bounce": 0.45,
+      "clearance": 0.05
+    },
+    "smgRecoil": 0.5
+  },
+  "randomSeed": 7291,
+  "shotGeometry": {
+    "muzzleOffset": 0,
+    "muzzleHeight": 0.5,
+    "maxDistance": 50,
+    "muzzleSide": 0,
+    "wallHeight": 0.7
+  },
+  "sources": {
+    "movement": "src/Game/PlayerUpdate.cpp:251-284,476-560,653-660",
+    "recoil": "src/Game/Weapon.cpp:289-339,369-382; src/Source/GameVar.cpp:274",
+    "aim": "src/Game/PlayerUpdate.cpp:323-345 (after controlIt)",
+    "grid": "src/Game/MapRender.cpp:464-647",
+    "clip": "src/Game/MapRender.cpp:650-759",
+    "collision-constants": "src/Game/Map.h:98-99",
+    "collision-call": "src/Game/Game.cpp:632-635"
+  },
+  "cases": [
+    {
+      "id": "axis-start-cap",
+      "derivation": "axis",
+      "sources": [
+        "movement"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4,
+        "y": 4,
+        "vx": 0,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [],
+      "segments": [
+        {
+          "ticks": 4,
+          "input": {
+            "x": 1,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4,
+            "y": 4,
+            "vx": 1.25,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 2,
+          "state": {
+            "x": 4.125,
+            "y": 4,
+            "vx": 2.1,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 3,
+          "state": {
+            "x": 4.335,
+            "y": 4,
+            "vx": 2.95,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 4,
+          "state": {
+            "x": 4.63,
+            "y": 4,
+            "vx": 3.25,
+            "vy": 0
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "axis-hold-release-60hz",
+      "derivation": "axis-closed-sum",
+      "sources": [
+        "movement"
+      ],
+      "dt": 0.016666666666666666,
+      "initial": {
+        "x": 4,
+        "y": 4,
+        "vx": 0,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [],
+      "segments": [
+        {
+          "ticks": 60,
+          "input": {
+            "x": 1,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        },
+        {
+          "ticks": 60,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 22,
+          "state": {
+            "x": 4.56875,
+            "y": 4,
+            "vx": 3.183333333333333,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 23,
+          "state": {
+            "x": 4.6218055555555555,
+            "y": 4,
+            "vx": 3.25,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 60,
+          "state": {
+            "x": 6.625972222222222,
+            "y": 4,
+            "vx": 3.25,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 109,
+          "state": {
+            "x": 7.973472222222222,
+            "y": 4,
+            "vx": 0,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 120,
+          "state": {
+            "x": 7.973472222222222,
+            "y": 4,
+            "vx": 0,
+            "vy": 0
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "axis-hold-release-120hz",
+      "derivation": "axis-closed-sum",
+      "sources": [
+        "movement"
+      ],
+      "dt": 0.008333333333333333,
+      "initial": {
+        "x": 4,
+        "y": 4,
+        "vx": 0,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [],
+      "segments": [
+        {
+          "ticks": 120,
+          "input": {
+            "x": 1,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        },
+        {
+          "ticks": 120,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 45,
+          "state": {
+            "x": 4.596597222222222,
+            "y": 4,
+            "vx": 3.220833333333333,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 46,
+          "state": {
+            "x": 4.6234375,
+            "y": 4,
+            "vx": 3.25,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 120,
+          "state": {
+            "x": 6.627604166666666,
+            "y": 4,
+            "vx": 3.25,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 218,
+          "state": {
+            "x": 7.961493055555555,
+            "y": 4,
+            "vx": 0,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 240,
+          "state": {
+            "x": 7.961493055555555,
+            "y": 4,
+            "vx": 0,
+            "vy": 0
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "axis-start-west",
+      "derivation": "axis",
+      "sources": [
+        "movement"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4,
+        "y": 4,
+        "vx": 0,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [],
+      "segments": [
+        {
+          "ticks": 2,
+          "input": {
+            "x": -1,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4,
+            "y": 4,
+            "vx": -1.25,
+            "vy": 0.0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 2,
+          "state": {
+            "x": 3.875,
+            "y": 4.0,
+            "vx": -2.1,
+            "vy": 0.0
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "axis-start-north",
+      "derivation": "axis",
+      "sources": [
+        "movement"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4,
+        "y": 4,
+        "vx": 0,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [],
+      "segments": [
+        {
+          "ticks": 2,
+          "input": {
+            "x": 0,
+            "y": 1,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4,
+            "y": 4,
+            "vx": 0.0,
+            "vy": 1.25
+          },
+          "shots": 0
+        },
+        {
+          "tick": 2,
+          "state": {
+            "x": 4.0,
+            "y": 4.125,
+            "vx": 0.0,
+            "vy": 2.1
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "axis-start-south",
+      "derivation": "axis",
+      "sources": [
+        "movement"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4,
+        "y": 4,
+        "vx": 0,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [],
+      "segments": [
+        {
+          "ticks": 2,
+          "input": {
+            "x": 0,
+            "y": -1,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4,
+            "y": 4,
+            "vx": 0.0,
+            "vy": -1.25
+          },
+          "shots": 0
+        },
+        {
+          "tick": 2,
+          "state": {
+            "x": 4.0,
+            "y": 3.875,
+            "vx": 0.0,
+            "vy": -2.1
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "release-small-velocity",
+      "derivation": "stop",
+      "sources": [
+        "movement"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4,
+        "y": 4,
+        "vx": 0.3,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [],
+      "segments": [
+        {
+          "ticks": 2,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.03,
+            "y": 4,
+            "vx": 0,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 2,
+          "state": {
+            "x": 4.03,
+            "y": 4,
+            "vx": 0,
+            "vy": 0
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "reverse-through-zero",
+      "derivation": "reverse",
+      "sources": [
+        "movement"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4,
+        "y": 4,
+        "vx": 3.25,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [],
+      "segments": [
+        {
+          "ticks": 3,
+          "input": {
+            "x": -1,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.325,
+            "y": 4,
+            "vx": 1.6,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 2,
+          "state": {
+            "x": 4.485,
+            "y": 4,
+            "vx": -0.05,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 3,
+          "state": {
+            "x": 4.48,
+            "y": 4,
+            "vx": -1.25,
+            "vy": 0
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "diagonal-start-cap",
+      "derivation": "diagonal",
+      "sources": [
+        "movement"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4,
+        "y": 4,
+        "vx": 0,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [],
+      "segments": [
+        {
+          "ticks": 3,
+          "input": {
+            "x": 1,
+            "y": 1,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4,
+            "y": 4,
+            "vx": 1.25,
+            "vy": 1.25
+          },
+          "shots": 0
+        },
+        {
+          "tick": 2,
+          "state": {
+            "x": 4.125,
+            "y": 4.125,
+            "vx": 2.217157287525381,
+            "vy": 2.217157287525381
+          },
+          "shots": 0
+        },
+        {
+          "tick": 3,
+          "state": {
+            "x": 4.346715728752538,
+            "y": 4.346715728752538,
+            "vx": 2.2980970388562794,
+            "vy": 2.2980970388562794
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "oblique-drag",
+      "derivation": "drag",
+      "sources": [
+        "movement"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4,
+        "y": 4,
+        "vx": 1.2,
+        "vy": 1.6,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.12,
+            "y": 4.16,
+            "vx": 0.96,
+            "vy": 1.28
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "recoil-rest",
+      "derivation": "recoil",
+      "sources": [
+        "movement",
+        "recoil"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4,
+        "y": 4,
+        "vx": 0,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 0,
+        "spread": 1
+      },
+      "walls": [],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": true,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4,
+            "y": 4,
+            "vx": -0.5,
+            "vy": 0
+          },
+          "shots": 1
+        }
+      ]
+    },
+    {
+      "id": "recoil-north",
+      "derivation": "recoil",
+      "sources": [
+        "movement",
+        "recoil"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4,
+        "y": 4,
+        "vx": 0,
+        "vy": 0,
+        "angle": 1.5707963267948966,
+        "cooldown": 0,
+        "spread": 1
+      },
+      "walls": [],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": true,
+            "aim": {
+              "x": 4,
+              "y": 30
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4,
+            "y": 4,
+            "vx": 0,
+            "vy": -0.5
+          },
+          "shots": 1
+        }
+      ]
+    },
+    {
+      "id": "recoil-with-forward-input",
+      "derivation": "recoil",
+      "sources": [
+        "movement",
+        "recoil"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4,
+        "y": 4,
+        "vx": 0,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 0,
+        "spread": 1
+      },
+      "walls": [],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 1,
+            "y": 0,
+            "fire": true,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4,
+            "y": 4,
+            "vx": 0.75,
+            "vy": 0
+          },
+          "shots": 1
+        }
+      ]
+    },
+    {
+      "id": "recoil-against-speed-cap",
+      "derivation": "recoil",
+      "sources": [
+        "movement",
+        "recoil"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4,
+        "y": 4,
+        "vx": -3.25,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 0,
+        "spread": 1
+      },
+      "walls": [],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": -1,
+            "y": 0,
+            "fire": true,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 3.675,
+            "y": 4,
+            "vx": -3.25,
+            "vy": 0
+          },
+          "shots": 1
+        }
+      ]
+    },
+    {
+      "id": "recoil-before-new-aim",
+      "derivation": "aim-order",
+      "sources": [
+        "movement",
+        "recoil",
+        "aim"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4,
+        "y": 4,
+        "vx": 0,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 0,
+        "spread": 1
+      },
+      "walls": [],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": true,
+            "aim": {
+              "x": 4,
+              "y": 30
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4,
+            "y": 4,
+            "vx": -0.5,
+            "vy": 0
+          },
+          "shots": 1
+        }
+      ]
+    },
+    {
+      "id": "wall-face-east",
+      "derivation": "wall-face",
+      "sources": [
+        "movement",
+        "grid",
+        "clip",
+        "collision-constants",
+        "collision-call"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4.7,
+        "y": 4.5,
+        "vx": 1,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 5,
+          "y": 4,
+          "w": 1,
+          "h": 1
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.7,
+            "y": 4.5,
+            "vx": -0.27,
+            "vy": 0
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "wall-face-west",
+      "derivation": "wall-face",
+      "sources": [
+        "movement",
+        "grid",
+        "clip",
+        "collision-constants",
+        "collision-call"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 6.3,
+        "y": 4.5,
+        "vx": -1,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 5,
+          "y": 4,
+          "w": 1,
+          "h": 1
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 6.3,
+            "y": 4.5,
+            "vx": 0.27,
+            "vy": 0
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "wall-face-north",
+      "derivation": "wall-face",
+      "sources": [
+        "movement",
+        "grid",
+        "clip",
+        "collision-constants",
+        "collision-call"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4.5,
+        "y": 4.7,
+        "vx": 0,
+        "vy": 1,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 4,
+          "y": 5,
+          "w": 1,
+          "h": 1
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.5,
+            "y": 4.7,
+            "vx": 0,
+            "vy": -0.27
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "wall-face-south",
+      "derivation": "wall-face",
+      "sources": [
+        "movement",
+        "grid",
+        "clip",
+        "collision-constants",
+        "collision-call"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4.5,
+        "y": 6.3,
+        "vx": 0,
+        "vy": -1,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 4,
+          "y": 5,
+          "w": 1,
+          "h": 1
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.5,
+            "y": 6.3,
+            "vx": 0,
+            "vy": 0.27
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "corner-previous-position",
+      "derivation": "corner-previous",
+      "sources": [
+        "movement",
+        "grid",
+        "clip",
+        "collision-constants",
+        "collision-call"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4.74,
+        "y": 4.8,
+        "vx": 1,
+        "vy": 1,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 5,
+          "y": 5,
+          "w": 1,
+          "h": 1
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.7,
+            "y": 4.9,
+            "vx": -0.32272077938642146,
+            "vy": 0.717157287525381
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "wall-rest-clearance",
+      "derivation": "wall-clip",
+      "sources": [
+        "grid",
+        "clip",
+        "collision-constants",
+        "collision-call"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4.72,
+        "y": 4.5,
+        "vx": 0,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 5,
+          "y": 4,
+          "w": 1,
+          "h": 1
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.7,
+            "y": 4.5,
+            "vx": 0,
+            "vy": 0
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "corner-previous-position-transposed",
+      "derivation": "corner-transposed",
+      "sources": [
+        "movement",
+        "grid",
+        "clip",
+        "collision-constants",
+        "collision-call"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4.8,
+        "y": 4.74,
+        "vx": 1,
+        "vy": 1,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 5,
+          "y": 5,
+          "w": 1,
+          "h": 1
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.9,
+            "y": 4.7,
+            "vx": 0.717157287525381,
+            "vy": -0.32272077938642146
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "corner-inner-two-faces",
+      "derivation": "corner-inner",
+      "sources": [
+        "movement",
+        "grid",
+        "clip",
+        "collision-constants",
+        "collision-call"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4.7,
+        "y": 4.7,
+        "vx": 1,
+        "vy": 1,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 5,
+          "y": 4,
+          "w": 1,
+          "h": 1
+        },
+        {
+          "x": 4,
+          "y": 5,
+          "w": 1,
+          "h": 1
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.7,
+            "y": 4.7,
+            "vx": -0.32272077938642146,
+            "vy": -0.32272077938642146
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "adjacent-cells-forward",
+      "derivation": "adjacent-cells",
+      "sources": [
+        "movement",
+        "grid",
+        "clip",
+        "collision-constants",
+        "collision-call"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4.7,
+        "y": 4.98,
+        "vx": 1,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 5,
+          "y": 4,
+          "w": 1,
+          "h": 1
+        },
+        {
+          "x": 5,
+          "y": 5,
+          "w": 1,
+          "h": 1
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.7,
+            "y": 4.98,
+            "vx": -0.27,
+            "vy": 0
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "adjacent-cells-reversed",
+      "derivation": "adjacent-cells",
+      "sources": [
+        "movement",
+        "grid",
+        "clip",
+        "collision-constants",
+        "collision-call"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4.7,
+        "y": 4.98,
+        "vx": 1,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 5,
+          "y": 5,
+          "w": 1,
+          "h": 1
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "w": 1,
+          "h": 1
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.7,
+            "y": 4.98,
+            "vx": -0.27,
+            "vy": 0
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "adjacent-cells-merged",
+      "derivation": "adjacent-cells",
+      "sources": [
+        "movement",
+        "grid",
+        "clip",
+        "collision-constants",
+        "collision-call"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4.7,
+        "y": 4.98,
+        "vx": 1,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 5,
+          "y": 4,
+          "w": 1,
+          "h": 2
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.7,
+            "y": 4.98,
+            "vx": -0.27,
+            "vy": 0
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "wall-leaving-clearance",
+      "derivation": "wall-leaving",
+      "sources": [
+        "movement",
+        "grid",
+        "clip",
+        "collision-constants",
+        "collision-call"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4.76,
+        "y": 4.5,
+        "vx": -0.1,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 5,
+          "y": 4,
+          "w": 1,
+          "h": 1
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.7,
+            "y": 4.5,
+            "vx": 0,
+            "vy": 0
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "wall-tangent-travel",
+      "derivation": "wall-tangent",
+      "sources": [
+        "movement",
+        "grid",
+        "clip",
+        "collision-constants",
+        "collision-call"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4.72,
+        "y": 4,
+        "vx": 0,
+        "vy": 2,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 5,
+          "y": 1,
+          "w": 1,
+          "h": 13
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 20,
+          "input": {
+            "x": 0,
+            "y": 1,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.7,
+            "y": 4.2,
+            "vx": 0,
+            "vy": 2.85
+          },
+          "shots": 0
+        },
+        {
+          "tick": 2,
+          "state": {
+            "x": 4.7,
+            "y": 4.485,
+            "vx": 0,
+            "vy": 3.25
+          },
+          "shots": 0
+        },
+        {
+          "tick": 4,
+          "state": {
+            "x": 4.7,
+            "y": 5.135,
+            "vx": 0,
+            "vy": 3.25
+          },
+          "shots": 0
+        },
+        {
+          "tick": 10,
+          "state": {
+            "x": 4.7,
+            "y": 7.085,
+            "vx": 0,
+            "vy": 3.25
+          },
+          "shots": 0
+        },
+        {
+          "tick": 20,
+          "state": {
+            "x": 4.7,
+            "y": 10.335,
+            "vx": 0,
+            "vy": 3.25
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "wall-held-input-bounces",
+      "derivation": "wall-held",
+      "sources": [
+        "movement",
+        "grid",
+        "clip",
+        "collision-constants",
+        "collision-call"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4.7,
+        "y": 4.5,
+        "vx": 1,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 5,
+          "y": 4,
+          "w": 1,
+          "h": 1
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 5,
+          "input": {
+            "x": 1,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.7,
+            "y": 4.5,
+            "vx": -0.8325,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 2,
+          "state": {
+            "x": 4.61675,
+            "y": 4.5,
+            "vx": 0.8175,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 3,
+          "state": {
+            "x": 4.6985,
+            "y": 4.5,
+            "vx": 1.6675,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 4,
+          "state": {
+            "x": 4.7,
+            "y": 4.5,
+            "vx": -1.132875,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 5,
+          "state": {
+            "x": 4.5867125,
+            "y": 4.5,
+            "vx": 0.517125,
+            "vy": 0
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "wall-cap-before-bounce",
+      "derivation": "wall-cap",
+      "sources": [
+        "movement",
+        "grid",
+        "clip",
+        "collision-constants",
+        "collision-call"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4.6,
+        "y": 4.5,
+        "vx": 3.25,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 5,
+          "y": 4,
+          "w": 1,
+          "h": 1
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 1,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.7,
+            "y": 4.5,
+            "vx": -1.4625,
+            "vy": 0
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "wall-recoil-before-contact",
+      "derivation": "wall-recoil",
+      "sources": [
+        "movement",
+        "recoil",
+        "aim",
+        "grid",
+        "clip"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4.74,
+        "y": 4.5,
+        "vx": 0.5,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 0,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 5,
+          "y": 4,
+          "w": 1,
+          "h": 1
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": true,
+            "aim": {
+              "x": 30,
+              "y": 4.5
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.7,
+            "y": 4.5,
+            "vx": -0.4,
+            "vy": 0
+          },
+          "shots": 1
+        }
+      ]
+    },
+    {
+      "id": "grid-boundary-clip",
+      "derivation": "boundary",
+      "sources": [
+        "movement",
+        "grid",
+        "clip",
+        "collision-constants",
+        "collision-call"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 0.8,
+        "y": 4,
+        "vx": 0,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 16
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 1.3,
+            "y": 4.3,
+            "vx": 0,
+            "vy": 0
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "embedded-cell-side-order",
+      "derivation": "embedded",
+      "sources": [
+        "movement",
+        "grid",
+        "clip",
+        "collision-constants",
+        "collision-call"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 5.4,
+        "y": 5.2,
+        "vx": 0,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "walls": [
+        {
+          "x": 5,
+          "y": 5,
+          "w": 1,
+          "h": 1
+        }
+      ],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 30,
+              "y": 4
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4.7,
+            "y": 4.7,
+            "vx": 0,
+            "vy": 0
+          },
+          "shots": 0
+        }
+      ]
+    },
+    {
+      "id": "recoil-turn-two-ticks",
+      "derivation": "aim-two-ticks",
+      "sources": [
+        "movement",
+        "recoil",
+        "aim"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4,
+        "y": 4,
+        "vx": 0,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 0,
+        "spread": 1
+      },
+      "walls": [],
+      "segments": [
+        {
+          "ticks": 2,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": true,
+            "aim": {
+              "x": 4,
+              "y": 30
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4,
+            "y": 4,
+            "vx": -0.5,
+            "vy": 0
+          },
+          "shots": 1
+        },
+        {
+          "tick": 2,
+          "state": {
+            "x": 3.95,
+            "y": 4,
+            "vx": -0.1,
+            "vy": -0.5
+          },
+          "shots": 2
+        }
+      ]
+    },
+    {
+      "id": "aim-then-fire-next-tick",
+      "derivation": "aim-next-tick",
+      "sources": [
+        "movement",
+        "recoil",
+        "aim"
+      ],
+      "dt": 0.1,
+      "initial": {
+        "x": 4,
+        "y": 4,
+        "vx": 0,
+        "vy": 0,
+        "angle": 0,
+        "cooldown": 0,
+        "spread": 1
+      },
+      "walls": [],
+      "segments": [
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": false,
+            "aim": {
+              "x": 4,
+              "y": 30
+            }
+          }
+        },
+        {
+          "ticks": 1,
+          "input": {
+            "x": 0,
+            "y": 0,
+            "fire": true,
+            "aim": {
+              "x": 4,
+              "y": 30
+            }
+          }
+        }
+      ],
+      "checkpoints": [
+        {
+          "tick": 1,
+          "state": {
+            "x": 4,
+            "y": 4,
+            "vx": 0,
+            "vy": 0
+          },
+          "shots": 0
+        },
+        {
+          "tick": 2,
+          "state": {
+            "x": 4,
+            "y": 4,
+            "vx": 0,
+            "vy": -0.5
+          },
+          "shots": 1
+        }
+      ]
+    }
+  ],
+  "gridBounds": {
+    "x": 0,
+    "y": 0,
+    "w": 16,
+    "h": 16
+  }
+}

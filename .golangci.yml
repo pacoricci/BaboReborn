@@ -1,0 +1,25 @@
+version: '2'
+run:
+  timeout: 5m
+linters:
+  default: none
+  enable:
+    - errcheck
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+  settings:
+    errcheck:
+      check-blank: true
+  exclusions:
+    presets: []
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      # Module imports form their own group after the standard library.
+      local-prefixes:
+        - baboreborn

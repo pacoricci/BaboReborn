@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>
+      BaboReborn · {{if .AccountPage}}Account{{else if .ManagementPage}}Manage
+      servers{{else}}Rooms{{end}}
+    </title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --accent: #ff4040;
+        --line: #f4efe526;
+        --muted: #bebbb5;
+        font-family: 'Arial Narrow', Arial, sans-serif;
+        color: #f4efe5;
+        background: #141619;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      a:hover {
+        color: var(--accent);
+      }
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 5px;
+      }
+      main {
+        width: min(1500px, calc(100% - 96px));
+        margin-inline: auto;
+      }
+      h1,
+      h2,
+      h3,
+      button,
+      .button {
+        font-family: Anton, Impact, 'Arial Narrow', sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+      }
+      main {
+        padding-block: 36px;
+      }
+      .eyebrow {
+        color: var(--muted);
+        font-size: 15px;
+        letter-spacing: 1.5px;
+        margin: 0 0 12px;
+      }
+      h1 {
+        font-size: 28px;
+        margin: 0;
+      }
+      h2 {
+        font-size: 28px;
+        margin: 0 0 14px;
+      }
+      h3 {
+        font-size: 28px;
+        margin: 0;
+      }
+      p {
+        line-height: 1.6;
+      }
+      .intro {
+        color: var(--muted);
+        font-size: 20px;
+        margin: 14px 0 32px;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      input[type='checkbox'] {
+        accent-color: var(--accent);
+      }
+      .account-card {
+        padding: 0;
+      }
+      .account-card {
+        max-width: 560px;
+        margin-top: 0;
+      }
+      .account-card > p:first-child {
+        margin-top: 0;
+      }
+      .muted {
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .account-card + .account-card {
+        margin-top: 24px;
+      }
+      code {
+        font-size: 14px;
+        overflow-wrap: anywhere;
+      }
+      details {
+        margin-top: 24px;
+        line-height: 1.6;
+      }
+      summary {
+        cursor: pointer;
+      }
+      form {
+        margin-top: 20px;
+      }
+      .notice {
+        border-left: 3px solid var(--accent);
+        padding: 12px 16px;
+        background: #202226;
+      }
+      .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: var(--accent);
+      }
+      @media (max-width: 900px) {
+        main {
+          width: calc(100% - 40px);
+        }
+      }
+      @media (max-width: 560px) {
+        .intro {
+          font-size: 16px;
+          margin: 8px 0 16px;
+        }
+        h1 {
+          font-size: 28px;
+        }
+        main {
+          padding-block: 24px;
+        }
+      }
+    </style>
+    <link rel="stylesheet" href="/assets/topbar.css" />
+    {{if .ManagementPage}}
+    <link rel="stylesheet" href="/assets/management.css" />
+    {{end}}
+    <link rel="stylesheet" href="/assets/product.css" />
+  </head>
+  <body
+    class="portal {{if .ManagementPage}}management{{end}}"
+    data-session-ended="{{and .Expired (or .SignedOut .Revoked .Deleted)}}"
+  >
+    <script type="module" src="/assets/account.js"></script>
+    <header class="product-topbar">
+      <a class="brand product-brand" href="/" aria-label="BaboReborn rooms"
+        >BABO<span>REBORN</span></a
+      >
+      <nav class="product-nav" aria-label="Main menu">
+        <a href="/">Rooms</a>
+        <a href="/character">Character</a>
+        <a href="/options">Options</a>
+      </nav>
+      <nav class="product-account" aria-label="Account and management">
+        <a href="/manage/servers" {{if .ManagementPage}}aria-current="page" {{end}}>Servers</a>
+        <a href="/account" {{if .AccountPage}}aria-current="page" {{end}}>Account</a>
+      </nav>
+    </header>
+    <main class="{{if .ManagementPage}}management-main{{end}}">
+      {{if .AccountPage}}{{template "account" .}} {{else if .ManagementPage}}{{template "management"
+      .}} {{end}}
+    </main>
+    <footer class="product-footer">
+      <nav aria-label="Legal">
+        <a href="/privacy.html">Privacy &amp; cookies</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/credits.html">Credits</a>
+      </nav>
+    </footer>
+  </body>
+</html>

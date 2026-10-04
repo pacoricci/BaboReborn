@@ -1,0 +1,38 @@
+.appearance-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 18px 0;
+  padding: 12px;
+  border: 1px solid #92918e70;
+  border-radius: 3px;
+  color: var(--text);
+  font: 13px system-ui;
+}
+.appearance-controls legend {
+  padding: 0 6px;
+}
+.appearance-controls label {
+  display: grid;
+  gap: 6px;
+}
+.appearance-controls select {
+  background: #202226;
+  color: var(--text);
+  border: 1px solid #92918e;
+  border-radius: 4px;
+  padding: 8px;
+}
+.appearance-controls input[type='color'] {
+  width: 52px;
+  height: 36px;
+  padding: 2px;
+  border: 1px solid #92918e;
+  border-radius: 4px;
+  background: #202226;
+  cursor: pointer;
+}
+.appearance-controls :focus-visible {
+  outline: 2px solid #ff4040;
+  outline-offset: 3px;
+}

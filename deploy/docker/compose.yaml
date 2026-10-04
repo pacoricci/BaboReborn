@@ -1,0 +1,90 @@
+services:
+  postgres:
+    image: postgres:17-trixie
+    restart: unless-stopped
+    stop_grace_period: 30s
+    environment:
+      POSTGRES_USER: baboreborn
+      POSTGRES_DB: baboreborn
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres-password
+    secrets: [postgres-password]
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U baboreborn -d baboreborn']
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+
+  central:
+    image: ${CENTRAL_IMAGE:-baboreborn/central:local}
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile
+      target: central
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    stop_grace_period: 15s
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs: ['/tmp:rw,noexec,nosuid,size=32m']
+    environment:
+      CENTRAL_DATABASE_URL_FILE: /run/config/database-url
+      GOOGLE_CLIENT_ID_FILE: /run/config/google-client-id
+      GOOGLE_CLIENT_SECRET_FILE: /run/config/google-client-secret
+    command:
+      - -data-dir
+      - /data
+      - -addr
+      - :8443
+      - -origin
+      - ${CENTRAL_ORIGIN:?Set CENTRAL_ORIGIN}
+      - -tls-cert
+      - /run/config/fullchain.pem
+      - -tls-key
+      - /run/config/privkey.pem
+    ports:
+      - ${CENTRAL_BIND:-0.0.0.0}:${CENTRAL_PORT:-443}:8443
+    volumes:
+      - central-data:/data
+      - type: bind
+        source: ${CENTRAL_CONFIG_DIR:-./secrets/central}
+        target: /run/config
+        read_only: true
+        bind:
+          create_host_path: false
+    healthcheck:
+      test:
+        [CMD, curl, --fail, --silent, --insecure, --max-time, '3', 'https://127.0.0.1:8443/healthz']
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+
+  server:
+    extends:
+      file: compose.server.yaml
+      service: server
+    profiles: [community]
+
+secrets:
+  postgres-password:
+    file: ${POSTGRES_PASSWORD_FILE:-./secrets/postgres-password}
+
+volumes:
+  postgres-data:
+  central-data:
+  server-data:

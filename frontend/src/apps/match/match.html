@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BaboReborn · Match</title>
+  </head>
+  <body>
+    <p id="content-status" role="status">Loading game content…</p>
+    <canvas id="game" tabindex="0" aria-label="Match arena"></canvas>
+    <div id="match-screen"></div>
+    <div id="damage-flash" aria-hidden="true"></div>
+    <div id="match-context">
+      <div id="match-clock"></div>
+      <div id="flag-status" aria-label="CTF captures" hidden>
+        <div class="flag-score" aria-label="Red team captures">
+          <span class="flag-icon flag-red" aria-hidden="true"></span>
+          <span id="red-score"></span>
+        </div>
+        <div class="flag-score" aria-label="Blue team captures">
+          <span class="flag-icon flag-blue" aria-hidden="true"></span>
+          <span id="blue-score"></span>
+        </div>
+      </div>
+    </div>
+    <ol
+      id="activity-feed"
+      aria-label="Match activity"
+      role="log"
+      aria-live="polite"
+      aria-relevant="additions"
+    ></ol>
+    <div id="kill-notice" role="status" aria-live="polite" aria-atomic="true" hidden>
+      <strong id="kill-notice-label"></strong>
+      <span id="kill-notice-victim"></span>
+    </div>
+    <canvas id="minimap" width="216" height="216" aria-label="Arena minimap"></canvas>
+    <div id="player-vitals" hidden>
+      <div id="ammo" aria-label="Ammunition">
+        <div id="ammo-primary" class="ammo-row" aria-label="Shotgun shells" hidden>
+          <img src="/icons/shotgun-rounds.svg" alt="" width="32" height="32" />
+          <span id="ammo-primary-count"></span>
+        </div>
+        <div class="ammo-row" aria-label="Grenades">
+          <img src="/icons/grenade.svg" alt="" width="32" height="32" />
+          <span id="ammo-grenade-count"></span>
+        </div>
+        <div class="ammo-row" aria-label="Molotovs">
+          <img src="/icons/molotov.svg" alt="" width="32" height="32" />
+          <span id="ammo-molotov-count"></span>
+        </div>
+      </div>
+      <div id="health-panel">
+        <span id="health"></span>
+        <div
+          id="health-meter"
+          role="meter"
+          aria-label="Health"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="100"
+        >
+          <div id="health-fill"></div>
+        </div>
+      </div>
+    </div>
+    <div
+      id="primary-reload"
+      role="progressbar"
+      aria-label="Primary weapon reloading"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="0"
+      hidden
+    >
+      <div id="primary-reload-fill"></div>
+    </div>
+    <div id="sniper-scope" aria-hidden="true" hidden></div>
+    <div id="crosshair" aria-hidden="true"></div>
+    <script type="module" src="/frontend/src/apps/match/main.ts"></script>
+  </body>
+</html>

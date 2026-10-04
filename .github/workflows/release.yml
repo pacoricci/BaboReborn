@@ -1,0 +1,88 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '24'
+      - name: Validate stable release from main
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: node scripts/release/validate.mjs "$RELEASE_TAG"
+
+  check:
+    needs: validate
+    uses: ./.github/workflows/check.yml
+
+  publish:
+    needs: [validate, check]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write
+    env:
+      RELEASE_TAG: ${{ github.ref_name }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Prepare image names and refuse an existing release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          test -n "$DOCKERHUB_USERNAME"
+          gh api --paginate "repos/$GITHUB_REPOSITORY/releases" --jq '.[].tag_name' > "$RUNNER_TEMP/release-tags"
+          if grep -Fxq "$RELEASE_TAG" "$RUNNER_TEMP/release-tags"; then
+            echo 'This release already exists; publish a new version instead.' >&2
+            exit 1
+          fi
+          version="${RELEASE_TAG#v}"
+          echo "CENTRAL_IMAGE=$DOCKERHUB_USERNAME/baboreborn-central:$version" >> "$GITHUB_ENV"
+          echo "SERVER_IMAGE=$DOCKERHUB_USERNAME/baboreborn-server:$version" >> "$GITHUB_ENV"
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      # Push the exact local images exercised by browser and persistence tests.
+      - run: make test-docker
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Push tested images and record their digests
+        run: |
+          docker push "$CENTRAL_IMAGE"
+          docker push "$SERVER_IMAGE"
+          {
+            echo "Source: $GITHUB_SHA"
+            docker image inspect "$CENTRAL_IMAGE" --format '{{index .RepoDigests 0}}'
+            docker image inspect "$SERVER_IMAGE" --format '{{index .RepoDigests 0}}'
+          } > "$RUNNER_TEMP/images.txt"
+      - name: Publish stable GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$RELEASE_TAG" "$RUNNER_TEMP/images.txt" \
+            --verify-tag --title "BaboReborn $RELEASE_TAG" \
+            --notes-file "docs/releases/${RELEASE_TAG#v}.md" --generate-notes

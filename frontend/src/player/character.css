@@ -1,0 +1,240 @@
+.profile-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 0;
+  align-items: start;
+  gap: 48px;
+}
+.profile-settings {
+  display: grid;
+  gap: 32px;
+  min-width: 0;
+}
+.profile-nickname {
+  display: grid;
+  gap: 8px;
+}
+.profile-nickname input {
+  width: min(100%, 320px);
+  box-sizing: border-box;
+}
+.profile-settings .appearance-controls {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  gap: 16px;
+}
+.profile-equipment,
+#appearance {
+  display: grid;
+  gap: 16px;
+}
+.profile-settings h2 {
+  margin: 0;
+}
+.identity-card {
+  align-self: start;
+  justify-self: center;
+  box-sizing: border-box;
+  width: min(100%, 440px);
+  text-align: center;
+  padding: 24px 16px;
+  border: 1px solid var(--line);
+  background: radial-gradient(ellipse at 50% 38%, #48403a 0, #26272a 55%, #202125 100%);
+  border-radius: 2px;
+}
+.identity-card canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 6 / 5;
+  max-width: 100%;
+  filter: drop-shadow(0 18px 12px #0007);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.identity-card canvas.dragging {
+  cursor: grabbing;
+}
+.identity-card canvas:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.preview-orbit-help {
+  margin: 0 0 16px;
+  font-size: 16px;
+}
+.preview-equipment {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+.preview-equipment strong {
+  font-size: 24px;
+  color: var(--accent);
+}
+#preview-motion {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+}
+#preview-motion svg {
+  width: 22px;
+  height: 22px;
+}
+.profile-settings .loadout {
+  display: flex;
+  gap: 16px;
+}
+.profile-settings .loadout label {
+  flex: 1;
+  min-width: 0;
+}
+.profile-settings .loadout select {
+  display: block;
+  margin-top: 8px;
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #bebbb560;
+  background: #141619;
+  border-radius: 3px;
+  color: var(--text);
+}
+@media (max-width: 850px) {
+  .profile-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+}
+@media (max-width: 600px) {
+  .profile-settings .loadout {
+    flex-direction: column;
+  }
+  .identity-card {
+    padding: 14px;
+  }
+  .identity-card canvas {
+    max-width: 400px;
+    margin-inline: auto;
+  }
+}
+
+.nickname-preview {
+  min-height: 1.5em;
+  font-size: 20px;
+  overflow-wrap: anywhere;
+}
+.nickname-advanced {
+  justify-self: start;
+}
+#nickname-editor {
+  box-sizing: border-box;
+  width: min(520px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  padding: 24px;
+  border: 1px solid var(--line);
+  color: var(--text, #edf2ef);
+  background: #17191c;
+}
+#nickname-editor::backdrop {
+  background: #000b;
+}
+#nickname-editor form {
+  display: grid;
+  gap: 16px;
+}
+#nickname-editor h2,
+#nickname-editor p {
+  margin: 0;
+}
+#nickname-editor label {
+  margin-bottom: -8px;
+}
+#nickname-editor input {
+  width: 100%;
+}
+#nickname-editor #advanced-nickname {
+  font-size: 28px;
+}
+#nickname-editor .nickname-preview {
+  padding: 12px;
+  background: #101214;
+  text-align: center;
+  font-size: 36px;
+}
+.nickname-palette {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 8px;
+}
+#nickname-editor .nickname-palette button {
+  padding: 0;
+  min-width: 0;
+  height: 44px;
+  background: var(--swatch);
+  border: 2px solid #fff4;
+}
+#nickname-editor .nickname-palette button:hover,
+#nickname-editor .nickname-palette button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.nickname-reset {
+  justify-self: start;
+}
+.nickname-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+@media (max-width: 480px) {
+  #nickname-editor {
+    padding: 20px;
+  }
+  .nickname-palette {
+    gap: 6px;
+  }
+}
+
+#nickname-editor .nickname-custom {
+  position: relative;
+  display: block;
+  margin: 0;
+  min-width: 0;
+  height: 44px;
+}
+#nickname-editor .nickname-custom input {
+  display: block;
+  box-sizing: border-box;
+  height: 100%;
+  padding: 0;
+  cursor: pointer;
+  border: 2px solid #fff4;
+  background: none;
+}
+.nickname-custom input::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.nickname-custom input::-webkit-color-swatch {
+  border: 0;
+}
+.nickname-custom input::-moz-color-swatch {
+  border: 0;
+}
+.nickname-custom span {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  font: bold 24px/1 sans-serif;
+  color: white;
+  text-shadow:
+    0 1px 3px #000,
+    0 0 3px #000;
+}

@@ -1,0 +1,12 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2022"],
+    "types": []
+  },
+  "include": [
+    "../../../frontend/src/apps/editor/model.ts",
+    "../../../frontend/src/apps/editor/application.ts",
+    "../../../frontend/src/apps/editor/play-world.ts"
+  ]
+}

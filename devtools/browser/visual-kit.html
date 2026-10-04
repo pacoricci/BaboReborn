@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Asset workshop · BaboReborn</title>
+  </head>
+  <body>
+    <header>
+      <div>
+        <span class="eyebrow">BABOREBORN / DEVELOPMENT</span>
+        <h1>Asset workshop</h1>
+      </div>
+      <nav aria-label="Development">
+        <a href="./index.html">Tools</a><a href="http://127.0.0.1:18090/">Game</a
+        ><a href="../../practice.html">Practice</a>
+      </nav>
+    </header>
+    <main>
+      <aside aria-label="Asset catalog">
+        <label for="search">Find an asset</label
+        ><input id="search" type="search" placeholder="Knives, fire, grenade…" /><label
+          for="category"
+          >Category</label
+        ><select id="category">
+          <option value="all">All categories</option></select
+        ><output id="count"></output>
+        <div id="catalog"></div>
+        <p id="empty" hidden>No assets match. Try another name or category.</p>
+      </aside>
+      <section class="workspace" aria-label="Preview workspace">
+        <div class="toolbar">
+          <div>
+            <span id="asset-category" class="eyebrow"></span>
+            <h2 id="asset-name"></h2>
+          </div>
+          <label
+            >View
+            <select id="mode">
+              <option value="model">Model · isolated</option>
+              <option value="game">In game · overhead</option>
+            </select></label
+          ><button id="compare" aria-pressed="false">Compare</button
+          ><button id="export">Export PNG</button>
+        </div>
+        <div id="stages">
+          <figure>
+            <figcaption id="caption-a">A · Selected asset</figcaption>
+            <canvas
+              id="preview"
+              tabindex="0"
+              aria-label="Selected asset preview. Drag to orbit, scroll to zoom. Arrow keys rotate; plus and minus zoom; Home frames the object."
+            ></canvas>
+            <p class="canvas-help">Drag to orbit · scroll to zoom · Home to fit</p>
+          </figure>
+          <figure id="reference" hidden>
+            <figcaption>
+              <label
+                >Reference B
+                <select id="reference-asset"></select></label
+              ><button id="pin">Copy A to B</button>
+            </figcaption>
+            <canvas id="preview-b" aria-label="Reference asset preview"></canvas
+            ><img id="reference-image" hidden alt="Imported comparison reference" /><label
+              class="import"
+              >Import reference image
+              <input id="import" type="file" accept="image/png,image/jpeg,image/webp" /></label
+            ><button id="clear-image" hidden>Use 3D reference</button>
+            <p id="reference-note">
+              Same camera angles and timeline as A; each model is fitted independently. Copy A to B
+              to preserve its skin.
+            </p>
+          </figure>
+        </div>
+        <section class="controls" aria-label="Preview controls">
+          <fieldset>
+            <legend>Camera</legend>
+            <div class="control-row">
+              <button id="fit">Frame all</button><button id="front">Front</button
+              ><button id="top">Top</button
+              ><label><input id="turn" type="checkbox" /> Turntable</label
+              ><label
+                >Zoom
+                <input id="zoom" type="range" min="0.4" max="3" step="0.05" value="1" /></label
+              ><label
+                >Background
+                <select id="background">
+                  <option value="dark">Graphite</option>
+                  <option value="light">Light</option>
+                </select></label
+              >
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend id="action-name">Animation</legend>
+            <div class="control-row">
+              <button id="play" aria-pressed="false">Play</button
+              ><button id="restart">Restart</button><button id="step">Step 1/60 s</button
+              ><label
+                >Speed
+                <select id="speed">
+                  <option value="0.1">0.1×</option>
+                  <option value="0.25">0.25×</option>
+                  <option value="0.5">0.5×</option>
+                  <option value="1" selected>1×</option>
+                </select></label
+              ><label><input id="loop" type="checkbox" checked /> Loop</label
+              ><button id="pose">Static pose</button>
+            </div>
+            <label class="timeline"
+              >Preview time
+              <input id="timeline" type="range" min="0" max="3" step="0.01" value="0" /><output
+                id="time"
+                >0.00 / 3.00 s</output
+              ></label
+            >
+            <p id="action-help"></p>
+          </fieldset>
+          <details id="skin">
+            <summary>Babo appearance</summary>
+            <div id="appearance"></div>
+          </details>
+        </section>
+        <section class="asset-info" aria-label="Asset information">
+          <div>
+            <strong id="asset-type"></strong>
+            <p id="description"></p>
+            <p id="source"></p>
+          </div>
+          <div>
+            <output id="asset-status" role="status"></output>
+            <p>Art status: provisional</p>
+            <button id="reset">Reset preview</button>
+          </div>
+        </section>
+        <details>
+          <summary>Loading details <span id="loading-summary"></span></summary>
+          <ul id="loading"></ul>
+          <button id="retry">Reload assets</button>
+        </details>
+        <p class="scope">
+          Visual inspection tool · uses the game’s assets and presentation. The 3-second timeline
+          and flight paths are illustrative, not combat simulation or performance validation. “In
+          game” uses a synthetic scene with a closer overhead camera; narrow panels show less
+          horizontal context.
+        </p>
+        <output id="notice" role="status" aria-live="polite"></output>
+      </section>
+    </main>
+    <script type="module" src="./visual-kit.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+# Allow only build inputs; never send local data, credentials or Git to the daemon.
+**
+!package.json
+!package-lock.json
+!tsconfig.json
+!go.mod
+!go.sum
+!backend/
+!backend/**
+!frontend/
+!frontend/**
+!content/
+!content/**
+!scripts/
+!deploy/
+!scripts/build/
+!scripts/build/*.mjs
+!deploy/docker/
+!deploy/docker/Dockerfile
+!deploy/docker/central-entrypoint.sh
+backend/web/dist/
+backend/web/portal/
+**/node_modules/
+**/.DS_Store

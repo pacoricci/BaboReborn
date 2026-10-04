@@ -1,0 +1,15 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2022"],
+    "types": []
+  },
+  "include": [
+    "../../../frontend/src/apps/match/session.ts",
+    "../../../frontend/src/apps/match/view.ts",
+    "../../../frontend/src/apps/match/menu-state.ts",
+    "../../../frontend/src/apps/match/screen.ts",
+    "../../../frontend/src/apps/match/lifecycle.ts",
+    "../../../frontend/src/apps/match/combat-feedback.ts"
+  ]
+}

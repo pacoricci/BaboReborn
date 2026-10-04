@@ -1,0 +1,567 @@
+{
+  "state": {
+    "capturedAtMs": 0,
+    "eventCut": 33,
+    "flags": [],
+    "match": {
+      "scores": { "blue": 0, "red": 0 },
+      "round": 1,
+      "phase": "intermission",
+      "startedTick": 0,
+      "endsTick": 100,
+      "rules": {
+        "mode": "dm",
+        "scoreLimit": 50,
+        "timeLimitTicks": 216000,
+        "respawnTicks": 120,
+        "endTicks": 1200,
+        "forceRespawn": false
+      },
+      "ranking": [
+        { "team": "none", "id": 2, "score": 9, "kills": 10, "deaths": 1 },
+        { "team": "none", "id": 1, "score": 0, "kills": 1, "deaths": 1 }
+      ]
+    },
+    "items": [
+      {
+        "motion": "fixed",
+        "motionTick": 20,
+        "position": { "x": 3, "y": 2, "z": 0.3 },
+        "velocity": { "x": 0, "y": 0, "z": 0 },
+        "expiresTick": 1000,
+        "id": 1,
+        "kind": "weapon",
+        "primary": "smg"
+      }
+    ],
+    "projectiles": [
+      {
+        "motion": "fixed",
+        "motionTick": 20,
+        "position": { "x": 21, "y": 2, "z": 0.3 },
+        "velocity": { "x": 0, "y": 0, "z": 0 },
+        "id": 20,
+        "kind": "flame",
+        "ownerId": 4,
+        "bornTick": 1,
+        "expiresTick": 500,
+        "attachedId": 0
+      },
+      {
+        "motion": "fixed",
+        "motionTick": 20,
+        "position": { "x": 3, "y": 8, "z": 0.3 },
+        "velocity": { "x": 0, "y": 0, "z": 0 },
+        "turret": { "angle": 0.75, "lastShotTick": 17 },
+        "id": 21,
+        "kind": "minibot",
+        "ownerId": 5,
+        "bornTick": 1,
+        "expiresTick": 500,
+        "attachedId": 0
+      }
+    ],
+    "type": "snapshot",
+    "version": 1,
+    "tick": 20,
+    "players": [
+      {
+        "team": "none",
+        "nickname": "Player 1",
+        "appearance": { "template": "geometric", "colors": ["#235cce", "#162c61", "#e8eef5"] },
+        "id": 1,
+        "state": {
+          "x": 2,
+          "y": 2,
+          "angle": 1.5707963267948966,
+          "cooldown": 1,
+          "equipment": {
+            "primary": "smg",
+            "secondary": "knives",
+            "shells": 0,
+            "charge": 0.25,
+            "sinceShot": 1,
+            "protection": 0,
+            "meleeDelay": 0
+          }
+        },
+        "hp": 100,
+        "status": "alive",
+        "life": 1,
+        "bornTick": 0
+      }
+    ],
+    "local": {
+      "id": 1,
+      "state": {
+        "equipment": {
+          "heat": 0.6,
+          "overheated": false,
+          "charge": 0.25,
+          "fireTime": 0,
+          "sinceShot": 1,
+          "scopeHeight": 7,
+          "rocketActive": false,
+          "rocketAge": 0,
+          "primaryAction": "",
+          "barrel": 0,
+          "secondaryActivated": false,
+          "primary": "smg",
+          "secondary": "knives",
+          "grenades": 2,
+          "molotovs": 1,
+          "shells": 0,
+          "meleeDelay": 0,
+          "throwDelay": 0,
+          "protection": 0,
+          "action": ""
+        },
+        "x": 2,
+        "y": 2,
+        "vx": 0,
+        "vy": 0,
+        "angle": 1.5707963267948966,
+        "cooldown": 1,
+        "spread": 1
+      },
+      "ack": 0,
+      "diedTick": 0,
+      "seed": 7292
+    }
+  },
+  "events": {
+    "type": "events",
+    "version": 1,
+    "tick": 20,
+    "after": 0,
+    "through": 33,
+    "events": [
+      {
+        "occurredAtMs": 0,
+        "id": 2,
+        "tick": 18,
+        "round": 1,
+        "kind": "activity",
+        "ownerId": 1,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "activity": {
+          "occurredAtMs": 0,
+          "id": 2,
+          "tick": 18,
+          "round": 1,
+          "kind": "kill",
+          "actor": { "id": 1, "nickname": "Player 1", "team": "none" },
+          "victim": { "id": 2, "nickname": "Target", "team": "none" },
+          "weapon": "smg"
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 4,
+        "tick": 18,
+        "round": 1,
+        "kind": "activity",
+        "ownerId": 2,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "activity": {
+          "occurredAtMs": 0,
+          "id": 4,
+          "tick": 18,
+          "round": 1,
+          "kind": "kill",
+          "actor": { "id": 2, "nickname": "Player 2", "team": "none" },
+          "victim": { "id": 3, "nickname": "Target", "team": "none" },
+          "weapon": "shotgun"
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 6,
+        "tick": 18,
+        "round": 1,
+        "kind": "activity",
+        "ownerId": 3,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "activity": {
+          "occurredAtMs": 0,
+          "id": 6,
+          "tick": 18,
+          "round": 1,
+          "kind": "kill",
+          "actor": { "id": 3, "nickname": "Player 3", "team": "none" },
+          "victim": { "id": 4, "nickname": "Target", "team": "none" },
+          "weapon": "dual"
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 8,
+        "tick": 18,
+        "round": 1,
+        "kind": "activity",
+        "ownerId": 4,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "activity": {
+          "occurredAtMs": 0,
+          "id": 8,
+          "tick": 18,
+          "round": 1,
+          "kind": "kill",
+          "actor": { "id": 4, "nickname": "Player 4", "team": "none" },
+          "victim": { "id": 5, "nickname": "Target", "team": "none" },
+          "weapon": "chain"
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 10,
+        "tick": 18,
+        "round": 1,
+        "kind": "activity",
+        "ownerId": 5,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "activity": {
+          "occurredAtMs": 0,
+          "id": 10,
+          "tick": 18,
+          "round": 1,
+          "kind": "kill",
+          "actor": { "id": 5, "nickname": "Player 5", "team": "none" },
+          "victim": { "id": 6, "nickname": "Target", "team": "none" },
+          "weapon": "sniper"
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 12,
+        "tick": 18,
+        "round": 1,
+        "kind": "activity",
+        "ownerId": 6,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "activity": {
+          "occurredAtMs": 0,
+          "id": 12,
+          "tick": 18,
+          "round": 1,
+          "kind": "kill",
+          "actor": { "id": 6, "nickname": "Player 6", "team": "none" },
+          "victim": { "id": 7, "nickname": "Target", "team": "none" },
+          "weapon": "bazooka"
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 14,
+        "tick": 18,
+        "round": 1,
+        "kind": "activity",
+        "ownerId": 7,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "activity": {
+          "occurredAtMs": 0,
+          "id": 14,
+          "tick": 18,
+          "round": 1,
+          "kind": "kill",
+          "actor": { "id": 7, "nickname": "Player 7", "team": "none" },
+          "victim": { "id": 8, "nickname": "Target", "team": "none" },
+          "weapon": "photon"
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 16,
+        "tick": 18,
+        "round": 1,
+        "kind": "activity",
+        "ownerId": 8,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "activity": {
+          "occurredAtMs": 0,
+          "id": 16,
+          "tick": 18,
+          "round": 1,
+          "kind": "kill",
+          "actor": { "id": 8, "nickname": "Player 8", "team": "none" },
+          "victim": { "id": 9, "nickname": "Target", "team": "none" },
+          "weapon": "flamethrower"
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 18,
+        "tick": 18,
+        "round": 1,
+        "kind": "activity",
+        "ownerId": 9,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "activity": {
+          "occurredAtMs": 0,
+          "id": 18,
+          "tick": 18,
+          "round": 1,
+          "kind": "kill",
+          "actor": { "id": 9, "nickname": "Player 9", "team": "none" },
+          "victim": { "id": 10, "nickname": "Target", "team": "none" },
+          "weapon": "smg"
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 20,
+        "tick": 18,
+        "round": 1,
+        "kind": "activity",
+        "ownerId": 10,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "activity": {
+          "occurredAtMs": 0,
+          "id": 20,
+          "tick": 18,
+          "round": 1,
+          "kind": "kill",
+          "actor": { "id": 10, "nickname": "Player 10", "team": "none" },
+          "victim": { "id": 11, "nickname": "Target", "team": "none" },
+          "weapon": "shotgun"
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 22,
+        "tick": 18,
+        "round": 1,
+        "kind": "activity",
+        "ownerId": 11,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "activity": {
+          "occurredAtMs": 0,
+          "id": 22,
+          "tick": 18,
+          "round": 1,
+          "kind": "kill",
+          "actor": { "id": 11, "nickname": "Player 11", "team": "none" },
+          "victim": { "id": 12, "nickname": "Target", "team": "none" },
+          "weapon": "dual"
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 24,
+        "tick": 18,
+        "round": 1,
+        "kind": "activity",
+        "ownerId": 12,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "activity": {
+          "occurredAtMs": 0,
+          "id": 24,
+          "tick": 18,
+          "round": 1,
+          "kind": "kill",
+          "actor": { "id": 12, "nickname": "Player 12", "team": "none" },
+          "victim": { "id": 13, "nickname": "Target", "team": "none" },
+          "weapon": "chain"
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 26,
+        "tick": 18,
+        "round": 1,
+        "kind": "activity",
+        "ownerId": 13,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "activity": {
+          "occurredAtMs": 0,
+          "id": 26,
+          "tick": 18,
+          "round": 1,
+          "kind": "kill",
+          "actor": { "id": 13, "nickname": "Player 13", "team": "none" },
+          "victim": { "id": 14, "nickname": "Target", "team": "none" },
+          "weapon": "sniper"
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 28,
+        "tick": 18,
+        "round": 1,
+        "kind": "activity",
+        "ownerId": 14,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "activity": {
+          "occurredAtMs": 0,
+          "id": 28,
+          "tick": 18,
+          "round": 1,
+          "kind": "kill",
+          "actor": { "id": 14, "nickname": "Player 14", "team": "none" },
+          "victim": { "id": 15, "nickname": "Target", "team": "none" },
+          "weapon": "bazooka"
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 30,
+        "tick": 18,
+        "round": 1,
+        "kind": "activity",
+        "ownerId": 15,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "activity": {
+          "occurredAtMs": 0,
+          "id": 30,
+          "tick": 18,
+          "round": 1,
+          "kind": "kill",
+          "actor": { "id": 15, "nickname": "Player 15", "team": "none" },
+          "victim": { "id": 16, "nickname": "Target", "team": "none" },
+          "weapon": "photon"
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 32,
+        "tick": 18,
+        "round": 1,
+        "kind": "activity",
+        "ownerId": 16,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "activity": {
+          "occurredAtMs": 0,
+          "id": 32,
+          "tick": 18,
+          "round": 1,
+          "kind": "kill",
+          "actor": { "id": 16, "nickname": "Player 16", "team": "none" },
+          "victim": { "id": 1, "nickname": "Target", "team": "none" },
+          "weapon": "flamethrower"
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 33,
+        "tick": 20,
+        "round": 1,
+        "kind": "activity",
+        "ownerId": 0,
+        "life": 0,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "activity": {
+          "occurredAtMs": 0,
+          "id": 33,
+          "tick": 20,
+          "round": 1,
+          "kind": "disconnected",
+          "actor": { "id": 2, "nickname": "Player 2", "team": "none" }
+        }
+      }
+    ],
+    "cues": [
+      {
+        "occurredAtMs": 0,
+        "id": 1,
+        "tick": 18,
+        "round": 1,
+        "kind": "shot",
+        "ownerId": 1,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "shot": {
+          "kind": "smg",
+          "from": { "x": 3, "y": 2, "z": 0.3 },
+          "to": { "x": 20, "y": 20, "z": 0.25 },
+          "killed": false
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 2,
+        "tick": 18,
+        "round": 1,
+        "kind": "explosion",
+        "ownerId": 1,
+        "life": 1,
+        "position": { "x": 3, "y": 2, "z": 0.3 },
+        "radius": 2
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 3,
+        "tick": 18,
+        "round": 1,
+        "kind": "shot",
+        "ownerId": 2,
+        "life": 1,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "shot": {
+          "kind": "shotgun",
+          "pellets": [
+            {
+              "kind": "shotgun",
+              "from": { "x": 9, "y": 2, "z": 0.3 },
+              "to": { "x": 20, "y": 20, "z": 0.25 },
+              "killed": false
+            },
+            {
+              "kind": "shotgun",
+              "from": { "x": 9, "y": 2, "z": 0.3 },
+              "to": { "x": 20.1, "y": 20, "z": 0.25 },
+              "killed": false
+            },
+            {
+              "kind": "shotgun",
+              "from": { "x": 9, "y": 2, "z": 0.3 },
+              "to": { "x": 20.2, "y": 20, "z": 0.25 },
+              "killed": false
+            },
+            {
+              "kind": "shotgun",
+              "from": { "x": 9, "y": 2, "z": 0.3 },
+              "to": { "x": 20.3, "y": 20, "z": 0.25 },
+              "killed": false
+            },
+            {
+              "kind": "shotgun",
+              "from": { "x": 9, "y": 2, "z": 0.3 },
+              "to": { "x": 20.4, "y": 20, "z": 0.25 },
+              "killed": false
+            }
+          ],
+          "from": { "x": 9, "y": 2, "z": 0.3 },
+          "to": { "x": 20, "y": 20, "z": 0.25 },
+          "killed": false
+        }
+      },
+      {
+        "occurredAtMs": 0,
+        "id": 4,
+        "tick": 18,
+        "round": 1,
+        "kind": "explosion",
+        "ownerId": 2,
+        "life": 1,
+        "position": { "x": 9, "y": 2, "z": 0.3 },
+        "radius": 2
+      }
+    ]
+  }
+}

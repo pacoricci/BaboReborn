@@ -1,0 +1,13 @@
+[
+  { "kind": "skin", "patch": { "id": "user-pattern" }, "valid": true },
+  { "kind": "skin", "patch": { "mask": "../mask.png" }, "valid": false },
+  { "kind": "skin", "patch": { "mask": "https://example.com/mask.png" }, "valid": false },
+  { "kind": "skin", "patch": { "schema": 2 }, "valid": false },
+  { "kind": "skin", "patch": { "author": null }, "valid": false },
+  { "kind": "theme", "patch": { "id": "user-theme" }, "valid": true },
+  { "kind": "theme", "patch": { "defaultMaterial": "missing" }, "valid": false },
+  { "kind": "theme", "patch": { "floorTile": 0 }, "valid": false },
+  { "kind": "theme", "patch": { "outdoorWear": null }, "valid": false },
+  { "kind": "theme", "patch": { "materials": {} }, "valid": false },
+  { "kind": "theme", "patch": { "unknown": true }, "valid": false }
+]

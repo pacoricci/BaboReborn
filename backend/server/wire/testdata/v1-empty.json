@@ -1,0 +1,39 @@
+{
+  "state": {
+    "capturedAtMs": 0,
+    "eventCut": 0,
+    "flags": [],
+    "match": {
+      "scores": { "blue": 0, "red": 0 },
+      "round": 1,
+      "phase": "playing",
+      "startedTick": 0,
+      "endsTick": 0,
+      "rules": {
+        "mode": "dm",
+        "scoreLimit": 50,
+        "timeLimitTicks": 216000,
+        "respawnTicks": 120,
+        "endTicks": 1200,
+        "forceRespawn": false
+      },
+      "ranking": []
+    },
+    "items": [],
+    "projectiles": [],
+    "type": "snapshot",
+    "version": 1,
+    "tick": 0,
+    "players": [],
+    "local": null
+  },
+  "events": {
+    "type": "events",
+    "version": 1,
+    "tick": 0,
+    "after": 0,
+    "through": 0,
+    "events": [],
+    "cues": []
+  }
+}

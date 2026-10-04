@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "author": "BaboReborn contributors",
+  "id": "futuristic",
+  "name": "Futuristic",
+  "floor": "floor.webp",
+  "floorTile": 4,
+  "defaultMaterial": "standard",
+  "background": "#18222f",
+  "groundLight": "#444d60",
+  "planFloor": "#293647",
+  "outdoorWear": false,
+  "materials": {
+    "standard": {
+      "name": "Standard",
+      "wall": "wall.webp",
+      "top": "top.webp",
+      "tile": 2,
+      "emission": 0,
+      "wallHue": 213
+    }
+  }
+}

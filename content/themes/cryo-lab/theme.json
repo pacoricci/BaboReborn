@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "author": "BaboReborn contributors",
+  "id": "cryo-lab",
+  "name": "Cryo Lab",
+  "floor": "floor.webp",
+  "floorTile": 4,
+  "defaultMaterial": "standard",
+  "background": "#141e2b",
+  "groundLight": "#536477",
+  "planFloor": "#273747",
+  "outdoorWear": false,
+  "materials": {
+    "standard": {
+      "name": "Cryogenic cladding",
+      "wall": "wall.webp",
+      "top": "top.webp",
+      "tile": 2,
+      "emission": 0.03,
+      "wallHue": 205
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "author": "BaboReborn contributors",
+  "id": "medieval",
+  "name": "Medieval",
+  "floor": "floor.webp",
+  "floorTile": 4,
+  "defaultMaterial": "standard",
+  "background": "#2c2922",
+  "groundLight": "#514b3c",
+  "planFloor": "#3b362b",
+  "outdoorWear": false,
+  "materials": {
+    "standard": {
+      "name": "Standard",
+      "wall": "wall.webp",
+      "top": "top.webp",
+      "tile": 2,
+      "emission": 0,
+      "wallHue": 38
+    }
+  }
+}

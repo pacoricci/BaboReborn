@@ -1,0 +1,442 @@
+{
+  "license": "CC0-1.0",
+  "retrieved": "2026-09-27",
+  "packs": {
+    "steam-release-sounds": {
+      "url": "https://opengameart.org/sites/default/files/steam_hisses.zip",
+      "sha256": "7dc5ae6f43ef0e9a47b8333e1e1508463cb64877ab06baa0259c643a9ab4677f",
+      "page": "https://opengameart.org/content/steam-release-sounds",
+      "author": "bart"
+    },
+    "7-mechanical-clicks-and-buzzes": {
+      "url": "https://opengameart.org/sites/default/files/mechanical.7z",
+      "sha256": "3884bdb73f6bbb852a120a21d84f0f75261031050e9a839c4ab5e3804302329f",
+      "page": "https://opengameart.org/content/7-mechanical-clicks-and-buzzes",
+      "author": "qubodup"
+    },
+    "50-cc0-sci-fi-sfx": {
+      "url": "https://opengameart.org/sites/default/files/sci-fi-sfx.zip",
+      "sha256": "7824c08e54b5b68d6c70ced9d8fe9e47f86ce19c1d8d47d093e1dc1b579f78ec",
+      "page": "https://opengameart.org/content/50-cc0-sci-fi-sfx",
+      "author": "rubberduck"
+    },
+    "space-ship-shield-sounds": {
+      "url": "https://opengameart.org/sites/default/files/space%20shield%20sounds.zip",
+      "sha256": "3d59c0dafd6934486b9d4ce1c9c6d39b96222609adc559a9409376f2d31c1385",
+      "page": "https://opengameart.org/content/space-ship-shield-sounds",
+      "author": "bart"
+    },
+    "fireplace-sound-loop": {
+      "url": "https://opengameart.org/sites/default/files/fire.wav",
+      "sha256": "85ca0cc60d0c037fff8b185e31ad1fcdbda6ce45eee17c3ee1318d1b8f59e330",
+      "page": "https://opengameart.org/content/fireplace-sound-loop",
+      "author": "PagDev"
+    },
+    "impact-sounds": {
+      "url": "https://kenney.nl/media/pages/assets/impact-sounds/87b4ddecda-1677589768/kenney_impact-sounds.zip",
+      "sha256": "029d734af1582474edf3a694d1b0cebc97c1c152f2f39fa34d4c2bafc5de77f8",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "author": "Kenney"
+    },
+    "seamless-energy-emission-loop": {
+      "url": "https://opengameart.org/sites/default/files/movingshield_sound.ogg",
+      "sha256": "a7502a3940ca3f1d0cafb81acd9cc6498c551ac5e2553bbede8c8896468b1439",
+      "page": "https://opengameart.org/content/seamless-energy-emission-loop",
+      "author": "zeroisnotnull"
+    },
+    "scrapes": {
+      "url": "https://opengameart.org/sites/default/files/scrapes.zip",
+      "sha256": "9598070ddd77ed99e922df1d4472a249624adcd945794d1b6eba88ac77f6a014",
+      "page": "https://opengameart.org/content/scrapes",
+      "author": "AntumDeluge"
+    },
+    "interface-sounds": {
+      "url": "https://kenney.nl/media/pages/assets/interface-sounds/fa43c1dd4d-1677589452/kenney_interface-sounds.zip",
+      "sha256": "f2193d072726d6758a5f7871b2dcc54dcce0d5c35c6f0a62f92549b327c81232",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "author": "Kenney"
+    },
+    "sci-fi-sounds": {
+      "url": "https://kenney.nl/media/pages/assets/sci-fi-sounds/6b296f9ecf-1677589334/kenney_sci-fi-sounds.zip",
+      "sha256": "119340f351a5098ad814f78719438c0da355a9ce8a4c8a3af6a8d48aa3d49e04",
+      "page": "https://kenney.nl/assets/sci-fi-sounds",
+      "author": "Kenney"
+    }
+  },
+  "samples": [
+    {
+      "name": "spawn",
+      "pack": "50-cc0-sci-fi-sfx",
+      "file": "unpacked/teleport_01.ogg",
+      "sha256": "88d1d00c7d9180c6afd273cf19ee047ad072c112a5e4df17e2b55c0e5c767706",
+      "seconds": 1,
+      "gain": 0.7,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "shield-end",
+      "pack": "space-ship-shield-sounds",
+      "file": "unpacked/space shield sounds - 4.wav",
+      "sha256": "be9b751a46e0abc0db851a9938dd3645d5c8e9d2eb3c02ef0a43c02d3cb0e324",
+      "seconds": 0.7,
+      "gain": 0.6,
+      "loop": false,
+      "start": 0,
+      "reverse": true
+    },
+    {
+      "name": "shield-hit",
+      "pack": "sci-fi-sounds",
+      "file": "unpacked/Audio/forceField_001.ogg",
+      "sha256": "5574e69dd04e5f59322c5ddffde5978f077b09170ae5e29cec0bd9901828cd90",
+      "seconds": 0.3,
+      "gain": 0.6,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "minibot-start",
+      "pack": "7-mechanical-clicks-and-buzzes",
+      "file": "unpacked/mechanical/mechanical_clicks-02.flac",
+      "sha256": "89cf42cb3766fe2893eaec806c8a205c0b337e7297ff526d11bbc1d2fcbd7e91",
+      "seconds": 0.7,
+      "gain": 0.6,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "minibot-end",
+      "pack": "7-mechanical-clicks-and-buzzes",
+      "file": "unpacked/mechanical/mechanical_button-01.flac",
+      "sha256": "c763eb6d5177c37c422965b47ece95cb824e795d0df3b3f83ae9ef53db161a3e",
+      "seconds": 0.5,
+      "gain": 0.5,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "chain-ready",
+      "pack": "steam-release-sounds",
+      "file": "unpacked/steam hisses - Marker #2.wav",
+      "sha256": "e0f94117729588440da6f56fec934fc637b299266556fd6a27df68a03277ef6a",
+      "seconds": 0.5,
+      "gain": 0.55,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "charge-ready",
+      "pack": "interface-sounds",
+      "file": "unpacked/Audio/confirmation_002.ogg",
+      "sha256": "33b17a9a9a2397c62b285c52c33a907fdffb476909c99e42dde603f6a7a8b12c",
+      "seconds": 0.3,
+      "gain": 0.5,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "fire-loop",
+      "pack": "fireplace-sound-loop",
+      "file": "fire.wav",
+      "sha256": "85ca0cc60d0c037fff8b185e31ad1fcdbda6ce45eee17c3ee1318d1b8f59e330",
+      "seconds": 3,
+      "gain": 0.4,
+      "loop": true,
+      "start": 2,
+      "reverse": false
+    },
+    {
+      "name": "fire-end",
+      "pack": "steam-release-sounds",
+      "file": "unpacked/steam hisses - Marker #3.wav",
+      "sha256": "f064442e7f7974f7f526f5d7dafc62015ea2d0ad7b1ca252e2841df4709ebe24",
+      "seconds": 0.4,
+      "gain": 0.35,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "roll-loop",
+      "pack": "scrapes",
+      "file": "unpacked/scrape-3.wav",
+      "sha256": "5586c252106affc44e71fcc5781bafb7c6d6d49c301b92f69a210f0d7435d508",
+      "seconds": 0.6,
+      "gain": 0.17,
+      "loop": true,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "roll-stop",
+      "pack": "scrapes",
+      "file": "unpacked/scrape-1.wav",
+      "sha256": "21075c276b96d0c602ac19e4d2235e3197bc9c35d27ed10eda4308e874125978",
+      "seconds": 0.15,
+      "gain": 0.18,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "player-impact",
+      "pack": "impact-sounds",
+      "file": "unpacked/Audio/impactSoft_heavy_000.ogg",
+      "sha256": "49e7ca88743fca974bb8676ea138b751cfd8f9033b5e7af8736c2a215d6edbc1",
+      "seconds": 0.25,
+      "gain": 0.4,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "item-impact",
+      "pack": "impact-sounds",
+      "file": "unpacked/Audio/impactMetal_light_001.ogg",
+      "sha256": "fba69c467ddd85da7b1d82e259f936b876d9ba6a3d6f1b24bdd10468e46bfe08",
+      "seconds": 0.3,
+      "gain": 0.28,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "rocket-loop",
+      "pack": "sci-fi-sounds",
+      "file": "unpacked/Audio/thrusterFire_000.ogg",
+      "sha256": "0fdc474d93f209debf1fc4ea77765a669dcb7676db31b4d8a0a509685bccf374",
+      "seconds": 1,
+      "gain": 0.4,
+      "loop": true,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "photon-loop",
+      "pack": "seamless-energy-emission-loop",
+      "file": "movingshield_sound.ogg",
+      "sha256": "a7502a3940ca3f1d0cafb81acd9cc6498c551ac5e2553bbede8c8896468b1439",
+      "seconds": 1,
+      "gain": 0.25,
+      "loop": true,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "photon-end",
+      "pack": "sci-fi-sounds",
+      "file": "unpacked/Audio/forceField_003.ogg",
+      "sha256": "15e3fe971ffd3415e5ab641d3a4d043fb31f6712b0956315b524ba29c3889cda",
+      "seconds": 0.3,
+      "gain": 0.35,
+      "loop": false,
+      "start": 0,
+      "reverse": true
+    },
+    {
+      "name": "scope-in",
+      "pack": "interface-sounds",
+      "file": "unpacked/Audio/switch_001.ogg",
+      "sha256": "3b74efad87f1e69dbd1d05c5ad952ab90859b5a3d11da6ec5bd79b4f03b42afa",
+      "seconds": 0.2,
+      "gain": 0.35,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "scope-out",
+      "pack": "interface-sounds",
+      "file": "unpacked/Audio/switch_002.ogg",
+      "sha256": "6fc395be2ad1f99ce318a5d28f98fb76dbeb676d83a0b28239d8c1fb90736180",
+      "seconds": 0.2,
+      "gain": 0.3,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "ambient-loop",
+      "pack": "50-cc0-sci-fi-sfx",
+      "file": "unpacked/loop_machine_02.ogg",
+      "sha256": "22807185e74eaf3c443b8ea57b9b26ae3f58d685958d2c5c384f44648da7a989",
+      "seconds": 3,
+      "gain": 0.08,
+      "loop": true,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "round-start",
+      "pack": "interface-sounds",
+      "file": "unpacked/Audio/maximize_003.ogg",
+      "sha256": "df16f25d45189f5d44d6a482ab20d5067350ca8525a9affa1f8ce599e31a20a5",
+      "seconds": 0.7,
+      "gain": 0.65,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "round-end",
+      "pack": "interface-sounds",
+      "file": "unpacked/Audio/minimize_003.ogg",
+      "sha256": "400e1041499de85ec8b5529a35ff36787288175c4696cf2018ecff24a3a3fd29",
+      "seconds": 0.7,
+      "gain": 0.65,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "victory",
+      "pack": "50-cc0-sci-fi-sfx",
+      "file": "unpacked/teleport_02.ogg",
+      "sha256": "1776e7df75bad4b5eacae95b9f7075a0a789fbd08f1954e7651c90ac17203e4b",
+      "seconds": 1.2,
+      "gain": 0.7,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "defeat",
+      "pack": "interface-sounds",
+      "file": "unpacked/Audio/error_008.ogg",
+      "sha256": "eba17ecb2a426bfd4a8a6acff5f8a86202b6424a77af0fd842e37809a1ab6d81",
+      "seconds": 0.8,
+      "gain": 0.6,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "pickup-grenade",
+      "pack": "interface-sounds",
+      "file": "unpacked/Audio/drop_003.ogg",
+      "sha256": "43d086d50f90493a98cd2e09aa6dbf150d164f1578e1ec768d21cb185571ad87",
+      "seconds": 0.35,
+      "gain": 0.6,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "rocket-explosion",
+      "pack": "sci-fi-sounds",
+      "file": "unpacked/Audio/explosionCrunch_003.ogg",
+      "sha256": "8c7197bb3a1c504690319c3abe0e62a5423ee246dd70caab57963d0b7aa8144f",
+      "seconds": 1.5,
+      "gain": 0.9,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "photon-impact",
+      "pack": "sci-fi-sounds",
+      "file": "unpacked/Audio/forceField_000.ogg",
+      "sha256": "c2916f2a062c8ddd1aca2826d134fe90847037db31342726ffb0f9097afe339c",
+      "seconds": 0.3,
+      "gain": 0.3,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "flame-impact",
+      "pack": "sci-fi-sounds",
+      "file": "unpacked/Audio/thrusterFire_002.ogg",
+      "sha256": "5f7731c30196d73777d62eec7cb36a28bf63852e70244057b7625b888e71a3a8",
+      "seconds": 0.2,
+      "gain": 0.2,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "ui-confirm",
+      "pack": "interface-sounds",
+      "file": "unpacked/Audio/confirmation_001.ogg",
+      "sha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+      "seconds": 0.5,
+      "gain": 0.3,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "ui-error",
+      "pack": "interface-sounds",
+      "file": "unpacked/Audio/error_001.ogg",
+      "sha256": "46e67425d16339772e8d328fb36a49426c9467418686e11beeb71ff84b0f6433",
+      "seconds": 0.5,
+      "gain": 0.3,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "ui-select",
+      "pack": "interface-sounds",
+      "file": "unpacked/Audio/click_001.ogg",
+      "sha256": "ccfb7fa0cccdd9faec0eb16033c732b1e308d139d80f799161495d58f7adcdb9",
+      "seconds": 0.5,
+      "gain": 0.3,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "ui-open",
+      "pack": "interface-sounds",
+      "file": "unpacked/Audio/open_001.ogg",
+      "sha256": "a27c6bb0df7da1e6af5dd5937593c98bc58b6e513f42fe6a3254cd6a6949c648",
+      "seconds": 0.5,
+      "gain": 0.3,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "ui-close",
+      "pack": "interface-sounds",
+      "file": "unpacked/Audio/close_001.ogg",
+      "sha256": "44af8249b933e0fd35ec957a638bb1a0b01f85b53fbe9674bf77bd3ca3168ef4",
+      "seconds": 0.5,
+      "gain": 0.3,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "connected",
+      "pack": "interface-sounds",
+      "file": "unpacked/Audio/toggle_001.ogg",
+      "sha256": "ca1d2dde5f0b286abac4f070e23edab8f30927c8a533665cdf2ac6492a415e49",
+      "seconds": 0.5,
+      "gain": 0.3,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    },
+    {
+      "name": "disconnected",
+      "pack": "interface-sounds",
+      "file": "unpacked/Audio/toggle_002.ogg",
+      "sha256": "1f564f5520cfa0764028ce245ad97599d3ece8f0ab504554c403af92ac72b900",
+      "seconds": 0.5,
+      "gain": 0.3,
+      "loop": false,
+      "start": 0,
+      "reverse": false
+    }
+  ]
+}

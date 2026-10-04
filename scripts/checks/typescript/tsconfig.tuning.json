@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.core.json",
+  "include": ["../../../frontend/src/gameconfig/tuning.ts"]
+}

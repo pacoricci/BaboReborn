@@ -1,0 +1,23 @@
+{
+  "closeCodes": {
+    "rejected": 4002,
+    "removed": 4003,
+    "roomClosed": 4004,
+    "roomFull": 1013,
+    "roomRestarted": 4001
+  },
+  "closeReasons": [
+    "room_restarted",
+    "room_closed",
+    "authentication_expired",
+    "server_removed",
+    "invalid_probe",
+    "invalid_generation",
+    "invalid_input",
+    "sanction_active",
+    "kicked",
+    "game_session_replaced",
+    "input_idle"
+  ],
+  "noticeActions": ["restart", "close", "cancelled", "permissions_changed"]
+}

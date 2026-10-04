@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "author": "BaboReborn contributors",
+  "id": "cyberpunk",
+  "name": "Cyberpunk",
+  "floor": "floor.webp",
+  "floorTile": 4,
+  "defaultMaterial": "standard",
+  "background": "#201b2e",
+  "groundLight": "#4b4059",
+  "planFloor": "#362b3e",
+  "outdoorWear": false,
+  "materials": {
+    "standard": {
+      "name": "Standard",
+      "wall": "wall.webp",
+      "top": "top.webp",
+      "tile": 2,
+      "emission": 0.08,
+      "wallHue": 183
+    }
+  }
+}

@@ -1,0 +1,18 @@
+[
+  { "patch": {}, "valid": true },
+  { "patch": { "angle": 1.5707963267948966, "opacity": 0 }, "valid": true },
+  { "patch": { "w": 0.05, "h": 32 }, "valid": false },
+  { "patch": { "asset": "../oil" }, "valid": false },
+  { "patch": { "x": 0.9 }, "valid": false },
+  { "patch": { "x": 1.1, "angle": 0.7853981633974483 }, "valid": false },
+  { "patch": { "w": 0 }, "valid": false },
+  { "patch": { "w": 0.049 }, "valid": false },
+  { "patch": { "h": 33 }, "valid": false },
+  { "patch": { "angle": 3.142 }, "valid": false },
+  { "patch": { "opacity": -0.01 }, "valid": false },
+  { "patch": { "opacity": 1.01 }, "valid": false },
+  { "patch": { "opacity": null }, "valid": false },
+  { "patch": { "z": 2 }, "valid": false },
+  { "patch": {}, "remove": ["angle"], "valid": false },
+  { "patch": {}, "remove": ["opacity"], "valid": false }
+]

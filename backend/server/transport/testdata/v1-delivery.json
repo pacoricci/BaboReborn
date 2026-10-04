@@ -1,0 +1,749 @@
+[
+  {
+    "type": "delivery",
+    "version": 1,
+    "connection": "protocol-fixture",
+    "sequence": 1,
+    "generation": 1,
+    "eventThrough": 1,
+    "sentAtMs": 0,
+    "kind": "installation",
+    "body": {
+      "activities": [
+        {
+          "occurredAtMs": 0,
+          "id": 1,
+          "tick": 0,
+          "round": 1,
+          "kind": "connected",
+          "actor": {
+            "id": 1,
+            "nickname": "Player 1",
+            "team": "none"
+          }
+        }
+      ],
+      "arena": {
+        "theme": "classic",
+        "schema": 1,
+        "id": "protocol",
+        "name": "Protocol",
+        "author": "Tests",
+        "width": 36,
+        "height": 36,
+        "walls": [],
+        "spawns": [
+          {
+            "x": 4,
+            "y": 4
+          }
+        ]
+      },
+      "eventCut": 1,
+      "id": 1,
+      "round": 1,
+      "shotGeometry": {
+        "muzzleOffset": 0.39787338256835936,
+        "muzzleSide": 0.16505887985229492,
+        "muzzleHeight": 0.2486686134338379,
+        "maxDistance": 128,
+        "wallHeight": 0.7
+      },
+      "snapshotHz": 30,
+      "state": {
+        "capturedAtMs": 0,
+        "eventCut": 1,
+        "flags": [],
+        "match": {
+          "scores": {
+            "blue": 0,
+            "red": 0
+          },
+          "round": 1,
+          "phase": "playing",
+          "startedTick": 0,
+          "endsTick": 0,
+          "rules": {
+            "mode": "dm",
+            "scoreLimit": 50,
+            "timeLimitTicks": 8,
+            "respawnTicks": 120,
+            "endTicks": 4,
+            "forceRespawn": false
+          },
+          "ranking": []
+        },
+        "items": [],
+        "projectiles": [],
+        "type": "snapshot",
+        "version": 1,
+        "tick": 0,
+        "players": [
+          {
+            "team": "none",
+            "nickname": "Player 1",
+            "appearance": {
+              "template": "geometric",
+              "colors": ["#235cce", "#162c61", "#e8eef5"]
+            },
+            "id": 1,
+            "state": {
+              "x": 4,
+              "y": 4,
+              "angle": 1.5707963267948966,
+              "cooldown": 1,
+              "equipment": {
+                "primary": "smg",
+                "secondary": "knives",
+                "shells": 0,
+                "charge": 0,
+                "sinceShot": 1,
+                "protection": 0,
+                "meleeDelay": 0
+              }
+            },
+            "hp": 0,
+            "status": "spectator",
+            "life": 0,
+            "bornTick": 0
+          }
+        ],
+        "local": {
+          "id": 1,
+          "state": {
+            "equipment": {
+              "heat": 1,
+              "overheated": false,
+              "charge": 0,
+              "fireTime": 0,
+              "sinceShot": 1,
+              "scopeHeight": 7,
+              "rocketActive": false,
+              "rocketAge": 0,
+              "primaryAction": "",
+              "barrel": 0,
+              "secondaryActivated": false,
+              "primary": "smg",
+              "secondary": "knives",
+              "grenades": 2,
+              "molotovs": 1,
+              "shells": 0,
+              "meleeDelay": 0,
+              "throwDelay": 0,
+              "protection": 0,
+              "action": ""
+            },
+            "x": 4,
+            "y": 4,
+            "vx": 0,
+            "vy": 0,
+            "angle": 1.5707963267948966,
+            "cooldown": 1,
+            "spread": 1
+          },
+          "ack": 0,
+          "diedTick": 0,
+          "seed": 7292
+        }
+      },
+      "tick": 0,
+      "tickHz": 120,
+      "type": "welcome",
+      "version": 1
+    }
+  },
+  {
+    "type": "delivery",
+    "version": 1,
+    "connection": "protocol-fixture",
+    "sequence": 2,
+    "generation": 1,
+    "eventThrough": 1,
+    "sentAtMs": 34,
+    "kind": "control",
+    "body": {
+      "action": "permissions_changed",
+      "type": "administration",
+      "version": 1
+    }
+  },
+  {
+    "protobuf": "CghkZWxpdmVyeRABGhBwcm90b2NvbC1maXh0dXJlIAMoATABOCJCBXN0YXRlSsAECCIQAzIIc25hcHNob3Q4AUAEGicIARIHcGxheWluZxgAIAAyBAgAEAA6EAoOCAESBG5vbmUYACAAKAAimQEIAREAAAAAAABZQBoFYWxpdmUgASgAMkkIgIACEKD/ARjQFyE0MzMzMzOzPyozCgNzbWcSBmtuaXZlcxgAIQAAAAAAAAAAKZqZmZmZmZk/MQAAAAAAAAAAOQAAAAAAAAAAOgRub25lQghQbGF5ZXIgMUomCglnZW9tZXRyaWMSByMyMzVjY2USByMxNjJjNjESByNlOGVlZjUingEIAhEAAAAAAAAAABoJc3BlY3RhdG9yIAAoADJKCICAAhCAgAIYgIABIQAAAAAAAPA/KjMKA3NtZxIGa25pdmVzGAAhAAAAAAAAAAApAAAAAAAA8D8xAAAAAAAAAAA5AAAAAAAAAAA6BG5vbmVCCFBsYXllciAySiYKCWdlb21ldHJpYxIHIzIzNWNjZRIHIzE2MmM2MRIHI2U4ZWVmNSrFAQgBErYBCQAAAAAAABBAEee0gU4b6A9AGWbGU+sJPXy8IZqZmZmZmdm/KW3AqrTTjtI/MTQzMzMzM7M/Of///////w1AQnUJAAAAAAAA8D8QABkAAAAAAAAAACEAAAAAAAAAACmamZmZmZmZPzEAAAAAAAAcQDgAQQAAAAAAAAAASgBQAFgAYgNzbWdqBmtuaXZlc3ACeAGAAQCJAQAAAAAAAAAAkQEAAAAAAAAAAJkBAAAAAAAAAACiAQAYASAAKI6O/oUL"
+  },
+  {
+    "type": "delivery",
+    "version": 1,
+    "connection": "protocol-fixture",
+    "sequence": 4,
+    "generation": 1,
+    "eventThrough": 1,
+    "sentAtMs": 34,
+    "kind": "probe",
+    "body": {
+      "nonce": 12,
+      "receivedAtMs": 34,
+      "tick": 4,
+      "type": "pong",
+      "version": 1
+    }
+  },
+  {
+    "type": "delivery",
+    "version": 1,
+    "connection": "protocol-fixture",
+    "sequence": 5,
+    "generation": 1,
+    "eventThrough": 3,
+    "sentAtMs": 34,
+    "kind": "events",
+    "body": {
+      "type": "events",
+      "version": 1,
+      "tick": 4,
+      "after": 1,
+      "through": 3,
+      "events": [
+        {
+          "occurredAtMs": 0,
+          "id": 2,
+          "tick": 0,
+          "round": 1,
+          "kind": "activity",
+          "ownerId": 0,
+          "life": 0,
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "activity": {
+            "occurredAtMs": 0,
+            "id": 2,
+            "tick": 0,
+            "round": 1,
+            "kind": "connected",
+            "actor": {
+              "id": 2,
+              "nickname": "Player 2",
+              "team": "none"
+            }
+          }
+        },
+        {
+          "occurredAtMs": 0,
+          "id": 3,
+          "tick": 0,
+          "round": 1,
+          "kind": "signal",
+          "ownerId": 1,
+          "life": 1,
+          "position": {
+            "x": 4,
+            "y": 4,
+            "z": 0.25
+          },
+          "signal": "spawn"
+        }
+      ],
+      "cues": []
+    }
+  },
+  {
+    "type": "delivery",
+    "version": 1,
+    "connection": "protocol-fixture",
+    "sequence": 6,
+    "generation": 1,
+    "eventThrough": 3,
+    "sentAtMs": 34,
+    "kind": "cues",
+    "body": {
+      "type": "events",
+      "version": 1,
+      "tick": 4,
+      "after": 3,
+      "through": 3,
+      "events": [],
+      "cues": [
+        {
+          "occurredAtMs": 34,
+          "id": 1,
+          "tick": 1,
+          "round": 1,
+          "kind": "shot",
+          "ownerId": 1,
+          "life": 1,
+          "position": {
+            "x": 4.165058879852295,
+            "y": 4.39787338256836,
+            "z": 0.2486686134338379
+          },
+          "shot": {
+            "kind": "smg",
+            "from": {
+              "x": 4.165058879852295,
+              "y": 4.39787338256836,
+              "z": 0.2486686134338379
+            },
+            "to": {
+              "x": 1.3051442112648606,
+              "y": 132.1586912497714,
+              "z": 3.8885280197767664
+            },
+            "killed": false
+          }
+        }
+      ]
+    }
+  },
+  {
+    "type": "delivery",
+    "version": 1,
+    "connection": "protocol-fixture",
+    "sequence": 7,
+    "generation": 2,
+    "eventThrough": 3,
+    "sentAtMs": 34,
+    "kind": "installation",
+    "body": {
+      "activities": [
+        {
+          "occurredAtMs": 0,
+          "id": 1,
+          "tick": 0,
+          "round": 1,
+          "kind": "connected",
+          "actor": {
+            "id": 1,
+            "nickname": "Player 1",
+            "team": "none"
+          }
+        },
+        {
+          "occurredAtMs": 0,
+          "id": 2,
+          "tick": 0,
+          "round": 1,
+          "kind": "connected",
+          "actor": {
+            "id": 2,
+            "nickname": "Player 2",
+            "team": "none"
+          }
+        }
+      ],
+      "arena": {
+        "theme": "classic",
+        "schema": 1,
+        "id": "protocol",
+        "name": "Protocol",
+        "author": "Tests",
+        "width": 36,
+        "height": 36,
+        "walls": [],
+        "spawns": [
+          {
+            "x": 4,
+            "y": 4
+          }
+        ]
+      },
+      "eventCut": 3,
+      "id": 1,
+      "round": 1,
+      "shotGeometry": {
+        "muzzleOffset": 0.39787338256835936,
+        "muzzleSide": 0.16505887985229492,
+        "muzzleHeight": 0.2486686134338379,
+        "maxDistance": 128,
+        "wallHeight": 0.7
+      },
+      "snapshotHz": 30,
+      "state": {
+        "capturedAtMs": 34,
+        "eventCut": 3,
+        "flags": [],
+        "match": {
+          "scores": {
+            "blue": 0,
+            "red": 0
+          },
+          "round": 1,
+          "phase": "playing",
+          "startedTick": 0,
+          "endsTick": 0,
+          "rules": {
+            "mode": "dm",
+            "scoreLimit": 50,
+            "timeLimitTicks": 8,
+            "respawnTicks": 120,
+            "endTicks": 4,
+            "forceRespawn": false
+          },
+          "ranking": [
+            {
+              "team": "none",
+              "id": 1,
+              "score": 0,
+              "kills": 0,
+              "deaths": 0
+            }
+          ]
+        },
+        "items": [],
+        "projectiles": [],
+        "type": "snapshot",
+        "version": 1,
+        "tick": 4,
+        "players": [
+          {
+            "team": "none",
+            "nickname": "Player 1",
+            "appearance": {
+              "template": "geometric",
+              "colors": ["#235cce", "#162c61", "#e8eef5"]
+            },
+            "id": 1,
+            "state": {
+              "x": 4,
+              "y": 3.988333333333333,
+              "angle": 0.2899674667669448,
+              "cooldown": 0.07500000000000001,
+              "equipment": {
+                "primary": "smg",
+                "secondary": "knives",
+                "shells": 0,
+                "charge": 0,
+                "sinceShot": 0.025,
+                "protection": 0,
+                "meleeDelay": 0
+              }
+            },
+            "hp": 100,
+            "status": "alive",
+            "life": 1,
+            "bornTick": 0
+          },
+          {
+            "team": "none",
+            "nickname": "Player 2",
+            "appearance": {
+              "template": "geometric",
+              "colors": ["#235cce", "#162c61", "#e8eef5"]
+            },
+            "id": 2,
+            "state": {
+              "x": 4,
+              "y": 4,
+              "angle": 1.5707963267948966,
+              "cooldown": 1,
+              "equipment": {
+                "primary": "smg",
+                "secondary": "knives",
+                "shells": 0,
+                "charge": 0,
+                "sinceShot": 1,
+                "protection": 0,
+                "meleeDelay": 0
+              }
+            },
+            "hp": 0,
+            "status": "spectator",
+            "life": 0,
+            "bornTick": 0
+          }
+        ],
+        "local": {
+          "id": 1,
+          "state": {
+            "equipment": {
+              "heat": 1,
+              "overheated": false,
+              "charge": 0,
+              "fireTime": 0,
+              "sinceShot": 0.025,
+              "scopeHeight": 7,
+              "rocketActive": false,
+              "rocketAge": 0,
+              "primaryAction": "",
+              "barrel": 0,
+              "secondaryActivated": false,
+              "primary": "smg",
+              "secondary": "knives",
+              "grenades": 2,
+              "molotovs": 1,
+              "shells": 0,
+              "meleeDelay": 0,
+              "throwDelay": 0,
+              "protection": 0,
+              "action": ""
+            },
+            "x": 4,
+            "y": 3.988333333333333,
+            "vx": -2.4492935982947028e-17,
+            "vy": -0.4,
+            "angle": 0.2899674667669448,
+            "cooldown": 0.07500000000000001,
+            "spread": 3.7499999999999996
+          },
+          "ack": 1,
+          "diedTick": 0,
+          "seed": 2965341966
+        }
+      },
+      "tick": 4,
+      "tickHz": 120,
+      "type": "resync",
+      "version": 1
+    }
+  },
+  {
+    "protobuf": "CghkZWxpdmVyeRABGhBwcm90b2NvbC1maXh0dXJlIAgoAjADOERCBXN0YXRlSrsDCEQQBDIIc25hcHNob3Q4AUAIGhQIARIMaW50ZXJtaXNzaW9uGAAgGCJhCAERAAAAAAAAWUAaBWFsaXZlIAEoADJJCICAAhDA/gEYzDkhWFVVVVVVpT8qMwoDc21nEgZrbml2ZXMYACEAAAAAAAAAACnd3d3d3d2tPzEAAAAAAAAAADkAAAAAAAAAACJmCAIRAAAAAAAAAAAaCXNwZWN0YXRvciAAKAAySgiAgAIQgIACGICAASEAAAAAAADwPyozCgNzbWcSBmtuaXZlcxgAIQAAAAAAAAAAKQAAAAAAAPA/MQAAAAAAAAAAOQAAAAAAAAAAKsUBCAEStgEJAAAAAAAAEEARz2kDnTbQD0AZmtk38lvTcrwhEhERERER0b8p7+Y1yxGe5j8xWFVVVVVVpT85U1VVVVVVC0BCdQkAAAAAAADwPxAAGQAAAAAAAAAAIQAAAAAAAAAAKd3d3d3d3a0/MQAAAAAAABxAOABBAAAAAAAAAABKAFAAWABiA3NtZ2oGa25pdmVzcAJ4AYABAIkBAAAAAAAAAACRAQAAAAAAAAAAmQEAAAAAAAAAAKIBABgBIAAojo7+hQs="
+  },
+  {
+    "type": "delivery",
+    "version": 1,
+    "connection": "protocol-fixture",
+    "sequence": 9,
+    "generation": 2,
+    "eventThrough": 4,
+    "sentAtMs": 68,
+    "kind": "events",
+    "body": {
+      "type": "events",
+      "version": 1,
+      "tick": 8,
+      "after": 3,
+      "through": 4,
+      "events": [
+        {
+          "occurredAtMs": 68,
+          "id": 4,
+          "tick": 8,
+          "round": 1,
+          "kind": "phase",
+          "ownerId": 0,
+          "life": 0,
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "phase": "intermission"
+        }
+      ],
+      "cues": []
+    }
+  },
+  {
+    "type": "delivery",
+    "version": 1,
+    "connection": "protocol-fixture",
+    "sequence": 10,
+    "generation": 3,
+    "eventThrough": 4,
+    "sentAtMs": 102,
+    "kind": "installation",
+    "body": {
+      "activities": [],
+      "arena": {
+        "theme": "classic",
+        "schema": 1,
+        "id": "next",
+        "name": "Next",
+        "author": "Tests",
+        "width": 36,
+        "height": 36,
+        "walls": [],
+        "spawns": [
+          {
+            "x": 4,
+            "y": 4
+          }
+        ]
+      },
+      "eventCut": 5,
+      "id": 1,
+      "round": 2,
+      "shotGeometry": {
+        "muzzleOffset": 0.39787338256835936,
+        "muzzleSide": 0.16505887985229492,
+        "muzzleHeight": 0.2486686134338379,
+        "maxDistance": 128,
+        "wallHeight": 0.7
+      },
+      "snapshotHz": 30,
+      "state": {
+        "capturedAtMs": 102,
+        "eventCut": 5,
+        "flags": [],
+        "match": {
+          "scores": {
+            "blue": 0,
+            "red": 0
+          },
+          "round": 2,
+          "phase": "playing",
+          "startedTick": 12,
+          "endsTick": 0,
+          "rules": {
+            "mode": "dm",
+            "scoreLimit": 50,
+            "timeLimitTicks": 8,
+            "respawnTicks": 120,
+            "endTicks": 4,
+            "forceRespawn": false
+          },
+          "ranking": [
+            {
+              "team": "none",
+              "id": 1,
+              "score": 0,
+              "kills": 0,
+              "deaths": 0
+            }
+          ]
+        },
+        "items": [],
+        "projectiles": [],
+        "type": "snapshot",
+        "version": 1,
+        "tick": 12,
+        "players": [
+          {
+            "team": "none",
+            "nickname": "Player 1",
+            "appearance": {
+              "template": "geometric",
+              "colors": ["#235cce", "#162c61", "#e8eef5"]
+            },
+            "id": 1,
+            "state": {
+              "x": 4,
+              "y": 4,
+              "angle": 1.5707963267948966,
+              "cooldown": 1,
+              "equipment": {
+                "primary": "smg",
+                "secondary": "knives",
+                "shells": 0,
+                "charge": 0,
+                "sinceShot": 1,
+                "protection": 0,
+                "meleeDelay": 0
+              }
+            },
+            "hp": 0,
+            "status": "dead",
+            "life": 2,
+            "bornTick": 0
+          },
+          {
+            "team": "none",
+            "nickname": "Player 2",
+            "appearance": {
+              "template": "geometric",
+              "colors": ["#235cce", "#162c61", "#e8eef5"]
+            },
+            "id": 2,
+            "state": {
+              "x": 4,
+              "y": 4,
+              "angle": 1.5707963267948966,
+              "cooldown": 1,
+              "equipment": {
+                "primary": "smg",
+                "secondary": "knives",
+                "shells": 0,
+                "charge": 0,
+                "sinceShot": 1,
+                "protection": 0,
+                "meleeDelay": 0
+              }
+            },
+            "hp": 0,
+            "status": "spectator",
+            "life": 1,
+            "bornTick": 0
+          }
+        ],
+        "local": {
+          "id": 1,
+          "state": {
+            "equipment": {
+              "heat": 1,
+              "overheated": false,
+              "charge": 0,
+              "fireTime": 0,
+              "sinceShot": 1,
+              "scopeHeight": 7,
+              "rocketActive": false,
+              "rocketAge": 0,
+              "primaryAction": "",
+              "barrel": 0,
+              "secondaryActivated": false,
+              "primary": "smg",
+              "secondary": "knives",
+              "grenades": 2,
+              "molotovs": 1,
+              "shells": 0,
+              "meleeDelay": 0,
+              "throwDelay": 0,
+              "protection": 0,
+              "action": ""
+            },
+            "x": 4,
+            "y": 4,
+            "vx": 0,
+            "vy": 0,
+            "angle": 1.5707963267948966,
+            "cooldown": 1,
+            "spread": 1
+          },
+          "ack": 1,
+          "diedTick": -108,
+          "seed": 2965341966
+        }
+      },
+      "tick": 12,
+      "tickHz": 120,
+      "type": "map",
+      "version": 1
+    }
+  },
+  {
+    "type": "delivery",
+    "version": 1,
+    "connection": "protocol-fixture",
+    "sequence": 11,
+    "generation": 3,
+    "eventThrough": 5,
+    "sentAtMs": 102,
+    "kind": "events",
+    "body": {
+      "type": "events",
+      "version": 1,
+      "tick": 12,
+      "after": 4,
+      "through": 5,
+      "events": [
+        {
+          "occurredAtMs": 102,
+          "id": 5,
+          "tick": 12,
+          "round": 2,
+          "kind": "phase",
+          "ownerId": 0,
+          "life": 0,
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "phase": "playing"
+        }
+      ],
+      "cues": []
+    }
+  }
+]

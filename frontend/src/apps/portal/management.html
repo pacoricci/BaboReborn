@@ -1,0 +1,19 @@
+{{define "management"}} {{if .Account}}
+<div id="registry" data-account="{{.Account}}"></div>
+<script src="/assets/registry.js" type="module"></script>
+{{else}}
+<div class="management-heading">
+  <div>
+    <h1>Manage servers</h1>
+  </div>
+</div>
+<p>Sign in to register and manage your servers.</p>
+{{if .LoginAvailable}}<a class="button primary" href="/auth/login?return=/manage/servers"
+  >Sign in with Google</a
+>
+<p class="muted">
+  <a href="/privacy.html">Privacy &amp; cookies</a> · <a href="/terms.html">Terms</a>
+</p>
+{{else}}
+<p class="notice">Sign-in is currently unavailable.</p>
+{{end}}{{end}} {{end}}

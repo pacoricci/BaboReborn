@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#172421" />
+    <meta
+      name="description"
+      content="A playable local arena shooter prototype. Move, aim, and put the SMG to the test."
+    />
+    <title>BaboReborn — Practice Range</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <canvas
+      id="game"
+      tabindex="0"
+      aria-label="Practice arena. WASD or arrow keys to move, mouse to aim, left mouse button to fire, Escape to pause."
+    ></canvas>
+    <div id="crosshair" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></div>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">b.</span>
+        <div>BABOREBORN<small>THE PRACTICE RANGE</small></div>
+      </div>
+      <div class="session">
+        <span class="status-dot"></span> LOCAL SESSION <span class="divider">/</span> FIELD TEST 01
+      </div>
+      <button id="pause" class="quiet-button" aria-label="Pause game">Pause <kbd>ESC</kbd></button>
+    </header>
+    <aside class="map-panel">
+      <div class="eyebrow"><span>THE YARD</span><span>36 × 36</span></div>
+      <canvas
+        id="minimap"
+        width="216"
+        height="216"
+        aria-label="Arena map. Blue is you, orange marks the targets."
+      ></canvas>
+      <div class="map-legend">
+        <span><i class="you-dot"></i> YOU</span><span><i class="target-dot"></i> TARGETS</span>
+      </div>
+    </aside>
+    <main id="menu" class="menu-backdrop">
+      <section class="menu-card" aria-labelledby="menu-title">
+        <div class="eyebrow">
+          <span class="status-dot"></span><span id="menu-label">LOCAL PRACTICE · SMG</span>
+        </div>
+        <h1 id="menu-title">Small arena.<br /><em>Big recoil.</em></h1>
+        <p id="menu-copy">
+          Find your footing. Track a target. Hold the trigger.<br />Get a feel for the first
+          playable Babo.
+        </p>
+        <div class="control-grid">
+          <div>
+            <span class="key-group"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span
+            ><span>Move</span>
+          </div>
+          <div><kbd class="wide-key">MOUSE</kbd><span>Aim</span></div>
+          <div><kbd class="wide-key">LEFT CLICK</kbd><span>Fire</span></div>
+          <div><kbd>R</kbd><span>Reset range</span></div>
+        </div>
+        <div id="appearance"></div>
+        <button id="start" class="primary-button" disabled>Loading arena… <span>↗</span></button>
+        <div class="menu-options">
+          <label><input id="moving" type="checkbox" checked /> Moving targets</label
+          ><button id="sound" class="text-button" aria-pressed="false">Sound off</button>
+        </div>
+        <p class="fine-print">Single-player practice. Targets do not fire back.</p>
+      </section>
+      <div class="menu-footnote">MOVE WITH MOMENTUM. SHOOT WITH INTENT.</div>
+    </main>
+    <div id="hit-notice" role="status" aria-live="polite"></div>
+    <footer class="hud">
+      <section class="vitals">
+        <div class="eyebrow">YOUR BABO <span class="blue-tag">PRACTICE</span></div>
+        <div class="health"><span>+</span> 100 <small>HP</small></div>
+        <div class="health-bar"><i></i></div>
+        <div class="speed"><span id="speed">0.00</span> / 3.25 <small>SPEED</small></div>
+      </section>
+      <section class="range-stats" aria-label="Practice statistics">
+        <div><strong id="eliminations">00</strong><span>TARGETS DOWN</span></div>
+        <div><strong id="accuracy">—</strong><span>ACCURACY</span></div>
+        <div><strong id="time">00:00</strong><span>RANGE TIME</span></div>
+      </section>
+      <section class="weapon">
+        <div class="eyebrow">PRIMARY / 01</div>
+        <div class="weapon-name">SMG <span>∞</span></div>
+        <div class="weapon-info">FULL AUTO <span>10 ROUNDS / SEC</span></div>
+        <div class="weapon-bar"><i id="weapon-ready"></i></div>
+      </section>
+    </footer>
+    <div class="bottom-strip">
+      <span
+        ><kbd>WASD</kbd> Move <span>·</span> Mouse aim <span>·</span> Hold click to fire
+        <span>·</span> <kbd>R</kbd> Reset</span
+      ><button id="metrics-toggle" class="text-button" aria-expanded="false">
+        Show performance
+      </button>
+    </div>
+    <section id="metrics" hidden aria-label="Performance monitor">
+      <div class="eyebrow">LIVE FRAME SAMPLE</div>
+      <div id="metrics-values">Collecting frames…</div>
+      <small>Local diagnostic · not a benchmark</small
+      ><button id="export" class="text-button">Export session data ↗</button>
+    </section>
+    <a href="/" style="position: fixed; right: 24px; top: 80px; z-index: 10; color: #9fe4fa"
+      >Main menu ↗</a
+    >
+    <script type="module" src="/frontend/src/apps/practice/main.ts"></script>
+  </body>
+</html>

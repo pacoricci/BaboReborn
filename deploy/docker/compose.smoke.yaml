@@ -1,0 +1,67 @@
+# Test-only loopback network: release TLS binaries, no public-IP policy bypass in deployment.
+services:
+  central:
+    environment:
+      SSL_CERT_FILE: /run/config/fullchain.pem
+    command: !override
+      - -data-dir
+      - /data
+      - -addr
+      - :${SMOKE_CENTRAL_PORT}
+      - -origin
+      - ${CENTRAL_ORIGIN}
+      - -tls-cert
+      - /run/config/fullchain.pem
+      - -tls-key
+      - /run/config/privkey.pem
+      - -development
+    ports: !override
+      - 127.0.0.1:${SMOKE_CENTRAL_PORT}:${SMOKE_CENTRAL_PORT}
+      - 127.0.0.1:${SMOKE_SERVER_PORT}:${SMOKE_SERVER_PORT}
+    healthcheck:
+      test:
+        [
+          CMD,
+          curl,
+          --fail,
+          --silent,
+          --cacert,
+          /run/config/fullchain.pem,
+          --max-time,
+          '3',
+          '${CENTRAL_ORIGIN}/healthz',
+        ]
+      interval: 2s
+  server:
+    network_mode: service:central
+    environment:
+      SSL_CERT_FILE: /run/config/fullchain.pem
+    command: !override
+      - -data-dir
+      - /data
+      - -addr
+      - :${SMOKE_SERVER_PORT}
+      - -central
+      - ${CENTRAL_ORIGIN}
+      - -tls-cert
+      - /run/config/fullchain.pem
+      - -tls-key
+      - /run/config/privkey.pem
+      - -development
+      - -pairing-code-file
+      - ${PAIRING_CODE_FILE:-}
+    ports: !reset []
+    healthcheck:
+      test:
+        [
+          CMD,
+          curl,
+          --fail,
+          --silent,
+          --cacert,
+          /run/config/fullchain.pem,
+          --max-time,
+          '3',
+          'https://127.0.0.1:${SMOKE_SERVER_PORT}/health',
+        ]
+      interval: 2s
