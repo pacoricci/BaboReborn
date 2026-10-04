@@ -51,7 +51,7 @@ build-embedded:
 	node scripts/build/embed-assets.mjs
 	node scripts/build/check-release.mjs backend/web/dist
 
-# Non-browser checks; GitHub Actions runs make check to include browser play.
+# Non-browser checks; GitHub Actions runs these alongside isolated browser shards.
 # Go embeds the frontend, so prepare it before any Go validation runs.
 check-ci: build format-check
 	npm run typecheck
@@ -90,7 +90,7 @@ test-postgres:
 	sh scripts/dev/test-postgres.sh
 
 test-browser: build-dev
-	npm run test:browser
+	npm run test:browser -- $(BROWSER_ARGS)
 
 measure-compression: build-embedded
 	go test ./backend/server/transport -run '^$$' -bench 'BenchmarkSnapshot(WebSocket|Deflate)' -benchtime=300x -count=3
