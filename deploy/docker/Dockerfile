@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM node:24-trixie-slim AS frontend
+FROM node:26-trixie-slim AS frontend
 WORKDIR /src
 COPY package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm npm ci
