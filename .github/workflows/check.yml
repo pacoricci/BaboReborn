@@ -9,7 +9,7 @@ permissions:
   contents: read
 concurrency:
   group: quality-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' || github.ref == 'refs/heads/main' }}
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -17,6 +17,7 @@ jobs:
     env:
       # Match the production image (deploy/docker/compose.yaml).
       POSTGRES_BIN: /usr/lib/postgresql/17/bin
+      BABOREBORN_SOFTWARE_GL: '1'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -38,4 +39,14 @@ jobs:
           sudo apt-get install -y --no-install-recommends postgresql-17
       - run: make dependencies
       - run: npx playwright install --with-deps chromium
-      - run: make check
+      - name: Install software WebGL
+        run: sudo apt-get install -y --no-install-recommends libegl-mesa0 libgl1-mesa-dri xvfb xauth
+      - run: xvfb-run -a make check
+      - name: Retain browser diagnostics
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: browser-diagnostics-${{ github.run_attempt }}
+          path: output/playwright/
+          if-no-files-found: ignore
+          retention-days: 7

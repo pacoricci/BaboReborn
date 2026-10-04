@@ -87,12 +87,23 @@ preserve the old directory and start with a fresh one.
 | `make test-docker`   | Build images and test containers, browser play, and persistence. Needs Docker and Chromium.                                                                                                      |
 | `make test-release`  | Release guards in temporary Git repositories. Needs Node.js and Git.                                                                                                                             |
 
-GitHub Actions runs `make check` on pull requests and pushes to `main`. Releases
-also run `make test-docker` before publishing.
+GitHub Actions runs `make check` on pull requests and pushes to `main`. New commits
+cancel obsolete checks for the same pull request or `main`. Releases also run
+`make test-docker` before publishing.
 
 Browser tests use disposable data under `/tmp` and port offset 10000, overridden
 by `BABOREBORN_BROWSER_PORT_OFFSET`. Reports, traces, screenshots, and stack logs
 remain in `output/playwright/`.
+
+Linux CI runs full Chromium under Xvfb with Mesa software WebGL and the game's
+Low graphics preset. This keeps rendering from stalling the live networking and
+audio checks on runners without a GPU. Reproduce that profile with
+`BABOREBORN_SOFTWARE_GL=1 xvfb-run -a make test-browser` after installing
+`libegl-mesa0 libgl1-mesa-dri xvfb xauth` and Chromium. Local runs keep the default
+graphics preset. Traces retain DOM snapshots; continuous trace screenshots are
+disabled in the software profile, while explicit and failure screenshots remain.
+Failed GitHub runs retain `output/playwright/` as a downloadable artifact for
+seven days. Product tests capture open pages before closing their test rooms.
 
 Choose checks for the affected behavior. Report automated results, browser
 observations, and human playtesting separately; conformance does not establish
