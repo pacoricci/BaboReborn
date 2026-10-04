@@ -63,6 +63,16 @@ Neither starts backend services. Use `make dev` to verify login and multiplayer.
 Generated files live in `dist/`, `backend/web/dist/`, `backend/web/portal/`, and
 `output/`.
 
+Local builds, including Docker images, identify as `dev`. To embed an explicit
+version, pass `RELEASE_VERSION` to Make (for example,
+`make build RELEASE_VERSION=0.1.0`) or as a Docker build argument.
+
+## Releases
+
+The annotated Git tag `vMAJOR.MINOR.PATCH` is the sole source of the published
+product version. The npm manifest versions are independent and do not need to
+change for a release.
+
 ## Local data and logs
 
 The [launcher](../../scripts/dev/dev-stack.sh) cleans up processes and stores data

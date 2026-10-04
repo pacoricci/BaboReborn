@@ -36,7 +36,7 @@ if [ ! -f "$stack_directory/pg/PG_VERSION" ]; then initdb -D "$stack_directory/p
 # On macOS the postmaster exits during startup without a valid LC_ALL.
 LC_ALL=C pg_ctl -D "$stack_directory/pg" -l "$stack_directory/postgres.log" -o "-h '' -k '$stack_directory/socket'" -w start >/dev/null
 started_pg=1
-if ! psql -h "$stack_directory/socket" -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname='baboreborn_identity_dev'" | rg -q '^1$'; then createdb -h "$stack_directory/socket" baboreborn_identity_dev; fi
+if ! psql -h "$stack_directory/socket" -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname='baboreborn_identity_dev'" | grep -q '^1$'; then createdb -h "$stack_directory/socket" baboreborn_identity_dev; fi
 CENTRAL_DATABASE_URL=$(node -e 'process.stdout.write("postgresql:///baboreborn_identity_dev?host="+encodeURIComponent(process.argv[1])+"&sslmode=disable")' "$stack_directory/socket")
 export CENTRAL_DATABASE_URL
 if [ ! -f "$stack_directory/central/signing.pem" ]; then output/identity-dev/central -data-dir "$stack_directory/central" -storage keygen; fi

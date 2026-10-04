@@ -6,7 +6,8 @@
 DOCKER ?= docker
 CENTRAL_IMAGE ?= baboreborn/central:local
 SERVER_IMAGE ?= baboreborn/server:local
-RELEASE_LDFLAGS = -X baboreborn/backend/release.Version=$(or $(shell go run ./backend/cmd/release-version),$(error Cannot read stable version from package.json))
+RELEASE_VERSION ?= dev
+RELEASE_LDFLAGS = -X baboreborn/backend/release.Version=$(RELEASE_VERSION)
 
 help:
 	@printf '%s\n' 'make setup         Install dependencies, tools and Git hooks' 'make dev           Start the complete local identity/server stack' 'make build         Build server and central with the release frontend' 'make check         Run all quality checks, including Go vulnerabilities' 'make format        Format JavaScript/TypeScript and Go' 'make precommit     Validate staged changes' 'make dependencies  Install dependencies and tools without Git hooks'
@@ -14,8 +15,8 @@ help:
 	@printf '%s\n' 'make check-ci      Run quality checks without browser tests' 'make test-release  Verify release validation against temporary Git repositories'
 
 docker-build:
-	$(DOCKER) build -f deploy/docker/Dockerfile --target server -t $(SERVER_IMAGE) .
-	$(DOCKER) build -f deploy/docker/Dockerfile --target central -t $(CENTRAL_IMAGE) .
+	$(DOCKER) build -f deploy/docker/Dockerfile --build-arg RELEASE_VERSION="$(RELEASE_VERSION)" --target server -t $(SERVER_IMAGE) .
+	$(DOCKER) build -f deploy/docker/Dockerfile --build-arg RELEASE_VERSION="$(RELEASE_VERSION)" --target central -t $(CENTRAL_IMAGE) .
 
 test-docker: docker-build
 	CENTRAL_IMAGE=$(CENTRAL_IMAGE) SERVER_IMAGE=$(SERVER_IMAGE) node deploy/docker/smoke.mjs

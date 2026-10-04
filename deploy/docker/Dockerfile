@@ -10,24 +10,23 @@ COPY scripts/build/*.mjs ./scripts/build/
 RUN npm run build:release && node scripts/build/embed-assets.mjs
 
 FROM golang:1.27-trixie AS go-build
+ARG RELEASE_VERSION=dev
 WORKDIR /src
-COPY go.mod go.sum package.json ./
+COPY go.mod go.sum ./
 RUN --mount=type=cache,target=/go/pkg/mod go mod download
 COPY backend ./backend
 
 # This branch has no dependency on the frontend build or bundled content.
 FROM go-build AS server-build
 RUN --mount=type=cache,target=/go/pkg/mod --mount=type=cache,target=/root/.cache/go-build \
-    release_version="$(go run ./backend/cmd/release-version)" && \
-    CGO_ENABLED=0 go build -ldflags "-X baboreborn/backend/release.Version=$release_version" -trimpath -o /out/server ./backend/cmd/server
+    CGO_ENABLED=0 go build -ldflags "-X baboreborn/backend/release.Version=$RELEASE_VERSION" -trimpath -o /out/server ./backend/cmd/server
 
 FROM go-build AS central-build
 COPY content ./content
 COPY --from=frontend /src/backend/web/dist ./backend/web/dist
 COPY --from=frontend /src/backend/web/portal ./backend/web/portal
 RUN --mount=type=cache,target=/go/pkg/mod --mount=type=cache,target=/root/.cache/go-build \
-    release_version="$(go run ./backend/cmd/release-version)" && \
-    CGO_ENABLED=0 go build -ldflags "-X baboreborn/backend/release.Version=$release_version" -trimpath -o /out/central ./backend/cmd/central
+    CGO_ENABLED=0 go build -ldflags "-X baboreborn/backend/release.Version=$RELEASE_VERSION" -trimpath -o /out/central ./backend/cmd/central
 
 FROM debian:trixie-slim AS runtime
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl \

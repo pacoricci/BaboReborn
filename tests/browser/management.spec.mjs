@@ -18,17 +18,18 @@ test('server settings preserve blurred drafts during polling and registration ke
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await login(page);
+  const releaseVersion = process.env.RELEASE_VERSION ?? 'dev';
+  const stableRelease = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(releaseVersion);
   await expect
     .poll(async () => {
       const servers = await (await page.request.get('/api/v1/manage/servers')).json();
-      const release = servers.find((item) => item.name === 'Local A')?.release;
-      return (
-        release?.status === 'current' &&
-        release.installed === release.recommended &&
-        /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(release.installed)
-      );
+      return servers.find((item) => item.name === 'Local A')?.release;
     })
-    .toBe(true);
+    .toMatchObject({
+      installed: releaseVersion,
+      recommended: releaseVersion,
+      status: stableRelease ? 'current' : 'compatible',
+    });
   await server(page).getByRole('button', { name: 'Settings', exact: true }).click();
   const dialog = page.getByRole('dialog');
   await dialog.getByLabel('Region', { exact: true }).fill('Draft Europe');
