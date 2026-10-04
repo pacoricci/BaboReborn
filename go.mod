@@ -8,7 +8,7 @@ require (
 	github.com/go-jose/go-jose/v4 v4.1.5
 	github.com/jackc/pgx/v5 v5.11.0
 	golang.org/x/image v0.46.0
-	golang.org/x/oauth2 v0.36.0
+	golang.org/x/oauth2 v0.37.0
 	golang.org/x/sys v0.48.0
 	google.golang.org/protobuf v1.36.11
 	modernc.org/sqlite v1.58.0
