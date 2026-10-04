@@ -1,0 +1,189 @@
+// Periodic snapshots. Remote pose is quantized; other doubles retain binary64.
+syntax = "proto2";
+package baboreborn.replication;
+
+option go_package = "baboreborn/backend/server/wire/pb";
+message Delivery {
+  optional string type = 1;
+  optional uint32 version = 2;
+  optional string connection = 3;
+  optional uint64 sequence = 4;
+  optional uint64 generation = 5;
+  optional uint64 event_through = 6;
+  optional uint64 sent_at_ms = 7;
+  optional string kind = 8;
+  optional Snapshot body = 9;
+}
+message Snapshot {
+  optional uint64 captured_at_ms = 1;
+  optional uint64 event_cut = 2;
+  optional Match match = 3;
+  repeated Player players = 4;
+  optional Local local = 5;
+  optional string type = 6;
+  optional uint32 version = 7;
+  optional uint64 tick = 8;
+  optional Flags flags = 9;
+  optional Items items = 10;
+  optional Projectiles projectiles = 11;
+}
+message Appearance {
+  optional string template = 1;
+  repeated string colors = 2;
+}
+message Player {
+  optional uint64 id = 1;
+  optional double hp = 2;
+  optional string status = 3;
+  optional uint64 life = 4;
+  optional sint64 born_tick = 5;
+  optional RemoteState state = 6;
+  optional string team = 7;
+  optional string nickname = 8;
+  optional Appearance appearance = 9;
+  optional string nickname_colors = 10;
+}
+message RemoteState {
+  // Position: signed world units * 4096. Angle: 0..65535 over one full turn.
+  optional sint32 x = 1;
+  optional sint32 y = 2;
+  optional uint32 angle = 3;
+  optional double cooldown = 4;
+  optional RemoteEquipment equipment = 5;
+}
+message RemoteEquipment {
+  optional string primary = 1;
+  optional string secondary = 2;
+  optional uint32 shells = 3;
+  optional double charge = 4;
+  optional double since_shot = 5;
+  optional double protection = 6;
+  optional double melee_delay = 7;
+}
+message Local {
+  optional uint64 id = 1;
+  optional State state = 2;
+  optional uint64 ack = 3;
+  optional sint64 died_tick = 4;
+  optional uint32 seed = 5;
+}
+message State {
+  optional double x = 1;
+  optional double y = 2;
+  optional double vx = 3;
+  optional double vy = 4;
+  optional double angle = 5;
+  optional double cooldown = 6;
+  optional double spread = 7;
+  optional Equipment equipment = 8;
+}
+message Equipment {
+  optional double heat = 1;
+  optional bool overheated = 2;
+  optional double charge = 3;
+  optional double fire_time = 4;
+  optional double since_shot = 5;
+  optional double scope_height = 6;
+  optional bool rocket_active = 7;
+  optional double rocket_age = 8;
+  optional string primary_action = 9;
+  optional uint32 barrel = 10;
+  optional bool secondary_activated = 11;
+  optional string primary = 12;
+  optional string secondary = 13;
+  optional uint32 grenades = 14;
+  optional uint32 molotovs = 15;
+  optional uint32 shells = 16;
+  optional double melee_delay = 17;
+  optional double throw_delay = 18;
+  optional double protection = 19;
+  optional string action = 20;
+}
+message Match {
+  optional uint64 round = 1;
+  optional string phase = 2;
+  optional sint64 started_tick = 3;
+  optional sint64 ends_tick = 4;
+  optional Rules rules = 5;
+  optional Scores scores = 6;
+  optional Ranking ranking = 7;
+}
+message Rules {
+  optional string mode = 1;
+  optional sint64 score_limit = 2;
+  optional sint64 time_limit_ticks = 3;
+  optional sint64 respawn_ticks = 4;
+  optional sint64 end_ticks = 5;
+  optional bool force_respawn = 6;
+}
+message Scores {
+  optional sint64 blue = 1;
+  optional sint64 red = 2;
+}
+message Ranking {
+  repeated Standing values = 1;
+}
+message Standing {
+  optional uint64 id = 1;
+  optional string team = 2;
+  optional sint64 score = 3;
+  optional sint64 kills = 4;
+  optional sint64 deaths = 5;
+}
+message Point {
+  optional double x = 1;
+  optional double y = 2;
+}
+message Vec3 {
+  optional double x = 1;
+  optional double y = 2;
+  optional double z = 3;
+}
+message Flags {
+  repeated Flag values = 1;
+}
+message Flag {
+  optional string team = 1;
+  optional string state = 2;
+  optional uint64 carrier_id = 3;
+  optional Point position = 4;
+}
+message Items {
+  repeated Item values = 1;
+  repeated Item upsert = 2;
+  repeated uint64 remove = 3 [packed = true];
+  optional bool delta = 4;
+}
+message Projectiles {
+  repeated Projectile values = 1;
+  repeated Projectile upsert = 2;
+  repeated uint64 remove = 3 [packed = true];
+  optional bool delta = 4;
+}
+message Item {
+  optional uint64 id = 1;
+  optional string motion = 2;
+  optional uint64 motion_tick = 3;
+  optional Vec3 position = 4;
+  optional Vec3 velocity = 5;
+  optional sint64 expires_tick = 6;
+  optional string kind = 7;
+  optional string primary = 8;
+}
+message Projectile {
+  optional uint64 id = 1;
+  optional string motion = 2;
+  optional uint64 motion_tick = 3;
+  optional Vec3 position = 4;
+  optional Vec3 velocity = 5;
+  optional sint64 expires_tick = 6;
+  optional string kind = 7;
+  optional uint64 owner_id = 8;
+  optional uint64 born_tick = 9;
+  optional uint64 attached_id = 10;
+  optional Turret turret = 11;
+}
+message Turret {
+  optional double angle = 1;
+  optional uint64 last_shot_tick = 2;
+}

@@ -1,0 +1,31 @@
+@import './menu.css';
+
+main.document {
+  max-width: 800px;
+  margin-block: 32px 64px;
+  font-size: 20px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.document h1 {
+  font:
+    400 36px/1.2 Anton,
+    Impact,
+    sans-serif;
+}
+.document section {
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.document a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.document a:hover {
+  color: var(--text);
+}
+.document li + li {
+  margin-top: 8px;
+}

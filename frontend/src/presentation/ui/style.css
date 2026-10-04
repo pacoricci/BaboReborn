@@ -1,0 +1,128 @@
+@font-face {
+  font-family: Anton;
+  src: url('/fonts/anton.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('/fonts/barlow-condensed.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('/fonts/barlow-condensed-semibold.ttf') format('truetype');
+  font-weight: 600;
+  font-display: swap;
+}
+:root {
+  font-family: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
+  --display-font: Anton, Impact, 'Arial Narrow', sans-serif;
+  --accent: #ff4040;
+  --panel: #202226;
+  --text: #f4efe5;
+  color-scheme: dark;
+  color: var(--text);
+  background: #141619;
+  font-synthesis: none;
+  --lime: var(--accent);
+  --muted: #92918e;
+  --line: #f4efe526;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  overflow: hidden;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button {
+  color: inherit;
+  cursor: pointer;
+}
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 5px;
+}
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+[hidden] {
+  display: none !important;
+}
+#game {
+  display: block;
+  width: 100vw;
+  height: 100dvh;
+  outline: none;
+  touch-action: none;
+}
+body.playing #game {
+  cursor: none;
+}
+#crosshair {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  pointer-events: none;
+  z-index: 3;
+  display: none;
+  filter: drop-shadow(0 1px 2px #000);
+}
+body.playing #crosshair {
+  display: block;
+}
+#crosshair i {
+  position: absolute;
+  background: var(--text);
+}
+#crosshair i:nth-child(1) {
+  width: 1px;
+  height: 6px;
+  left: 12px;
+  top: 0;
+}
+#crosshair i:nth-child(2) {
+  width: 1px;
+  height: 6px;
+  left: 12px;
+  bottom: 0;
+}
+#crosshair i:nth-child(3) {
+  height: 1px;
+  width: 6px;
+  left: 0;
+  top: 12px;
+}
+#crosshair i:nth-child(4) {
+  height: 1px;
+  width: 6px;
+  right: 0;
+  top: 12px;
+}
+#crosshair b {
+  position: absolute;
+  top: 11px;
+  left: 11px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--lime);
+}
+#crosshair.hit {
+  transform: rotate(45deg) scale(1.25);
+}
+#crosshair.hit i {
+  background: #f4bd90;
+}

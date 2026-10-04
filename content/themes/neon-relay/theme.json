@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "author": "BaboReborn contributors",
+  "id": "neon-relay",
+  "name": "Neon Relay",
+  "floor": "floor.webp",
+  "floorTile": 4,
+  "defaultMaterial": "standard",
+  "background": "#101825",
+  "groundLight": "#3c4e65",
+  "planFloor": "#202c3c",
+  "outdoorWear": false,
+  "materials": {
+    "standard": {
+      "name": "Relay armor",
+      "wall": "wall.webp",
+      "top": "top.webp",
+      "tile": 2,
+      "emission": 0.12,
+      "wallHue": 192
+    }
+  }
+}

@@ -1,0 +1,41 @@
+name: Quality checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # Release publication reuses this gate instead of duplicating it.
+  workflow_call:
+permissions:
+  contents: read
+concurrency:
+  group: quality-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      # Match the production image (deploy/docker/compose.yaml).
+      POSTGRES_BIN: /usr/lib/postgresql/17/bin
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            scripts/checks/package-lock.json
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+      - name: Install PostgreSQL 17
+        run: |
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y --no-install-recommends postgresql-17
+      - run: make dependencies
+      - run: npx playwright install --with-deps chromium
+      - run: make check

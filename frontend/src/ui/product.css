@@ -1,0 +1,141 @@
+/* Shared menu surfaces; editor and match HUD retain their own presentation. */
+.product-footer {
+  width: min(1500px, calc(100% - 96px));
+  margin-inline: auto;
+  padding-block: 24px;
+  color: var(--muted);
+}
+.product-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+}
+.product-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.product-footer a:hover {
+  color: var(--accent);
+}
+@media (max-width: 900px) {
+  .product-footer {
+    width: calc(100% - 40px);
+  }
+}
+
+:is(body.rooms, body.management, body.portal) {
+  --accent: #ff4040;
+  --panel: #202226;
+  --text: #f4efe5;
+  --line: #f4efe526;
+  --muted: #bebbb5;
+  font-family: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
+}
+/* Shared by the bundled player pages and the server-rendered registry. */
+:is(.rooms:has(#play-root), body.management) {
+  isolation: isolate;
+}
+:is(.rooms:has(#play-root), body.management)::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: url('/assets/lobby-background.jpg') center / cover no-repeat;
+  opacity: 0.25;
+  pointer-events: none;
+}
+:is(body.rooms, body.management, body.portal) :is(button, .button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid #787879;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--text);
+  font:
+    400 17px/1.3 Anton,
+    Impact,
+    sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  cursor: pointer;
+}
+:is(body.rooms, body.management, body.portal) :is(button, .button):not(:disabled):hover {
+  border-color: var(--accent);
+  background: #ffffff08;
+}
+:is(body.rooms, body.management, body.portal) :is(button, .button).primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #141619;
+}
+:is(body.rooms, body.management, body.portal) :is(button, .button).primary:not(:disabled):hover {
+  background: #ff6868;
+  border-color: #ff6868;
+}
+:is(body.rooms, body.management, body.portal) button.danger {
+  color: #ffa48d;
+  border-color: #775049;
+}
+:is(body.rooms, body.management, body.portal) :is(button, .button):disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+:is(body.rooms, body.management, body.portal) :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+:is(body.rooms, body.management, body.portal) h2 {
+  font:
+    400 24px/1.3 Anton,
+    Impact,
+    sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+}
+:is(body.rooms, body.management, body.portal) .management-heading h1 {
+  font-size: 28px;
+}
+:is(body.rooms, body.management, body.portal) main {
+  width: min(1500px, calc(100% - 96px));
+  margin-inline: auto;
+}
+.product-topbar .product-account a:not(.button) {
+  color: var(--muted);
+  font:
+    400 17px/1.3 Anton,
+    Impact,
+    sans-serif;
+  text-transform: uppercase;
+}
+.product-topbar .product-account a:is(:hover, [aria-current]) {
+  color: var(--accent);
+}
+.product-account a[aria-current] {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (max-width: 1050px) {
+  :is(body.rooms, body.management, body.portal) main {
+    width: calc(100% - 48px);
+  }
+}
+@media (max-width: 700px) {
+  :is(body.rooms, body.management, body.portal) main {
+    width: calc(100% - 32px);
+  }
+}

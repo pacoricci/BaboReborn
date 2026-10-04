@@ -1,0 +1,100 @@
+.catalog-filters {
+  display: flex;
+  gap: 16px;
+  align-items: end;
+  flex-wrap: wrap;
+  margin: 24px 0;
+}
+.catalog-filters label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.catalog-filters label:has(input[type='search']),
+.catalog-filters label:has(select) {
+  flex-direction: column;
+  align-items: start;
+}
+.room-table-scroll {
+  /* Keep absolutely positioned accessible labels inside the scrolling table. */
+  position: relative;
+  overflow-x: auto;
+}
+.global-rooms {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.global-rooms th,
+.global-rooms td {
+  padding: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.global-rooms thead th {
+  color: var(--muted);
+  font-weight: normal;
+  white-space: nowrap;
+}
+.global-rooms tbody th {
+  min-width: 192px;
+  overflow-wrap: anywhere;
+}
+.global-rooms tbody tr:hover {
+  background: #ffffff05;
+}
+.room-ping,
+.room-slots {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.room-action {
+  text-align: right;
+  white-space: nowrap;
+}
+.account-notice {
+  color: var(--muted);
+}
+.account-notice:empty {
+  display: none;
+}
+.catalog-filters input[type='search'] {
+  max-width: 100%;
+}
+@media (max-width: 560px) {
+  .catalog-filters {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .catalog-filters input[type='search'] {
+    width: 100%;
+  }
+}
+
+.room-name {
+  color: var(--accent);
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.room-details {
+  width: min(512px, 75vw);
+}
+.room-details header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.room-details h2 {
+  overflow-wrap: anywhere;
+}
+.room-details canvas {
+  width: 100%;
+  height: auto;
+}
+.room-details p {
+  overflow-wrap: anywhere;
+}

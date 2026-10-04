@@ -1,0 +1,110 @@
+.options-page {
+  width: 100%;
+  max-width: 800px;
+  margin-inline: auto;
+}
+.game-settings {
+  display: grid;
+  gap: 16px;
+  max-width: 800px;
+  width: 100%;
+  margin-inline: auto;
+}
+.game-settings fieldset,
+.game-settings details {
+  min-width: 0;
+  margin: 0;
+  padding: 12px 20px 16px;
+  border: 1px solid #f4efe526;
+  background: #141619f2;
+}
+.game-settings legend {
+  padding: 0 8px;
+  font-size: 20px;
+}
+.game-settings label,
+.game-settings .binding-list > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 40px;
+  margin: 4px 0;
+}
+.game-settings p {
+  margin: 8px 0 12px;
+  line-height: 1.45;
+}
+.game-settings p:empty {
+  display: none;
+}
+.game-settings input[type='range'] {
+  width: 40%;
+  max-width: 260px;
+  flex-shrink: 0;
+}
+.game-settings input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.game-settings select {
+  max-width: 60%;
+}
+.game-settings input[type='color'] {
+  width: 56px;
+  height: 32px;
+  padding: 2px;
+}
+.game-settings button,
+.game-settings select {
+  min-height: 36px;
+}
+.game-settings .binding-list button,
+.online-menu .game-settings .binding-list button,
+body.rooms .game-settings .binding-list button {
+  min-width: 125px;
+  min-height: 40px;
+  padding: 6px 12px;
+  background: #20252c;
+  color: var(--text);
+  border: 1px solid #f4efe540;
+}
+.game-settings summary {
+  cursor: pointer;
+}
+.game-settings .crosshair-preview {
+  height: 70px;
+  background: #252a2d;
+  display: grid;
+  place-items: center;
+}
+.crosshair-preview > span {
+  display: block;
+  border: 1px solid;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px #000;
+}
+.game-settings :focus-visible {
+  outline: 2px solid #ff4040;
+  outline-offset: 3px;
+}
+@media (max-width: 460px) {
+  .game-settings fieldset,
+  .game-settings details {
+    padding: 10px;
+  }
+  .game-settings label,
+  .game-settings .binding-list > div {
+    gap: 8px;
+  }
+}
+
+.game-settings .binding-list button[aria-pressed='true'],
+.online-menu .game-settings .binding-list button[aria-pressed='true'],
+body.rooms .game-settings .binding-list button[aria-pressed='true'] {
+  border-color: #ff4040;
+}
+.game-settings input {
+  accent-color: #ff4040;
+}

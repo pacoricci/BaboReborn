@@ -1,0 +1,10 @@
+version: v2
+plugins:
+  - local: output/tools/protobuf/protoc-gen-go
+    out: backend/server/wire/pb
+    opt:
+      - paths=source_relative
+      - default_api_level=API_OPAQUE
+  - local: node_modules/.bin/protoc-gen-es
+    out: frontend/src/network/generated
+    opt: target=ts

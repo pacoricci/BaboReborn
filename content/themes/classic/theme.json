@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "author": "BaboReborn contributors",
+  "id": "classic",
+  "name": "Classic",
+  "floor": "floor.webp",
+  "floorTile": 6,
+  "defaultMaterial": "standard",
+  "background": "#1c2925",
+  "groundLight": "#38483c",
+  "planFloor": "#29322f",
+  "outdoorWear": true,
+  "earth": "earth.webp",
+  "materials": {
+    "standard": {
+      "name": "Standard",
+      "wall": "wall.webp",
+      "top": "top.webp",
+      "tile": 2,
+      "emission": 0,
+      "wallHue": 211
+    }
+  }
+}

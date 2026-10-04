@@ -1,0 +1,345 @@
+@import '../../ui/boot.css';
+:root {
+  color-scheme: dark;
+  font:
+    14px/1.45 system-ui,
+    sans-serif;
+  color: #e7e9ed;
+  background: #141619;
+  --line: #373b42;
+  --accent: #ff4040;
+  /* Shared boot surface tokens; the editor keeps its own body text color. */
+  --panel: #202226;
+  --text: #f4efe5;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+[hidden] {
+  display: none !important;
+}
+a {
+  color: inherit;
+}
+header {
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  font-weight: 900;
+  font-size: 24px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.brand span {
+  font-size: 16px;
+  font-weight: 500;
+  color: #afb6c0;
+  letter-spacing: 0;
+  margin-left: 12px;
+}
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+  background: #252930;
+  border: 1px solid #49505b;
+  border-radius: 6px;
+  padding: 9px 11px;
+  min-height: 38px;
+}
+button {
+  cursor: pointer;
+}
+button:hover:not(:disabled) {
+  background: #353b45;
+  border-color: #87909d;
+}
+button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+button.primary,
+button[aria-pressed='true'] {
+  color: #171717;
+  background: var(--accent);
+  border-color: var(--accent);
+  font-weight: 650;
+}
+button.primary:hover:not(:disabled),
+button[aria-pressed='true']:hover {
+  background: #ff8585;
+}
+:focus-visible {
+  outline: 3px solid #ffa3a3;
+  outline-offset: 3px;
+}
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+main {
+  display: grid;
+  grid-template-columns: 240px minmax(280px, 1fr) 245px;
+  min-height: calc(100dvh - 80px);
+}
+aside {
+  padding: 22px 18px;
+  background: #1b1e23;
+}
+.tools {
+  border-right: 1px solid var(--line);
+}
+.checks {
+  border-left: 1px solid var(--line);
+}
+h1 {
+  font-size: 23px;
+  line-height: 1.15;
+  margin: 0 0 8px;
+}
+h2 {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #b9c1cd;
+  margin: 25px 0 12px;
+}
+.muted {
+  color: #9ba5b3;
+  margin-top: 0;
+}
+label {
+  display: grid;
+  gap: 5px;
+  margin: 12px 0;
+  color: #c7cdd5;
+}
+input,
+select {
+  width: 100%;
+  min-width: 0;
+}
+.dimensions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.hint {
+  font-size: 12px;
+  color: #a5aebc;
+  line-height: 1.6;
+}
+.tool-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+.decal-palette {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 12px;
+}
+.decal-palette button {
+  padding: 6px;
+  font-size: 11px;
+}
+.decal-palette img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+.tool-grid button {
+  text-align: left;
+  padding: 10px 8px;
+}
+kbd {
+  float: right;
+  font: inherit;
+  opacity: 0.7;
+}
+.drawing {
+  min-width: 0;
+  padding: 18px;
+  position: sticky;
+  top: 0;
+  align-self: start;
+}
+.canvas-toolbar,
+.canvas-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.canvas-toolbar {
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.canvas-footer {
+  padding: 12px 0 0;
+  font-size: 12px;
+  color: #bec6d1;
+  flex-wrap: wrap;
+}
+#viewport {
+  width: 100%;
+  height: clamp(320px, calc(100dvh - 255px), 1000px);
+  overflow: auto;
+  background: #101215;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+#map {
+  display: block;
+  margin-inline: auto;
+  touch-action: none;
+  cursor: crosshair;
+}
+#zoom {
+  min-width: 42px;
+  font-size: 12px;
+  text-align: center;
+}
+#notice {
+  min-height: 22px;
+  color: #ffd2bf;
+}
+#issues {
+  padding-left: 18px;
+  font-size: 13px;
+}
+#issues li {
+  margin-bottom: 9px;
+  color: #f1c185;
+}
+#issues li.error {
+  color: #ffacaa;
+}
+#spawn-list {
+  padding-left: 24px;
+  max-height: 240px;
+  overflow: auto;
+}
+#spawn-list li {
+  padding: 4px 0;
+}
+#spawn-list button {
+  min-height: 28px;
+  padding: 3px 7px;
+  font-size: 12px;
+  margin-left: 6px;
+}
+details {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #b9c1cd;
+}
+summary {
+  cursor: pointer;
+}
+code {
+  overflow-wrap: anywhere;
+}
+#trial {
+  position: fixed;
+  inset: 0;
+  background: #171d19;
+}
+#game {
+  width: 100%;
+  height: 100%;
+  display: block;
+  outline: none;
+}
+.trial-toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 14px;
+  background: #141619ec;
+}
+.trial-toolbar span {
+  font-size: 13px;
+}
+#minimap {
+  position: absolute;
+  bottom: 35px;
+  left: 18px;
+  width: 160px;
+  height: 160px;
+}
+@media (max-width: 1050px) {
+  main {
+    grid-template-columns: 215px minmax(250px, 1fr);
+  }
+  .checks {
+    grid-column: 1 / -1;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+  #viewport {
+    height: 580px;
+  }
+}
+@media (max-width: 600px) {
+  header {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 16px;
+  }
+  main {
+    display: flex;
+    flex-direction: column;
+  }
+  .tools {
+    border-right: 0;
+  }
+  .drawing {
+    order: -1;
+    padding: 12px;
+    position: static;
+  }
+  #viewport {
+    height: 400px;
+  }
+}
+/* Small real surface previews help authors choose before opening the 3D trial. */
+.scenario-swatches {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.scenario-swatches figure {
+  margin: 0;
+}
+.scenario-swatches img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.scenario-swatches figcaption {
+  font-size: 11px;
+  color: #a3aab5;
+  margin-top: 4px;
+}

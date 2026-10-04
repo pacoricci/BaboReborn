@@ -1,0 +1,16 @@
+name: Feature proposal
+description: Discuss a feature or substantial change before implementing it.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or player need
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change and alternatives
+      description: Explain the benefit and tradeoffs in complexity, maintenance, or gameplay.
+    validations:
+      required: true

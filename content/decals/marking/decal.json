@@ -1,0 +1,7 @@
+{
+  "schema": 1,
+  "id": "marking",
+  "name": "Worn hazard marking",
+  "author": "BaboReborn contributors",
+  "texture": "texture.png"
+}

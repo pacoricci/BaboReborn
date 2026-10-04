@@ -1,0 +1,32 @@
+name: Bug report
+description: Report a reproducible gameplay, browser, or server problem.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Report vulnerabilities privately through [the security policy](https://github.com/pacoricci/BaboReborn/security/policy).
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Include match or server conditions and how often it occurs.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Release or commit, browser, operating system, and hosting setup when relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Logs, screenshots, or measurements
+      description: Remove credentials and private information.

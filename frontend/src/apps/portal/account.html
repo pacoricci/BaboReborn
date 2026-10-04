@@ -1,0 +1,68 @@
+{{define "account"}}
+<h1 class="visually-hidden">Account</h1>
+{{if .SignedOut}}
+<p class="notice" role="status">Signed out.</p>
+{{end}} {{if .Revoked}}
+<p class="notice" role="status">Signed out on all devices.</p>
+{{end}} {{if .Deleted}}
+<p class="notice" role="status">Portal account deleted.</p>
+{{end}} {{if .DeleteBlocked}}
+<p class="notice" role="alert">
+  Transfer or remove your servers and resolve incoming ownership transfers before deleting your
+  account. <a href="/manage/servers">Manage servers</a>.
+</p>
+{{end}}
+<section class="account-card" aria-label="Account">
+  {{if .Account}}
+  <p>Signed in</p>
+  <form method="post" action="/auth/logout">
+    <button class="secondary">Sign out</button>
+  </form>
+  <p class="muted">Games you have already joined may stay signed in for up to 15 minutes.</p>
+  <details>
+    <summary>Sign out on all devices</summary>
+    <p>Games on other devices may stay signed in for up to 15 minutes.</p>
+    <form method="post" action="/auth/revoke-all">
+      <button class="secondary">Sign out on all devices</button>
+    </form>
+  </details>
+  <details>
+    <summary>Account ID</summary>
+    <p class="muted">Share this ID with a server owner to join their staff.</p>
+    <code id="account-id">{{.Account}}</code>
+    <button id="copy-account-id" type="button" class="secondary">Copy account ID</button>
+    <p id="copy-account-status" role="status"></p>
+  </details>
+  <details>
+    <summary>Delete account</summary>
+    <p>
+      Permanently deletes your portal account and Google sign-in link, and ends all portal sessions.
+      Signing in again creates a new account.
+    </p>
+    <p class="muted">
+      Games already joined may stay signed in for up to 15 minutes. Community server records,
+      backups and browser settings are not deleted by this action. For other data requests, see
+      <a href="/privacy.html">Privacy &amp; cookies</a>.
+    </p>
+    <form method="post" action="/auth/delete-account">
+      <input type="hidden" name="account" value="{{.Account}}" />
+      <label>
+        <input type="checkbox" name="confirm" value="delete" required />
+        I understand that deleting my portal account is permanent.
+      </label>
+      <p><button class="secondary">Delete my account</button></p>
+    </form>
+  </details>
+  {{else}}
+  <p>Guest</p>
+  {{if .Expired}}
+  <p class="muted">Session expired. You’re browsing as Guest.</p>
+  {{end}} {{if .LoginAvailable}}<a class="button primary" href="/auth/login">Sign in with Google</a>
+  <p class="muted">
+    <a href="/privacy.html">Privacy &amp; cookies</a> · <a href="/terms.html">Terms</a>
+  </p>
+  {{else}}
+  <p>Sign-in is currently unavailable.</p>
+  {{end}} {{end}}
+</section>
+{{end}}

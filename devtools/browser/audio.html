@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Audio workshop · BaboReborn</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font:
+          15px/1.5 system-ui,
+          sans-serif;
+        color: #e5eeeb;
+        background: #131e23;
+      }
+      body {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 36px 24px;
+      }
+      a {
+        color: #9ce1ca;
+      }
+      h1 {
+        font-size: 32px;
+        margin-bottom: 8px;
+      }
+      p {
+        color: #afc3bd;
+        max-width: 760px;
+      }
+      #sounds {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+        gap: 16px;
+      }
+      article {
+        background: #1b2a30;
+        padding: 20px;
+        border: 1px solid #33484e;
+        border-radius: 12px;
+      }
+      article h2 {
+        font-size: 17px;
+        margin: 0 0 8px;
+      }
+      article p {
+        font-size: 13px;
+        min-height: 40px;
+      }
+      audio {
+        width: 100%;
+        margin: 12px 0;
+      }
+      button {
+        font: inherit;
+        background: #9ce1ca;
+        color: #122c25;
+        border: 0;
+        border-radius: 7px;
+        padding: 9px 14px;
+        cursor: pointer;
+      }
+      button:focus-visible,
+      a:focus-visible {
+        outline: 3px solid #fff;
+        outline-offset: 4px;
+      }
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 16px;
+        padding: 20px 0;
+      }
+      label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      #status {
+        min-height: 24px;
+      }
+      .eyebrow {
+        color: #9ce1ca;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="./index.html">← Development tools</a>
+    <p class="eyebrow">Audio workshop</p>
+    <h1>BaboReborn sounds</h1>
+    <p>Characterized original recordings. Weapons, impacts, equipment and match events.</p>
+    <p>
+      The audio controls play the raw samples. “In-game mix” uses the game's quieter gain, distance
+      and stereo positioning.
+    </p>
+    <div class="controls">
+      <button id="play-all">Play all samples</button>
+      <button id="stop">Stop</button>
+      <label
+        >Position <input id="position" type="range" min="-12" max="12" value="0" step="1" /><output
+          id="position-value"
+          >Center</output
+        ></label
+      >
+    </div>
+    <p id="status" role="status">Ready to listen.</p>
+    <section id="sounds" aria-label="Game sounds"></section>
+    <script type="module" src="./audio.ts"></script>
+  </body>
+</html>
