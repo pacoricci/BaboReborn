@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-// Version is populated from package.json by the supported build workflows.
-// Direct go builds remain explicitly unknown rather than claiming a release.
+// Version is populated from the release tag by the publication workflow.
+// Local builds default to dev unless a version is explicitly supplied.
 var Version = "dev"
 
 var stableVersion = regexp.MustCompile(`^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$`)

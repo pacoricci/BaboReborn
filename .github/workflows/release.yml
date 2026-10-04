@@ -60,6 +60,7 @@ jobs:
             exit 1
           fi
           version="${RELEASE_TAG#v}"
+          echo "RELEASE_VERSION=$version" >> "$GITHUB_ENV"
           echo "CENTRAL_IMAGE=$DOCKERHUB_USERNAME/baboreborn-central:$version" >> "$GITHUB_ENV"
           echo "SERVER_IMAGE=$DOCKERHUB_USERNAME/baboreborn-server:$version" >> "$GITHUB_ENV"
       - run: npm ci
@@ -85,4 +86,4 @@ jobs:
         run: |
           gh release create "$RELEASE_TAG" "$RUNNER_TEMP/images.txt" \
             --verify-tag --title "BaboReborn $RELEASE_TAG" \
-            --notes-file "docs/releases/${RELEASE_TAG#v}.md" --generate-notes
+            --generate-notes
