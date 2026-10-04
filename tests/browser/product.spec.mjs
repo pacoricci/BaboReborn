@@ -6,9 +6,27 @@ import { readFile } from 'node:fs/promises';
 import { community, portal, contentOrigin } from './playwright.config.mjs';
 
 const createdRooms = [];
-test.afterEach(async ({ browser }) => {
+test.afterEach(async ({ browser }, info) => {
   const rooms = createdRooms.splice(0);
   if (!rooms.length) return;
+  // Capture the failure before room cleanup redirects the game back to the portal.
+  if (info.status !== info.expectedStatus) {
+    const pages = browser.contexts().flatMap((context) => context.pages());
+    for (const [index, page] of pages.entries()) {
+      if (page.isClosed()) continue;
+      try {
+        await info.attach(`page-${index + 1}-before-cleanup`, {
+          body: await page.screenshot({ timeout: 5000 }),
+          contentType: 'image/png',
+        });
+      } catch (error) {
+        await info.attach(`page-${index + 1}-capture-error`, {
+          body: String(error),
+          contentType: 'text/plain',
+        });
+      }
+    }
+  }
   // Each case owns its rooms; retained bot rooms otherwise exhaust the server's
   // real room limit and change the load of later networking/browser checks.
   const context = await browser.newContext({ baseURL: portal });
@@ -671,12 +689,12 @@ test('rendered shot references reach authority and are acknowledged', async ({ p
   await page.getByRole('button', { name: 'Play', exact: true }).click();
   await expect.poll(() => wire.states.includes('alive')).toBe(true);
   await expect.poll(() => wire.snapshots.size).toBeGreaterThan(8);
-  await page.mouse.move(600, 300);
-  await page.mouse.down();
-  await expect
-    .poll(() => wire.inputs.filter((input) => input.fire && input.view).length)
-    .toBeGreaterThan(10);
-  await page.mouse.up();
+  // Recovery releases held controls. Fresh presses keep this check about shot
+  // references, without requiring an uninterrupted hold across a resync.
+  await expect(async () => {
+    await page.mouse.click(600, 300, { delay: 150 });
+    expect(wire.inputs.filter((input) => input.fire && input.view).length).toBeGreaterThan(10);
+  }).toPass({ timeout: 15000 });
   const shots = wire.inputs.filter((input) => input.fire && input.view);
   for (const shot of shots) {
     const view = shot.view;
@@ -768,6 +786,8 @@ test('global skin follows a guest into either community without community conten
     await enterRoom(page, index, `Browser appearance ${index}`);
     references.push(new URL(page.url()).pathname);
   }
+  // The owner's setup session is finished; only the guest needs a live arena.
+  await page.goto('/');
   const guest = await browser.newContext();
   const player = await guest.newPage();
   const localContent = [],
@@ -1097,6 +1117,7 @@ for (const joinDuringPause of [false, true])
 test('nickname colors persist, preserve edited letters and reach other players', async ({
   page,
   browser,
+  viewport,
 }) => {
   test.setTimeout(120000);
   page.setDefaultTimeout(15000);
@@ -1184,7 +1205,8 @@ test('nickname colors persist, preserve edited letters and reach other players',
   expect(await dialog.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
   await page.screenshot({ path: 'output/playwright/nickname-mobile.png', fullPage: true });
   await dialog.getByRole('button', { name: 'Save', exact: true }).click();
-  await page.setViewportSize({ width: 1440, height: 900 });
+  // Desktop/mobile layout checks are done; restore the shared gameplay viewport.
+  await page.setViewportSize(viewport);
   const expected = 'ff3344'.repeat(4) + '55ddff'.repeat(5);
   const wire = await enterRoom(page, 0, 'Nickname colors');
   await expect
