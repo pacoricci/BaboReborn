@@ -101,7 +101,7 @@ test('desktop room editor keeps drafts, renames a live match and limits pending 
     if (url.pathname === '/ws' && url.searchParams.get('info') !== '1')
       socket.on('framereceived', ({ payload }) => messages.push(parseDelivery(payload).body));
   });
-  await game.goto('/');
+  await game.goto('/rooms');
   await game
     .locator('.global-rooms tbody tr')
     .filter({ hasText: 'UX live room' })

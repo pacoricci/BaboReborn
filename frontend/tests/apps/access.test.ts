@@ -67,7 +67,7 @@ void test('admission checks room, identity and compatibility in order before ope
   assert.equal(f.access.invite!.href, `https://arena.example/rooms/${server}.${room}`);
   assert.equal(f.access.url.searchParams.get('guest'), null);
   assert.equal(f.access.url.searchParams.get('profile'), 'verified');
-  assert.deepEqual(f.events[2], { type: 'portal', url: 'https://accounts.example/' });
+  assert.deepEqual(f.events[2], { type: 'portal', url: 'https://accounts.example/rooms' });
   f.access.welcome();
   assert.equal(
     f.access.closed(1013, ''),

@@ -35,7 +35,7 @@ test('a second account tab replaces the first and normal re-entry remains availa
   const second = await context.newPage();
   const secondMessages = observe(second);
   try {
-    await first.goto('/');
+    await first.goto('/rooms');
     await first
       .locator('.global-rooms tbody tr')
       .filter({ hasText: 'Account re-entry' })

@@ -90,7 +90,7 @@ void startWithContent(() => {
     const catalogQuery = createQuery(
       () => ({
         queryKey: ['catalog'],
-        enabled: page === '/',
+        enabled: page === '/rooms',
         refetchInterval: CATALOG_REFRESH_MS,
         queryFn: async ({ signal }) => {
           const response = await fetch('/api/v1/rooms', {
@@ -122,7 +122,7 @@ void startWithContent(() => {
     // Preserve row identity and keyboard focus across catalog refreshes and sorting.
     createEffect(() => setCatalogRooms(reconcile(catalogQuery.data?.rooms ?? [], { key: 'ref' })));
     const rooms = () => (catalogQuery.isError ? [] : catalogRooms);
-    const loading = () => page === '/' && catalogQuery.isPending;
+    const loading = () => page === '/rooms' && catalogQuery.isPending;
     const error = () => catalogQuery.error?.message ?? '';
     const account = () => (accountQuery.isError ? undefined : accountQuery.data);
     createEffect(() =>
@@ -168,7 +168,7 @@ void startWithContent(() => {
             BABO<span>REBORN</span>
           </a>
           <nav class="rooms-nav product-nav" aria-label="Main menu">
-            <a href="/" aria-current={page === '/' ? 'page' : undefined}>
+            <a href="/rooms" aria-current={page === '/rooms' ? 'page' : undefined}>
               Rooms
             </a>
             <a href="/character" aria-current={page === '/character' ? 'page' : undefined}>
@@ -219,7 +219,7 @@ void startWithContent(() => {
           <Show when={page === '/options'}>
             <Options app={preferences} />
           </Show>
-          <Show when={page === '/'}>
+          <Show when={page === '/rooms'}>
             <p class="account-notice" role="status">
               {returnedNotice(new URLSearchParams(location.search).get('notice')) ||
                 (account()?.expired ? 'Session expired. You’re browsing as Guest.' : '')}

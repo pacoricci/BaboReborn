@@ -23,5 +23,5 @@ test('guests can reach shipped credits and notices without signing in', async ({
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: 'output/playwright/credits-mobile.png', fullPage: true });
   await page.getByRole('link', { name: 'Back to rooms' }).click();
-  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveURL(/\/rooms$/);
 });

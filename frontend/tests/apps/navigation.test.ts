@@ -18,7 +18,7 @@ void test('room references preserve identity across invitations, rejoin and logi
     new URL(signInPath(path), 'https://portal.example').searchParams.get('return'),
     path,
   );
-  assert.equal(roomsPath(), ' /'.trim());
+  assert.equal(roomsPath(), '/rooms');
   assert.equal(
     new URL(
       roomsPath('authentication_expired', roomReference(server, room)),
@@ -39,6 +39,6 @@ void test('invalid and credential-bearing invitation URLs are rejected', () => {
     assert.throws(() => matchRoom(new URL(path, 'https://portal.example')));
   assert.throws(() => matchPath('https://other.example', server));
   assert.throws(() => roomsPath('closed', 'invalid'));
-  assert.equal(centralPortal('https://portal.example/path'), 'https://portal.example/');
+  assert.equal(centralPortal('https://portal.example/path'), 'https://portal.example/rooms');
   assert.equal(centralPortal('https://user:password@portal.example'), null);
 });

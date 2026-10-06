@@ -11,7 +11,7 @@ import (
 
 func TestReleaseHandlerServesOnlyProductSurfaces(t *testing.T) {
 	handler := Handler()
-	for _, path := range []string{"/credits.html", "/privacy.html", "/terms.html", "/licenses/BaboViolent2.txt", "/icons/Tabler-LICENSE.txt", "/play.html", "/manage.html", "/match.html", "/editor.html", "/favicon.svg"} {
+	for _, path := range []string{"/credits.html", "/privacy.html", "/terms.html", "/licenses/BaboViolent2.txt", "/icons/Tabler-LICENSE.txt", "/landing.html", "/play.html", "/manage.html", "/match.html", "/editor.html", "/favicon.svg"} {
 		status := statusFollowingRedirects(t, handler, path)
 		if status != http.StatusOK {
 			t.Errorf("product path %s returned %d", path, status)

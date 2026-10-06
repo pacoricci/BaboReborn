@@ -22,11 +22,11 @@ void startWithContent(() => {
     return (
       <>
         <header class="management-header product-topbar">
-          <a class="brand product-brand" href="/" aria-label="BaboReborn rooms">
+          <a class="brand product-brand" href="/" aria-label="BaboReborn home">
             BABO<span>REBORN</span>
           </a>
           <nav class="product-nav" aria-label="Management navigation">
-            <a href="/">Rooms</a>
+            <a href="/rooms">Rooms</a>
             <a href="/character">Character</a>
             <a href="/options">Options</a>
           </nav>

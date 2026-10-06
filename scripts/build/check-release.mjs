@@ -17,6 +17,7 @@ visit(root);
 const productEntries = [
   'credits.html',
   'editor.html',
+  'landing.html',
   'manage.html',
   'match.html',
   'play.html',
