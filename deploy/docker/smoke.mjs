@@ -114,7 +114,7 @@ let serverID;
 let signingKeys;
 
 async function enterRoom(fullMatch = false) {
-  await page.goto(portal);
+  await page.goto(`${portal}/rooms`);
   const wire = {
     id: null,
     alive: false,
