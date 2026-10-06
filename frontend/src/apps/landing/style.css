@@ -1,0 +1,491 @@
+@font-face {
+  font-family: Anton;
+  src: url('/fonts/anton.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('/fonts/barlow-condensed.ttf') format('truetype');
+  font-display: swap;
+}
+:root {
+  color-scheme: dark;
+  --accent: #ff4040;
+  --paper: #f4efe5;
+  --muted: #b7b5b0;
+  --line: #f4efe526;
+  font-family: 'Barlow Condensed', Arial, sans-serif;
+  color: var(--paper);
+  background: #141619;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+a:hover {
+  color: var(--accent);
+}
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 6px;
+}
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+p {
+  font-size: 21px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+h1,
+h2,
+h3,
+.brand,
+.button,
+.mode-code {
+  font-family: Anton, Impact, sans-serif;
+  font-weight: 400;
+}
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 1.08;
+}
+h1 {
+  font-size: clamp(58px, 6.7vw, 112px);
+  letter-spacing: -0.025em;
+}
+h2 {
+  font-size: clamp(42px, 4.5vw, 70px);
+}
+h3 {
+  font-size: 30px;
+}
+h1 span,
+h2 span,
+.brand span {
+  color: var(--accent);
+}
+.header,
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px max(28px, calc((100vw - 1320px) / 2));
+}
+.header {
+  border-bottom: 1px solid var(--line);
+  background: #141619;
+}
+.brand {
+  white-space: nowrap;
+  font-size: 28px;
+  letter-spacing: -0.6px;
+}
+.header nav,
+.footer nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.header nav {
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.github-icon {
+  width: 22px;
+  height: 22px;
+  background: currentColor;
+  mask: url('/icons/brand-github.svg') center / contain no-repeat;
+}
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 54px;
+  padding: 19px 28px;
+  font-size: 24px;
+  text-transform: uppercase;
+  background: var(--accent);
+  color: #101215;
+  border: 1px solid var(--accent);
+}
+.button:hover {
+  background: var(--paper);
+  color: #101215;
+  border-color: var(--paper);
+}
+.button.compact {
+  padding: 11px 20px;
+  font-size: 18px;
+  gap: 30px;
+}
+.hero {
+  min-height: 700px;
+  height: min(820px, 83vh);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  padding: 80px max(28px, calc((100vw - 1320px) / 2));
+  overflow: hidden;
+}
+.hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 70% center;
+  z-index: -3;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(90deg, #101215f5 5%, #101215d9 30%, #10121555 75%),
+    linear-gradient(0deg, #141619, transparent 35%);
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.16;
+  background: repeating-linear-gradient(0deg, transparent 0 3px, #000 3px 4px);
+  pointer-events: none;
+}
+.hero-copy {
+  max-width: 900px;
+}
+.eyebrow {
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 15px;
+  margin: 0 0 22px;
+}
+.intro {
+  font-size: 25px;
+  margin: 28px 0;
+  color: var(--paper);
+}
+.scroll-link {
+  position: absolute;
+  bottom: 32px;
+  right: max(28px, calc((100vw - 1320px) / 2));
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 14px;
+}
+.scroll-link span {
+  padding-left: 20px;
+  color: var(--accent);
+}
+.facts {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  border-block: 1px solid var(--line);
+  gap: 20px 68px;
+  padding: 23px 24px;
+  font-size: 16px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.facts span::before {
+  content: '+';
+  color: var(--accent);
+  margin-right: 14px;
+}
+.section {
+  width: min(1320px, calc(100% - 56px));
+  margin-inline: auto;
+  padding-block: 112px;
+  scroll-margin-top: 32px;
+}
+.gameplay {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  align-items: center;
+  gap: 70px;
+}
+.section-copy p {
+  max-width: 470px;
+}
+.text-link {
+  display: inline-block;
+  margin-top: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--accent);
+  font-size: 20px;
+}
+.text-link span {
+  margin-left: 28px;
+  color: var(--accent);
+}
+figure {
+  margin: 0;
+}
+.game-shot {
+  border: 1px solid var(--line);
+  transform: rotate(-2deg);
+}
+.game-shot img {
+  width: 100%;
+  height: auto;
+}
+.modes {
+  border-top: 1px solid var(--line);
+}
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 32px;
+  margin-bottom: 52px;
+}
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--line);
+}
+.mode-grid article {
+  padding: 36px 32px 0;
+  border-right: 1px solid var(--line);
+}
+.mode-grid article:first-child {
+  padding-left: 0;
+}
+.mode-grid article:last-child {
+  border: 0;
+  padding-right: 0;
+}
+.mode-code {
+  display: block;
+  font-size: 84px;
+  color: #a8a39c;
+  opacity: 0.34;
+  line-height: 1;
+  margin-bottom: 36px;
+}
+.mode-grid article p:last-child {
+  max-width: 320px;
+  font-size: 20px;
+}
+.arsenal {
+  background:
+    linear-gradient(110deg, #202328ee, #141619ec),
+    url('/assets/lobby-background.jpg') center / cover;
+  border-block: 1px solid var(--line);
+}
+.arsenal-inner {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 60px;
+  align-items: center;
+}
+.arsenal-inner > div > p {
+  max-width: 430px;
+}
+.weapons {
+  display: flex;
+  align-items: center;
+}
+.weapons figure {
+  width: 33.33%;
+  text-align: center;
+}
+.weapons figure:nth-child(2) {
+  transform: translateY(-34px);
+}
+.weapons img {
+  width: 100%;
+  filter: drop-shadow(0 20px 12px #0008);
+}
+.weapons figcaption {
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.join {
+  text-align: center;
+  padding-block: 110px;
+}
+.join h2 {
+  font-size: clamp(50px, 6vw, 88px);
+  margin-bottom: 34px;
+}
+.footer {
+  align-items: end;
+  padding-block: 36px;
+  border-top: 1px solid var(--line);
+}
+.footer nav {
+  font-size: 16px;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.skip {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  padding: 12px;
+  background: var(--paper);
+  color: #141619;
+  transform: translateY(-200%);
+}
+.skip:focus {
+  transform: none;
+}
+@media (max-width: 950px) {
+  .header nav {
+    gap: 22px;
+  }
+  .hero {
+    min-height: 630px;
+    height: auto;
+  }
+  .gameplay,
+  .arsenal-inner {
+    gap: 36px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .facts {
+    gap: 20px 30px;
+  }
+  .section {
+    padding-block: 76px;
+  }
+  .footer {
+    align-items: start;
+    flex-direction: column;
+  }
+}
+@media (max-width: 650px) {
+  .header {
+    padding: 18px 20px;
+  }
+  .brand {
+    font-size: 24px;
+  }
+  .header nav > a:not(.button):not(.github-link) {
+    display: none;
+  }
+  .header {
+    gap: 12px;
+  }
+  .header nav {
+    gap: 14px;
+  }
+  .github-label {
+    display: none;
+  }
+  .github-link {
+    min-width: 32px;
+    min-height: 40px;
+    justify-content: center;
+  }
+  .button.compact {
+    font-size: 16px;
+    gap: 18px;
+    padding: 10px 14px;
+  }
+  .hero {
+    min-height: 650px;
+    padding: 76px 24px 94px;
+  }
+  h1 {
+    font-size: clamp(48px, 10.7vw, 69px);
+  }
+  .hero::before {
+    background:
+      linear-gradient(90deg, #101215ed, #10121588), linear-gradient(0deg, #141619, transparent);
+  }
+  .eyebrow {
+    font-size: 13px;
+  }
+  .intro {
+    font-size: 22px;
+  }
+  .scroll-link {
+    left: 24px;
+    right: auto;
+  }
+  .facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+  .facts span::before {
+    margin-right: 7px;
+  }
+  .section {
+    width: calc(100% - 48px);
+    padding-block: 64px;
+  }
+  .gameplay,
+  .arsenal-inner {
+    grid-template-columns: 1fr;
+    gap: 42px;
+  }
+  .game-shot {
+    transform: none;
+  }
+  .section-heading {
+    display: block;
+    margin-bottom: 30px;
+  }
+  .mode-grid {
+    grid-template-columns: 1fr;
+  }
+  .mode-grid article,
+  .mode-grid article:first-child,
+  .mode-grid article:last-child {
+    position: relative;
+    padding: 32px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .mode-code {
+    font-size: 48px;
+    margin-bottom: 24px;
+  }
+  .mode-grid article p:last-child {
+    max-width: none;
+    margin-bottom: 0;
+  }
+  .weapons {
+    margin-top: 28px;
+  }
+  .weapons figcaption {
+    font-size: 13px;
+  }
+  .footer {
+    padding: 28px 24px;
+  }
+  .footer nav {
+    gap: 16px 24px;
+  }
+}

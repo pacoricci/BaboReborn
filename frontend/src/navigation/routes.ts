@@ -20,16 +20,16 @@ export function roomsPath(notice?: string, invitation?: string): string {
     parseRoomReference(invitation);
     params.set('room', invitation);
   }
-  return `/${params.size ? `?${params}` : ''}`;
+  return `/rooms${params.size ? `?${params}` : ''}`;
 }
-export function signInPath(target = '/'): string {
+export function signInPath(target = '/rooms'): string {
   return `/auth/login?${new URLSearchParams({ return: target })}`;
 }
 export function centralPortal(central: string): string | null {
   try {
     const url = new URL(central);
     if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) return null;
-    return new URL('/', url).href;
+    return new URL('/rooms', url).href;
   } catch {
     return null;
   }

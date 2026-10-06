@@ -34,7 +34,7 @@ test('measure real browser frame time during a 16-participant battle', async ({ 
   await editor.getByLabel('Bots', { exact: true }).fill('15');
   await editor.getByRole('button', { name: 'Save room' }).click();
   await expect(editor).not.toBeVisible();
-  await page.goto('/');
+  await page.goto('/rooms');
   await page
     .locator('.global-rooms tbody tr')
     .filter({ hasText: 'Replication performance' })

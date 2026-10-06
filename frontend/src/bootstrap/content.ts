@@ -16,7 +16,7 @@ export async function startWithContent(
     message.setAttribute('role', 'alert');
     message.textContent = error instanceof Error ? error.message : String(error);
     const back = document.createElement('a');
-    back.href = '/';
+    back.href = '/rooms';
     back.textContent = ' Return to rooms';
     message.append(back);
     if (location.pathname.startsWith('/manage/')) {

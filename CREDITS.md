@@ -33,7 +33,7 @@ Copyright 2026 FromBlueToGreen and BaboReborn contributors. Licensed under
 “BaboReborn contributors”.
 
 This covers maps, themes, skins and decals in `content/`, and models,
-textures, equipment images, lobby background, favicon, core sound effects and
+textures, equipment images, in-engine homepage captures, lobby background, favicon, core sound effects and
 music in `frontend/public/`. They were created for BaboReborn and are not
 derived from BaboViolent media. Third-party materials below are excluded.
 
@@ -42,7 +42,7 @@ derived from BaboViolent media. Third-party materials below are excluded.
 - [HUD icon sources and authors](frontend/public/icons/README.md): Shotgun rounds
   by Delapouite; Grenade and Molotov by Lorc, from Game-icons.net, **CC BY 3.0**.
   Unmodified SVGs, also attributed in the published Credits page.
-- Tabler's filled `flag-2`, by Paweł Kuna: [MIT notice](frontend/public/icons/Tabler-LICENSE.txt).
+- Tabler's filled `flag-2` and outline `brand-github`, by Paweł Kuna: [MIT notice](frontend/public/icons/Tabler-LICENSE.txt).
   The SVG is unmodified; team colors are applied through a CSS mask.
 
 ## Fonts

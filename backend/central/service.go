@@ -81,7 +81,11 @@ func (s *Service) Handler() http.Handler {
 	mux.HandleFunc("GET /assets/account.js", serveAccountScript)
 	mux.HandleFunc("GET /assets/topbar.css", serveTopbarStyle)
 	mux.HandleFunc("GET /assets/product.css", serveProductStyle)
-	mux.HandleFunc("GET /{$}", s.productPage("play.html"))
+	mux.HandleFunc("GET /{$}", s.productPage("landing.html"))
+	mux.HandleFunc("GET /landing.html", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/", http.StatusMovedPermanently)
+	})
+	mux.HandleFunc("GET /rooms", s.productPage("play.html"))
 	mux.HandleFunc("GET /character", s.productPage("play.html"))
 	mux.HandleFunc("GET /options", s.productPage("play.html"))
 	mux.HandleFunc("GET /rooms/{ref}", s.productPage("match.html"))

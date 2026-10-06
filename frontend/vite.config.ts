@@ -5,6 +5,7 @@ import { readdirSync, rmSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const releaseInputs = {
+  landing: 'frontend/src/apps/landing/landing.html',
   credits: 'frontend/src/apps/credits/credits.html',
   privacy: 'frontend/src/apps/legal/privacy.html',
   terms: 'frontend/src/apps/legal/terms.html',
@@ -18,6 +19,7 @@ const releaseInputs = {
 // Public page URLs stay independent of the source directory layout.
 function pageRoutes(): Plugin {
   const pages: Record<string, string> = {
+    '/landing.html': '/frontend/src/apps/landing/landing.html',
     '/credits.html': '/frontend/src/apps/credits/credits.html',
     '/privacy.html': '/frontend/src/apps/legal/privacy.html',
     '/terms.html': '/frontend/src/apps/legal/terms.html',

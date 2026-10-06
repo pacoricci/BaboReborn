@@ -18,7 +18,7 @@ func loginReturn(r *http.Request) string {
 		return "/account"
 	}
 	switch u.Path {
-	case "/character", "/options", "/editor.html", "/manage/servers", "/account", "/":
+	case "/rooms", "/character", "/options", "/editor.html", "/manage/servers", "/account", "/":
 		return u.String()
 	}
 	if strings.HasPrefix(u.Path, "/rooms/") {

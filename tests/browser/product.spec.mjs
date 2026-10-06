@@ -94,7 +94,7 @@ async function enterRoom(page, index, name, bots = 0) {
   await editor.getByRole('button', { name: 'Save room' }).click();
   await expect(editor).not.toBeVisible();
   createdRooms.push({ index, name });
-  await page.goto('/');
+  await page.goto('/rooms');
   const wire = {
     socket: null,
     id: null,
@@ -724,7 +724,7 @@ test('portal logout closes games on both community servers', async ({ page, cont
   await page.getByRole('button', { name: 'Sign out', exact: true }).click();
   await expect(page.getByText('Signed out.', { exact: true })).toBeVisible();
   for (const game of [first, second]) {
-    await expect(game).toHaveURL(/\/\?notice=authentication_expired/);
+    await expect(game).toHaveURL(/\/rooms\?notice=authentication_expired/);
     await expect(
       game.getByText('Session expired. You’re browsing as Guest.', { exact: true }),
     ).toBeVisible();
@@ -745,7 +745,7 @@ test('room catalog search, favorites and separate management', async ({ page }) 
   page.on('pageerror', (e) => failures.push(e.message));
   await login(page);
   await enterRoom(page, 0, 'Browser catalog A');
-  await page.goto('/');
+  await page.goto('/rooms');
   const requests = [];
   page.on('request', (r) => requests.push(r.url()));
   await page.getByLabel('Search rooms').fill('Browser catalog A');
@@ -787,7 +787,7 @@ test('global skin follows a guest into either community without community conten
     references.push(new URL(page.url()).pathname);
   }
   // The owner's setup session is finished; only the guest needs a live arena.
-  await page.goto('/');
+  await page.goto('/rooms');
   const guest = await browser.newContext();
   const player = await guest.newPage();
   const localContent = [],
@@ -901,7 +901,7 @@ test('catalog supports mobile keyboard navigation and keeps focused controls acr
   await login(page);
   await enterRoom(page, 0, 'Browser mobile keyboard');
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  await page.goto('/rooms');
   const search = page.getByLabel('Search rooms');
   await expect(search).toBeVisible();
   await search.focus();
@@ -929,7 +929,7 @@ for (const expired of [false, true]) {
     await page.goto('/account');
     await page.getByRole('button', { name: 'Sign out', exact: true }).click();
     if (!expired) await context.clearCookies();
-    await page.goto('/');
+    await page.goto('/rooms');
     await expect(page.getByText('Guest', { exact: true })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Sign in', exact: true })).toBeVisible();
     await expect(page.locator('details.account-summary')).toHaveCount(0);
