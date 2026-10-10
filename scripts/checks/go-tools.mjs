@@ -8,7 +8,7 @@ const root = fileURLToPath(new URL('../../', import.meta.url));
 const tools = {
   lint: {
     module: 'github.com/golangci/golangci-lint/v2/cmd/golangci-lint',
-    version: 'v2.13.2',
+    version: 'v2.14.0',
     name: 'golangci-lint',
   },
   vuln: { module: 'golang.org/x/vuln/cmd/govulncheck', version: 'v1.7.0', name: 'govulncheck' },

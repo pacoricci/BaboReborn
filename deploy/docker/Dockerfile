@@ -9,7 +9,7 @@ COPY content/maps ./content/maps
 COPY scripts/build/*.mjs ./scripts/build/
 RUN npm run build:release && node scripts/build/embed-assets.mjs
 
-FROM golang:1.27-trixie AS go-build
+FROM golang:1.27.2-trixie AS go-build
 ARG RELEASE_VERSION=dev
 WORKDIR /src
 COPY go.mod go.sum ./
