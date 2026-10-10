@@ -27,9 +27,24 @@ make dev
 `make dependencies` to omit hooks. Linux runners may also need Playwright's system
 dependencies.
 
-Dependabot updates Babylon core and loaders together. Node type major updates are
-handled with the minimum runtime, CI, and Docker versions; minor and patch type
-updates remain automatic.
+Dependabot checks weekly and groups patch and minor updates separately for each
+configured ecosystem and npm directory. Security updates use their own groups.
+Babylon core/loaders and the TypeScript protobuf runtime/generator also stay
+together for major updates.
+
+Verified Dependabot PRs containing only patch updates enable GitHub auto-merge.
+The required `check` gate, branch freshness and review-thread rules still apply;
+minor, major and unclassified updates require manual review. Every new PR revision
+clears the previous auto-merge request before its metadata is verified again. The
+privileged workflow never checks out or executes PR code. Repository auto-merge
+must be enabled for this workflow to operate.
+
+Node and Node type major upgrades are coordinated with CI and Docker. PostgreSQL
+major upgrades require a migration plan. Lint tooling keeps TypeScript below 6.1
+until its parser supports a newer version. These constraints are explicit in
+[dependabot.yml](../../.github/dependabot.yml); review them when upgrading the
+corresponding runtime or parser. Go tools pinned in `scripts/checks/go-tools.mjs`
+remain a manual update, and floating Docker tags require refreshed image pulls.
 
 The pre-commit hook checks the staged snapshot: formatting, lint, typecheck,
 `npm test` for non-documentation changes, and Go tests without the race detector

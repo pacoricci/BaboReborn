@@ -5,28 +5,103 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
-  - package-ecosystem: npm
-    directories:
-      - /
-      - /scripts/checks
     groups:
-      babylonjs:
-        patterns:
-          - '@babylonjs/*'
-    # Node type majors follow the minimum runtime, upgraded with CI and Docker.
-    ignore:
-      - dependency-name: '@types/node'
-        update-types: ['version-update:semver-major']
+      patches:
+        patterns: ['*']
+        update-types: [patch]
+      minors:
+        patterns: ['*']
+        update-types: [minor]
+  - package-ecosystem: npm
+    directory: /
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    groups:
+      patches:
+        patterns: ['*']
+        update-types: [patch]
+      minors:
+        patterns: ['*']
+        update-types: [minor]
+      security:
+        applies-to: security-updates
+        patterns: ['*']
+      babylon-major:
+        patterns: ['@babylonjs/*']
+        update-types: [major]
+      protobuf-major:
+        patterns: ['@bufbuild/protobuf', '@bufbuild/protoc-gen-es']
+        update-types: [major]
+    # Node types follow the minimum runtime used by CI and Docker.
+    ignore:
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
+  - package-ecosystem: npm
+    directory: /scripts/checks
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      patches:
+        patterns: ['*']
+        update-types: [patch]
+      minors:
+        patterns: ['*']
+        update-types: [minor]
+      security:
+        applies-to: security-updates
+        patterns: ['*']
+    # typescript-eslint currently requires TypeScript <6.1.
+    ignore:
+      - dependency-name: typescript
+        versions: ['>=6.1.0']
   - package-ecosystem: gomod
     directory: /
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    groups:
+      patches:
+        patterns: ['*']
+        update-types: [patch]
+      minors:
+        patterns: ['*']
+        update-types: [minor]
+      security:
+        applies-to: security-updates
+        patterns: ['*']
   - package-ecosystem: docker
     directory: /deploy/docker
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    groups:
+      patches:
+        patterns: ['*']
+        update-types: [patch]
+      minors:
+        patterns: ['*']
+        update-types: [minor]
+    # Runtime major upgrades are coordinated with CI and Node types.
+    ignore:
+      - dependency-name: node
+        update-types: ['version-update:semver-major']
+  - package-ecosystem: docker-compose
+    directory: /deploy/docker
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      patches:
+        patterns: ['*']
+        update-types: [patch]
+      minors:
+        patterns: ['*']
+        update-types: [minor]
+    allow:
+      - dependency-name: postgres
+    # Database major upgrades require an explicit migration plan.
+    ignore:
+      - dependency-name: postgres
+        update-types: ['version-update:semver-major']
