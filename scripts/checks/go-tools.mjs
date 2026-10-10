@@ -11,7 +11,7 @@ const tools = {
     version: 'v2.14.0',
     name: 'golangci-lint',
   },
-  vuln: { module: 'golang.org/x/vuln/cmd/govulncheck', version: 'v1.7.0', name: 'govulncheck' },
+  vuln: { module: 'golang.org/x/vuln/cmd/govulncheck', version: 'v1.8.0', name: 'govulncheck' },
 };
 const directory = (tool) => join(root, 'output', 'tools', `${tool.name}-${tool.version}`);
 const executable = (tool) =>
