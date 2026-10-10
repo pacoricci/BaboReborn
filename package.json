@@ -28,23 +28,23 @@
     "node": ">=24"
   },
   "dependencies": {
-    "@babylonjs/core": "9.29.0",
-    "@babylonjs/loaders": "9.29.0",
-    "@bufbuild/protobuf": "2.15.0",
-    "@tanstack/solid-query": "5.102.8",
-    "solid-js": "1.9.15"
+    "@babylonjs/core": "9.30.0",
+    "@babylonjs/loaders": "9.30.0",
+    "@bufbuild/protobuf": "2.16.0",
+    "@tanstack/solid-query": "5.104.1",
+    "solid-js": "1.9.17"
   },
   "devDependencies": {
     "@bufbuild/buf": "1.73.0",
-    "@bufbuild/protoc-gen-es": "2.15.0",
-    "@playwright/test": "1.63.0",
-    "@types/node": "24.19.1",
-    "@types/ws": "^8.18.1",
+    "@bufbuild/protoc-gen-es": "2.16.0",
+    "@playwright/test": "1.64.0",
+    "@types/node": "24.19.2",
+    "@types/ws": "^8.18.2",
     "prettier": "3.9.9",
     "tsx": "4.23.15",
     "typescript": "7.0.2",
-    "vite": "8.3.2",
+    "vite": "8.3.4",
     "vite-plugin-solid": "2.11.14",
-    "ws": "^8.21.3"
+    "ws": "^8.22.0"
   }
 }
