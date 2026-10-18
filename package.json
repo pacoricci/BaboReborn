@@ -28,14 +28,14 @@
     "node": ">=24"
   },
   "dependencies": {
-    "@babylonjs/core": "9.30.0",
-    "@babylonjs/loaders": "9.30.0",
+    "@babylonjs/core": "9.31.0",
+    "@babylonjs/loaders": "9.31.0",
     "@bufbuild/protobuf": "2.16.0",
     "@tanstack/solid-query": "5.104.1",
     "solid-js": "1.9.17"
   },
   "devDependencies": {
-    "@bufbuild/buf": "1.73.0",
+    "@bufbuild/buf": "1.74.0",
     "@bufbuild/protoc-gen-es": "2.16.0",
     "@playwright/test": "1.64.0",
     "@types/node": "24.19.2",
