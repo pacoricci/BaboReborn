@@ -1,0 +1,5 @@
+# Test-only connection to PostgreSQL owned by a separate Compose project.
+networks:
+  default:
+    external: true
+    name: ${SMOKE_DATABASE_NETWORK:?Set SMOKE_DATABASE_NETWORK}

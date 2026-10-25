@@ -31,29 +31,92 @@ Set `.env` domains and ports. The defaults are `https://portal.example.org` and
 hostname, and port. `CENTRAL_BIND` and `SERVER_BIND` select host interfaces,
 defaulting to `0.0.0.0`. Configure DNS and inbound access for both endpoints.
 
-Run remaining Compose commands from `deploy/docker/` with these helpers:
+## Choose the database
+
+Central reads its connection URL from `secrets/central/database-url`. Choose one
+of the following helpers from `deploy/docker/` and use it for **all** startup,
+update, backup, restore, and shutdown commands for that installation.
+
+For **local PostgreSQL**, add the optional database file:
+
+```sh
+dc() { docker compose --env-file .env -f compose.yaml -f compose.postgres.yaml "$@"; }
+```
+
+This starts PostgreSQL 17 with a persistent volume and makes central wait for its
+healthcheck. Create `secrets/postgres-password` and set the URL to:
+
+```text
+postgresql://baboreborn:ENCODED_PASSWORD@postgres:5432/baboreborn?sslmode=disable
+```
+
+Use the same password, URL-encoded. PostgreSQL is reachable only on the Compose
+network; its port is not published to the host.
+
+For **external PostgreSQL**, including a managed service, use only the base file:
 
 ```sh
 dc() { docker compose --env-file .env -f compose.yaml "$@"; }
+```
+
+This creates no PostgreSQL container, database volume, or local database password
+secret. Put the provider's connection URL in `secrets/central/database-url`, for
+example:
+
+```text
+postgresql://baboreborn:ENCODED_PASSWORD@db.example.org:5432/baboreborn?sslmode=verify-full&sslrootcert=/run/config/postgres-ca.pem&connect_timeout=10
+```
+
+Place the provider's CA certificate in `secrets/central/postgres-ca.pem` so both
+central and its backup/restore tools can verify the database certificate.
+Certificate paths in the URL refer to paths **inside** the container. Client
+certificates, when required, use `sslcert` and `sslkey` in the same mounted
+directory. Keep the URL, including its password, in the secret file rather than
+in `.env` or command arguments.
+
+Provision a dedicated empty database for a new installation, with a role that
+can connect, create and own the application's tables in `public`, and read/write
+them. Backup/restore also needs access to those objects and permission to
+recreate them. Allow connections from the deployment host in the provider's
+network rules. Use a direct database endpoint or session pooling: central holds
+a session advisory lock, so transaction/statement pooling is unsupported.
+
+PostgreSQL 17 is the tested database version. The image includes PostgreSQL 17
+backup clients; `pg_dump` cannot back up a newer major server version. Check the
+provider's version and URL options before deployment, and rehearse backup and
+restore. Supported URL query options are `host`, `port`, `sslmode`, `sslrootcert`,
+`sslcert`, `sslkey`, and `connect_timeout`; other options are rejected.
+
+An existing installation using the old all-in-one `compose.yaml` must now include
+`compose.postgres.yaml` to retain local PostgreSQL management. Keep the same
+`COMPOSE_PROJECT_NAME`, configuration, and volumes: their names are unchanged.
+Changing the URL alone does **not** migrate a database. To move existing data,
+stop central, back up the source, restore to the destination using the maintenance
+procedure below, and preserve central's signing keys. Retain the source database
+until the destination is verified; never use `down -v` for this transition.
+
+For a standalone community host, use:
+
+```sh
 ds() { docker compose --env-file .env -f compose.server.yaml "$@"; }
 ```
 
-`dc` manages PostgreSQL and central. Use `ds` for a standalone community host with
-its own `.env` and `secrets/server/`, or `dc --profile community` to include a server
-on central's host. Keep the same management method for maintenance.
+Use `ds` with its own `.env` and `secrets/server/`, or `dc --profile community` to
+include a server on central's host with either database mode.
 
 ## Central secrets and first startup
 
 Prepare these files; bind mounts reject missing configuration directories:
 
-| Host path, relative to `deploy/docker/` | Contents                                                                                                                   |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `secrets/postgres-password`             | PostgreSQL password.                                                                                                       |
-| `secrets/central/database-url`          | `postgresql://baboreborn:ENCODED_PASSWORD@postgres:5432/baboreborn?sslmode=disable`, using the same password, URL-encoded. |
-| `secrets/central/google-client-id`      | Google OAuth client ID.                                                                                                    |
-| `secrets/central/google-client-secret`  | Google OAuth client secret.                                                                                                |
-| `secrets/central/fullchain.pem`         | Certificate chain for central's public hostname.                                                                           |
-| `secrets/central/privkey.pem`           | Matching TLS private key.                                                                                                  |
+| Host path, relative to `deploy/docker/` | Contents                                                                        |
+| --------------------------------------- | ------------------------------------------------------------------------------- |
+| `secrets/postgres-password`             | Local PostgreSQL password; not needed for an external database.                 |
+| `secrets/central/database-url`          | Connection URL for the selected local or external database, as described above. |
+| `secrets/central/postgres-ca.pem`       | External database CA certificate, only when referenced by `sslrootcert`.        |
+| `secrets/central/google-client-id`      | Google OAuth client ID.                                                         |
+| `secrets/central/google-client-secret`  | Google OAuth client secret.                                                     |
+| `secrets/central/fullchain.pem`         | Certificate chain for central's public hostname.                                |
+| `secrets/central/privkey.pem`           | Matching TLS private key.                                                       |
 
 Register `CENTRAL_ORIGIN/auth/callback` as the OAuth redirect URL. Supply both
 Google credentials or neither. For guest-only play with this Compose setup, leave
@@ -61,17 +124,20 @@ both credential files empty; account-based ownership management is unavailable.
 
 Containers use UID/GID **10001:10001**. Grant that identity directory traversal
 and read access to mounted configuration and private keys without exposing secrets.
-Named volumes mount at `/data`. Central includes PostgreSQL 17 clients to match
-the Compose database.
+Named application volumes mount at `/data`. With the selected `dc` helper:
 
 ```sh
 dc config --quiet
-dc up -d postgres
 dc run --rm --no-deps central -data-dir /data -storage keygen
-dc up -d central
+dc up -d --wait --wait-timeout 120 central
 dc ps
 dc logs --tail=100 central
 ```
+
+Local PostgreSQL starts automatically as a dependency of central. For an external
+database, provision it before starting central; Compose does not manage its
+lifecycle. Central fails startup if it cannot connect or initialize/validate the
+schema. The HTTP healthcheck is a liveness check, not a continuous database check.
 
 First startup requires an empty PostgreSQL database and fresh central/community
 data volumes. Startup initializes the
@@ -86,7 +152,7 @@ Run `keygen` only for a new central volume. Preserve `/data/signing.pem` and
 The [entrypoint](../../deploy/docker/central-entrypoint.sh) reads `*_FILE` settings
 into the binary's environment and rejects a value supplied both directly and by
 file. Override Compose paths with `CENTRAL_CONFIG_DIR`, `SERVER_CONFIG_DIR`, and
-`POSTGRES_PASSWORD_FILE`.
+`POSTGRES_PASSWORD_FILE` (local PostgreSQL only).
 
 Central, community, and browser must share the registry, API, gameplay, content,
 and tuning contracts in the [compatibility descriptor](../../backend/compatibility/current.go).
@@ -170,9 +236,11 @@ requests arrive from loopback.
 
 ## Backup and restore
 
-Stop the owning application before maintenance; keep PostgreSQL running for
-central's dump/restore commands. Both services acquire exclusive leases, and
-central locks its database. Backups reject existing destinations.
+Stop the owning application before maintenance; keep the selected local or
+external PostgreSQL database available for central's dump/restore commands.
+Use the same `dc` helper and database URL as the running installation. Both
+services acquire exclusive leases, and central locks its database. Backups reject
+existing destinations.
 
 These commands use `dc` for central and `ds` for a standalone community. Replace
 `ds` with `dc --profile community` for a community managed by the main Compose
@@ -229,6 +297,14 @@ database schemas, and central keys. Preserve volumes; `down -v` deletes them.
 | Storage is locked                   | Stop the owner before backup/restore; do not bypass leases.                           |
 | Protocol/profile mismatch           | Components must share contracts and tuning.                                           |
 
-`make test-docker` from the repository root tests containers, browser play, and
-persistence. Verify public domains, identity configuration, certificates, and
-network access on the deployed installation.
+`make test-deploy` from the repository root validates the local, external, and
+community Compose configurations without a running Docker daemon or real secrets.
+It also runs in `make check` / `make check-ci` and requires the Docker Compose CLI.
+
+`make test-docker` builds the images and runs browser play, recreation, and
+backup/restore with both a local database and a database owned by a separate
+Compose project. The external fixture verifies that application shutdown leaves
+the database running. Both fixtures use PostgreSQL 17 on an isolated Docker
+network without database TLS; they do not certify a particular managed provider.
+Verify database TLS, provider permissions, public domains, identity configuration,
+certificates, and network access on the deployed installation.

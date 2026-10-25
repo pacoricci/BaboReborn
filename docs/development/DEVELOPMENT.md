@@ -13,7 +13,8 @@ for module responsibilities and [deployment](../deployment/DEPLOYMENT.md) for ho
   and `pg_restore`. Scripts also detect Homebrew PostgreSQL 18 at
   `/opt/homebrew/opt/postgresql@18/bin`; set `POSTGRES_BIN` for another installation.
   Run local clusters as a regular user.
-- Chromium for browser tests; Docker with Compose for container tests.
+- Docker Compose CLI for deployment configuration checks (no daemon required).
+- Chromium for browser tests; a running Docker daemon for container tests.
 
 ## First run
 
@@ -110,18 +111,19 @@ preserve the old directory and start with a fresh one.
 
 ## Verification
 
-| Command              | Scope and prerequisites                                                                                                                                                                          |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `make check`         | `make check-ci` plus browser tests; needs Chromium.                                                                                                                                              |
-| `make check-ci`      | Build, formatting check, typecheck, lint, frontend/release tests, Go race tests, PostgreSQL integration, movement/prediction parity, Go vulnerability check. Needs quality tools and PostgreSQL. |
-| `make format`        | Format source files, Markdown, Go, and protobuf.                                                                                                                                                 |
-| `npm test`           | Frontend unit and architecture/contract tests.                                                                                                                                                   |
-| `make test-go`       | Go race tests; run `make build-embedded` first.                                                                                                                                                  |
-| `make test-postgres` | Temporary PostgreSQL cluster, storage/service tests, and backup/restore checks; run `make build-embedded` first.                                                                                 |
-| `make test-parity`   | Cross-language movement and prediction conformance.                                                                                                                                              |
-| `make test-browser`  | Rebuild binaries and test a disposable stack in Chromium.                                                                                                                                        |
-| `make test-docker`   | Build images and test containers, browser play, and persistence. Needs Docker and Chromium.                                                                                                      |
-| `make test-release`  | Release guards in temporary Git repositories. Needs Node.js and Git.                                                                                                                             |
+| Command              | Scope and prerequisites                                                                                                                                                                                                       |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `make check`         | `make check-ci` plus browser tests; needs Chromium.                                                                                                                                                                           |
+| `make check-ci`      | Build, formatting check, typecheck, lint, frontend/release/deployment tests, Go race tests, PostgreSQL integration, movement/prediction parity, Go vulnerability check. Needs quality tools, PostgreSQL, and the Compose CLI. |
+| `make format`        | Format source files, Markdown, Go, and protobuf.                                                                                                                                                                              |
+| `npm test`           | Frontend unit and architecture/contract tests.                                                                                                                                                                                |
+| `make test-go`       | Go race tests; run `make build-embedded` first.                                                                                                                                                                               |
+| `make test-postgres` | Temporary PostgreSQL cluster, storage/service tests, and backup/restore checks; run `make build-embedded` first.                                                                                                              |
+| `make test-parity`   | Cross-language movement and prediction conformance.                                                                                                                                                                           |
+| `make test-browser`  | Rebuild binaries and test a disposable stack in Chromium.                                                                                                                                                                     |
+| `make test-deploy`   | Validate local/external database and community Compose configurations. Needs the Compose CLI only.                                                                                                                            |
+| `make test-docker`   | Build images and test both database modes, browser play, persistence, and backup/restore. Needs Docker and Chromium.                                                                                                          |
+| `make test-release`  | Release guards in temporary Git repositories. Needs Node.js and Git.                                                                                                                                                          |
 
 GitHub Actions runs `make check-ci` alongside three browser shards on pull requests
 and pushes to `main`. Each shard builds and starts its own disposable stack and

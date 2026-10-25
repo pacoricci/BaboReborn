@@ -9,9 +9,12 @@ import { tsImport } from 'tsx/esm/api';
 
 const { parseDelivery } = await tsImport('../../frontend/src/network/protocol.ts', import.meta.url);
 
+const databaseMode = process.argv[2] ?? 'local';
+assert(['local', 'external'].includes(databaseMode), 'Database mode must be local or external');
+const docker = process.env.DOCKER ?? 'docker';
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const files = resolve(root, 'deploy/docker');
-const output = resolve(root, 'output/docker-smoke');
+const output = resolve(root, 'output/docker-smoke', databaseMode);
 // Keep bind sources inside the checkout shared with Docker Desktop/Colima.
 await mkdir(output, { recursive: true });
 for (const name of ['failure.png', 'match.png', 'containers.log'])
@@ -35,6 +38,7 @@ const environment = {
   PAIRING_CODE_FILE: '/run/config/pairing-code',
   SMOKE_CENTRAL_PORT: centralPort,
   SMOKE_SERVER_PORT: serverPort,
+  SMOKE_DATABASE_NETWORK: `${project}-database_default`,
 };
 const composeArgs = [
   'compose',
@@ -44,11 +48,29 @@ const composeArgs = [
   project,
   '-f',
   resolve(files, 'compose.yaml'),
+  ...(databaseMode === 'local' ? ['-f', resolve(files, 'compose.postgres.yaml')] : []),
   '-f',
   resolve(files, 'compose.smoke.yaml'),
+  ...(databaseMode === 'external' ? ['-f', resolve(files, 'compose.external-smoke.yaml')] : []),
   '--profile',
   'community',
 ];
+
+// The external fixture owns its database independently of the application project.
+const databaseArgs =
+  databaseMode === 'local'
+    ? composeArgs
+    : [
+        'compose',
+        '--env-file',
+        resolve(temporary, 'empty.env'),
+        '-p',
+        `${project}-database`,
+        '-f',
+        resolve(files, 'compose.yaml'),
+        '-f',
+        resolve(files, 'compose.postgres.yaml'),
+      ];
 
 async function run(command, args, input) {
   return new Promise((done, reject) => {
@@ -70,12 +92,13 @@ async function run(command, args, input) {
     child.stdin.end(input);
   });
 }
-const compose = (...args) => run('docker', [...composeArgs, ...args]);
+const compose = (...args) => run(docker, [...composeArgs, ...args]);
+const database = (...args) => run(docker, [...databaseArgs, ...args]);
 const sql = (input) =>
   run(
-    'docker',
+    docker,
     [
-      ...composeArgs,
+      ...databaseArgs,
       'exec',
       '-T',
       'postgres',
@@ -108,6 +131,7 @@ let browser;
 let page;
 let context;
 let started = false;
+let databaseStarted = false;
 const failures = [];
 const roomName = 'Docker persistence';
 let serverID;
@@ -238,7 +262,7 @@ try {
   }
   await compose('config', '--quiet');
   // Also validate the independently deployable community file, without central services.
-  await run('docker', [
+  await run(docker, [
     'compose',
     '--env-file',
     resolve(temporary, 'empty.env'),
@@ -247,9 +271,10 @@ try {
     'config',
     '--quiet',
   ]);
+  console.log(`Starting ${databaseMode} PostgreSQL fixture and release central image.`);
+  databaseStarted = true;
+  await database('up', '-d', '--wait', '--wait-timeout', '120', 'postgres');
   started = true;
-  console.log('Starting isolated PostgreSQL and release central image.');
-  await compose('up', '-d', '--wait', '--wait-timeout', '120', 'postgres');
   await compose(
     'run',
     '--rm',
@@ -315,6 +340,13 @@ try {
   environment.PAIRING_CODE_FILE = '';
   await rm(resolve(temporary, 'server/pairing-code'));
   await compose('down');
+  if (databaseMode === 'external') {
+    assert.match(
+      await sql('SELECT 1;'),
+      /1 row/,
+      'External database must survive application shutdown',
+    );
+  }
   await compose('up', '-d', '--no-build', '--wait', '--wait-timeout', '60', 'central');
   await compose('up', '-d', '--no-build', '--wait', '--wait-timeout', '60', 'server');
   await verifyPersistentState();
@@ -353,7 +385,13 @@ try {
         }
       }
     } finally {
-      await rm(temporary, { recursive: true, force: true });
+      try {
+        if (databaseStarted && (databaseMode === 'external' || !started)) {
+          await database('down', '--volumes', '--remove-orphans');
+        }
+      } finally {
+        await rm(temporary, { recursive: true, force: true });
+      }
     }
   }
 }
