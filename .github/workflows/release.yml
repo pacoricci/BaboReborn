@@ -60,26 +60,48 @@ jobs:
             exit 1
           fi
           version="${RELEASE_TAG#v}"
-          echo "RELEASE_VERSION=$version" >> "$GITHUB_ENV"
-          echo "CENTRAL_IMAGE=$DOCKERHUB_USERNAME/baboreborn-central:$version" >> "$GITHUB_ENV"
-          echo "SERVER_IMAGE=$DOCKERHUB_USERNAME/baboreborn-server:$version" >> "$GITHUB_ENV"
+          {
+            echo "RELEASE_VERSION=$version"
+            echo "CENTRAL_IMAGE=$DOCKERHUB_USERNAME/baboreborn-central:$version"
+            echo "SERVER_IMAGE=$DOCKERHUB_USERNAME/baboreborn-server:$version"
+          } >> "$GITHUB_ENV"
+      - name: Enable the multiarch image store
+        uses: docker/setup-docker-action@3f1ab1ab0e29231562e4db4ca600c1a49653bac6 # v5.7.0
+        with:
+          daemon-config: |
+            {
+              "features": {
+                "containerd-snapshotter": true
+              }
+            }
+      - name: Set up ARM64 emulation
+        uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4.4.0
+        with:
+          platforms: arm64
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      # Push the exact local images exercised by browser and persistence tests.
-      - run: make test-docker
+      # Keep both architectures local so publication reuses the tested images.
+      - name: Build multiarch images and test the native platform
+        env:
+          DOCKER_BUILD_FLAGS: --platform=linux/amd64,linux/arm64
+        run: make test-docker
       - uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Push tested images and record their digests
+      - name: Push tested images, verify platforms and record index digests
         run: |
-          docker push "$CENTRAL_IMAGE"
-          docker push "$SERVER_IMAGE"
-          {
-            echo "Source: $GITHUB_SHA"
-            docker image inspect "$CENTRAL_IMAGE" --format '{{index .RepoDigests 0}}'
-            docker image inspect "$SERVER_IMAGE" --format '{{index .RepoDigests 0}}'
-          } > "$RUNNER_TEMP/images.txt"
+          echo "Source: $GITHUB_SHA" > "$RUNNER_TEMP/images.txt"
+          for image in "$CENTRAL_IMAGE" "$SERVER_IMAGE"; do
+            docker push "$image"
+            manifest="$(docker buildx imagetools inspect "$image" --format '{{json .Manifest}}')"
+            jq -e '
+              [.manifests[].platform | select(.os == "linux") | .architecture]
+              | sort == ["amd64", "arm64"]
+            ' <<< "$manifest"
+            digest="$(jq -er '.digest' <<< "$manifest")"
+            echo "${image%:*}@$digest" >> "$RUNNER_TEMP/images.txt"
+          done
       - name: Publish stable GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}

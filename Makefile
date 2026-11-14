@@ -4,6 +4,7 @@
 .PHONY: help setup dependencies tools-install hooks-install dev build-dev build build-embedded check check-ci format-check format lint lint-go test-go test-postgres test-parity test-browser measure-compression security-go precommit server central docker-build test-docker test-deploy
 
 DOCKER ?= docker
+DOCKER_BUILD_FLAGS ?=
 CENTRAL_IMAGE ?= baboreborn/central:local
 SERVER_IMAGE ?= baboreborn/server:local
 RELEASE_VERSION ?= dev
@@ -15,8 +16,8 @@ help:
 	@printf '%s\n' 'make check-ci      Run quality checks without browser tests' 'make test-release  Verify release validation against temporary Git repositories'
 
 docker-build:
-	$(DOCKER) build -f deploy/docker/Dockerfile --build-arg RELEASE_VERSION="$(RELEASE_VERSION)" --target server -t $(SERVER_IMAGE) .
-	$(DOCKER) build -f deploy/docker/Dockerfile --build-arg RELEASE_VERSION="$(RELEASE_VERSION)" --target central -t $(CENTRAL_IMAGE) .
+	$(DOCKER) build $(DOCKER_BUILD_FLAGS) -f deploy/docker/Dockerfile --build-arg RELEASE_VERSION="$(RELEASE_VERSION)" --target server -t $(SERVER_IMAGE) .
+	$(DOCKER) build $(DOCKER_BUILD_FLAGS) -f deploy/docker/Dockerfile --build-arg RELEASE_VERSION="$(RELEASE_VERSION)" --target central -t $(CENTRAL_IMAGE) .
 
 test-deploy:
 	DOCKER=$(DOCKER) node --test tests/deployment/*.test.mjs

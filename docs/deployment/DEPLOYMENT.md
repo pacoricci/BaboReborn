@@ -21,10 +21,11 @@ mkdir -p secrets/central secrets/server backups
 The build produces `baboreborn/central:local` and `baboreborn/server:local`, the
 `.env` defaults. Stable releases publish Docker Hub images named
 `<namespace>/baboreborn-central:X.Y.Z` and `<namespace>/baboreborn-server:X.Y.Z`.
-Set `CENTRAL_IMAGE` and `SERVER_IMAGE` to matching releases. Prefer the
-`namespace/image@sha256:...` references in each
-[GitHub Release](https://github.com/pacoricci/BaboReborn/releases)'s `images.txt`,
-which also records the source commit.
+Each tag includes `linux/amd64` and `linux/arm64`; Docker selects the host's
+architecture automatically. Set `CENTRAL_IMAGE` and `SERVER_IMAGE` to matching
+releases. Prefer the `namespace/image@sha256:...` references in each
+[GitHub Release](https://github.com/pacoricci/BaboReborn/releases)'s `images.txt`.
+These digests pin the multiarch indexes; the file also records the source commit.
 
 Set `.env` domains and ports. The defaults are `https://portal.example.org` and
 `https://game.example.org:8443`; registered origins must match the public scheme,
