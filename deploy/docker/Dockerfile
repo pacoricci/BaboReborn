@@ -1,5 +1,6 @@
 # syntax=docker/dockerfile:1
-FROM node:24-trixie-slim AS frontend
+# Build assets and cross-compile Go on the builder's native architecture.
+FROM --platform=$BUILDPLATFORM node:24-trixie-slim AS frontend
 WORKDIR /src
 COPY package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm npm ci
@@ -9,24 +10,26 @@ COPY content/maps ./content/maps
 COPY scripts/build/*.mjs ./scripts/build/
 RUN npm run build:release && node scripts/build/embed-assets.mjs
 
-FROM golang:1.27.4-trixie AS go-build
+FROM --platform=$BUILDPLATFORM golang:1.27.4-trixie AS go-build
 ARG RELEASE_VERSION=dev
 WORKDIR /src
 COPY go.mod go.sum ./
 RUN --mount=type=cache,target=/go/pkg/mod go mod download
 COPY backend ./backend
+ARG TARGETOS
+ARG TARGETARCH
 
 # This branch has no dependency on the frontend build or bundled content.
 FROM go-build AS server-build
 RUN --mount=type=cache,target=/go/pkg/mod --mount=type=cache,target=/root/.cache/go-build \
-    CGO_ENABLED=0 go build -ldflags "-X baboreborn/backend/release.Version=$RELEASE_VERSION" -trimpath -o /out/server ./backend/cmd/server
+    CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -ldflags "-X baboreborn/backend/release.Version=$RELEASE_VERSION" -trimpath -o /out/server ./backend/cmd/server
 
 FROM go-build AS central-build
 COPY content ./content
 COPY --from=frontend /src/backend/web/dist ./backend/web/dist
 COPY --from=frontend /src/backend/web/portal ./backend/web/portal
 RUN --mount=type=cache,target=/go/pkg/mod --mount=type=cache,target=/root/.cache/go-build \
-    CGO_ENABLED=0 go build -ldflags "-X baboreborn/backend/release.Version=$RELEASE_VERSION" -trimpath -o /out/central ./backend/cmd/central
+    CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -ldflags "-X baboreborn/backend/release.Version=$RELEASE_VERSION" -trimpath -o /out/central ./backend/cmd/central
 
 FROM debian:trixie-slim AS runtime
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl \

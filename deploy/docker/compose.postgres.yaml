@@ -1,0 +1,35 @@
+# Optional local database; combine with compose.yaml.
+services:
+  postgres:
+    image: postgres:17-trixie
+    restart: unless-stopped
+    stop_grace_period: 30s
+    environment:
+      POSTGRES_USER: baboreborn
+      POSTGRES_DB: baboreborn
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres-password
+    secrets: [postgres-password]
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U baboreborn -d baboreborn']
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+
+  central:
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+secrets:
+  postgres-password:
+    file: ${POSTGRES_PASSWORD_FILE:-./secrets/postgres-password}
+
+volumes:
+  postgres-data:

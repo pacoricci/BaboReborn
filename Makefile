@@ -1,9 +1,10 @@
 .DEFAULT_GOAL := help
 # These workflows share generated assets; keep them ordered even with make -j.
 .NOTPARALLEL:
-.PHONY: help setup dependencies tools-install hooks-install dev build-dev build build-embedded check check-ci format-check format lint lint-go test-go test-postgres test-parity test-browser measure-compression security-go precommit server central docker-build test-docker
+.PHONY: help setup dependencies tools-install hooks-install dev build-dev build build-embedded check check-ci format-check format lint lint-go test-go test-postgres test-parity test-browser measure-compression security-go precommit server central docker-build test-docker test-deploy
 
 DOCKER ?= docker
+DOCKER_BUILD_FLAGS ?=
 CENTRAL_IMAGE ?= baboreborn/central:local
 SERVER_IMAGE ?= baboreborn/server:local
 RELEASE_VERSION ?= dev
@@ -11,15 +12,19 @@ RELEASE_LDFLAGS = -X baboreborn/backend/release.Version=$(RELEASE_VERSION)
 
 help:
 	@printf '%s\n' 'make setup         Install dependencies, tools and Git hooks' 'make dev           Start the complete local identity/server stack' 'make build         Build server and central with the release frontend' 'make check         Run all quality checks, including Go vulnerabilities' 'make format        Format JavaScript/TypeScript and Go' 'make precommit     Validate staged changes' 'make dependencies  Install dependencies and tools without Git hooks'
-	@printf '%s\n' 'make docker-build  Build central and community server container images' 'make test-docker   Verify containers, browser play and persistence (Docker + Chromium)'
+	@printf '%s\n' 'make docker-build  Build central and community server container images' 'make test-deploy   Validate local/external deployment configuration (Compose CLI only)' 'make test-docker   Verify both database modes, browser play and persistence (Docker + Chromium)'
 	@printf '%s\n' 'make check-ci      Run quality checks without browser tests' 'make test-release  Verify release validation against temporary Git repositories'
 
 docker-build:
-	$(DOCKER) build -f deploy/docker/Dockerfile --build-arg RELEASE_VERSION="$(RELEASE_VERSION)" --target server -t $(SERVER_IMAGE) .
-	$(DOCKER) build -f deploy/docker/Dockerfile --build-arg RELEASE_VERSION="$(RELEASE_VERSION)" --target central -t $(CENTRAL_IMAGE) .
+	$(DOCKER) build $(DOCKER_BUILD_FLAGS) -f deploy/docker/Dockerfile --build-arg RELEASE_VERSION="$(RELEASE_VERSION)" --target server -t $(SERVER_IMAGE) .
+	$(DOCKER) build $(DOCKER_BUILD_FLAGS) -f deploy/docker/Dockerfile --build-arg RELEASE_VERSION="$(RELEASE_VERSION)" --target central -t $(CENTRAL_IMAGE) .
 
-test-docker: docker-build
-	CENTRAL_IMAGE=$(CENTRAL_IMAGE) SERVER_IMAGE=$(SERVER_IMAGE) node deploy/docker/smoke.mjs
+test-deploy:
+	DOCKER=$(DOCKER) node --test tests/deployment/*.test.mjs
+
+test-docker: test-deploy docker-build
+	DOCKER=$(DOCKER) CENTRAL_IMAGE=$(CENTRAL_IMAGE) SERVER_IMAGE=$(SERVER_IMAGE) node deploy/docker/smoke.mjs local
+	DOCKER=$(DOCKER) CENTRAL_IMAGE=$(CENTRAL_IMAGE) SERVER_IMAGE=$(SERVER_IMAGE) node deploy/docker/smoke.mjs external
 
 setup: dependencies hooks-install
 
@@ -58,7 +63,7 @@ check-ci: build format-check
 	npm run typecheck
 	$(MAKE) lint
 	npm test
-	$(MAKE) test-release
+	$(MAKE) test-release test-deploy
 	$(MAKE) test-go test-postgres test-parity security-go
 
 check: check-ci test-browser

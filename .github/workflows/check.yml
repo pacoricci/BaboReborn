@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     env:
-      # Match the production image (deploy/docker/compose.yaml).
+      # Match the local database image (deploy/docker/compose.postgres.yaml).
       POSTGRES_BIN: /usr/lib/postgresql/17/bin
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
