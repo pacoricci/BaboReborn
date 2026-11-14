@@ -9,6 +9,11 @@
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.1"
   },
+  "overrides": {
+    "@typescript-eslint/typescript-estree@8.72.1": {
+      "minimatch": "11.0.8"
+    }
+  },
   "engines": {
     "node": ">=24"
   }
