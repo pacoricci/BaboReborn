@@ -33,30 +33,58 @@ function config(t, files, community = false) {
     SMOKE_SERVER_PORT: '38080',
     SMOKE_DATABASE_NETWORK: 'independent-database_default',
   });
-  const result = execFileSync(
-    process.env.DOCKER ?? 'docker',
-    [
-      'compose',
-      '--env-file',
-      envFile,
-      '-p',
-      'baboreborn-config-test',
-      ...files.flatMap((file) => ['-f', join(root, 'deploy/docker', file)]),
-      ...(community ? ['--profile', 'community'] : []),
-      'config',
-      '--format',
-      'json',
-    ],
-    { env, encoding: 'utf8', timeout: 30000 },
+  const render = (paths, community = false) =>
+    JSON.parse(
+      execFileSync(
+        process.env.DOCKER ?? 'docker',
+        [
+          'compose',
+          '--env-file',
+          envFile,
+          '-p',
+          'baboreborn-config-test',
+          ...paths.flatMap((file) => ['-f', file]),
+          ...(community ? ['--profile', 'community'] : []),
+          'config',
+          '--format',
+          'json',
+        ],
+        { env, encoding: 'utf8', timeout: 30000 },
+      ),
+    );
+  const reference = join(directory, 'bind-reference.json');
+  writeFileSync(
+    reference,
+    JSON.stringify({
+      services: {
+        reference: {
+          image: 'example/reference:fixture',
+          volumes: [
+            {
+              type: 'bind',
+              source: directory,
+              target: '/run/config',
+              bind: { create_host_path: false },
+            },
+          ],
+        },
+      },
+    }),
   );
-  return { model: JSON.parse(result), directory };
+  // Compose versions omit different boolean defaults from their JSON output.
+  const disabledBind = render([reference]).services.reference.volumes[0].bind;
+  const model = render(
+    files.map((file) => join(root, 'deploy/docker', file)),
+    community,
+  );
+  return { model, directory, disabledBind };
 }
 
 for (const local of [false, true]) {
   for (const community of [false, true]) {
     test(`${local ? 'local' : 'external'} database${community ? ' with community server' : ''}`, (t) => {
       const files = ['compose.yaml', ...(local ? ['compose.postgres.yaml'] : [])];
-      const { model, directory } = config(t, files, community);
+      const { model, directory, disabledBind } = config(t, files, community);
       assert.deepEqual(
         Object.keys(model.services).sort(),
         ['central', ...(local ? ['postgres'] : []), ...(community ? ['server'] : [])].sort(),
@@ -71,7 +99,7 @@ for (const local of [false, true]) {
       const mount = central.volumes.find(({ target }) => target === '/run/config');
       assert.equal(mount.source, join(directory, 'central'));
       assert.equal(mount.read_only, true);
-      assert.equal(mount.bind.create_host_path, false);
+      assert.equal(mount.bind.create_host_path, disabledBind.create_host_path);
       // Existing installations must retain their application and database volume identities.
       assert.equal(model.volumes['central-data'].name, 'baboreborn-config-test_central-data');
       if (local) {
