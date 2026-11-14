@@ -46,6 +46,12 @@ until its parser supports a newer version. These constraints are explicit in
 corresponding runtime or parser. Go tools pinned in `scripts/checks/go-tools.mjs`
 remain a manual update, and floating Docker tags require refreshed image pulls.
 
+Lint tooling overrides `minimatch` to 11.0.8 only for
+`@typescript-eslint/typescript-estree@8.72.1` to address
+[GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249).
+Reassess this version-scoped override when updating the parser; remove it when
+the parser declares a patched `minimatch` dependency.
+
 The pre-commit hook checks the staged snapshot: formatting, lint, typecheck,
 `npm test` for non-documentation changes, and Go tests without the race detector
 for changes to `backend/`, `content/`, or Go modules. Go tests reuse assets from the
