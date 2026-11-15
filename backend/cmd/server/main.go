@@ -109,6 +109,9 @@ func run() (err error) {
 		}
 		return configuredRoom(c, arenas, []string{parsed.Host}, remote.Catalog)
 	}, *maxRooms)
+	if err = configureUpdater(rooms, filepath.Join(*directory, "updater-auth")); err != nil {
+		return err
+	}
 	admin := administration.New(ctx, local.DB, auth, rooms)
 	reg.Apply = admin.ApplyAssociation
 	reg.Publication = admin.Publication
@@ -150,7 +153,7 @@ func routes(rooms, latency http.Handler, diagnostics bool) http.Handler {
 		switch r.URL.Path {
 		case "/latency":
 			latency.ServeHTTP(w, r)
-		case "/ws", "/health", "/metrics":
+		case "/ws", "/health", "/metrics", "/maintenance/drain":
 			rooms.ServeHTTP(w, r)
 		case "/diagnostics":
 			if diagnostics {

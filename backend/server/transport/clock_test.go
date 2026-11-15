@@ -156,6 +156,21 @@ func TestOwnerStopsWhenWakeSourceCloses(t *testing.T) {
 	}
 }
 
+func TestHumansResetWhenRoomOwnerStops(t *testing.T) {
+	r := startControlledOwner(t, match.MustNew(testcontent.Map("yard")))
+	p := &peer{connection: "controlled", cancel: func() {}}
+	done := make(chan bool, 1)
+	r.server.register <- registration{peer: p, done: done}
+	if !<-done || r.server.Humans() != 1 {
+		t.Fatal("connected human was not counted")
+	}
+	r.cancel()
+	<-r.done
+	if got := r.server.Humans(); got != 0 {
+		t.Fatalf("stopped room reports %d humans", got)
+	}
+}
+
 func TestCatchUpPreservesInputReleaseAndTimeout(t *testing.T) {
 	for _, release := range []bool{false, true} {
 		t.Run(map[bool]string{false: "timeout", true: "release"}[release], func(t *testing.T) {

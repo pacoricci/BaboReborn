@@ -96,7 +96,6 @@ func TestRemoveRetiresInFlightRoomAdmission(t *testing.T) {
 				return join(transport.Identity{})
 			})
 			s := transport.New(match.MustNew(testcontent.Map("yard")), 2, nil)
-			s.SetAdmission(m.admit)
 			if err := m.Install("one", s); err != nil {
 				t.Fatal(err)
 			}
@@ -153,4 +152,48 @@ func TestAdministrativeDisconnectKeepsRoomOpen(t *testing.T) {
 	roomTestClose(t, ctx, first, transport.CloseRemoved, transport.ReasonKicked)
 	second := roomTestSocket(t, ctx, url)
 	roomTestWelcome(t, ctx, second)
+}
+
+func TestHealthCountsConnectedHumans(t *testing.T) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	m := New(ctx, nil, nil, 1)
+	m.SetAdmission(func(_ *http.Request, join func(transport.Identity) error) error { return join(transport.Identity{}) })
+	s := transport.New(match.MustNew(testcontent.Map("yard")), 2, nil)
+	if err := m.Install("one", s); err != nil {
+		t.Fatal(err)
+	}
+	server := httptest.NewServer(m)
+	defer server.Close()
+	humans := func() int {
+		response, err := http.Get(server.URL + "/health")
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer response.Body.Close() //nolint:errcheck // Test response cleanup.
+		var health struct{ Humans int }
+		if err := json.NewDecoder(response.Body).Decode(&health); err != nil {
+			t.Fatal(err)
+		}
+		return health.Humans
+	}
+	waitFor := func(want int) {
+		t.Helper()
+		for humans() != want {
+			select {
+			case <-ctx.Done():
+				t.Fatalf("health never reported %d humans", want)
+			case <-time.After(10 * time.Millisecond):
+			}
+		}
+	}
+	waitFor(0)
+	url := "ws" + strings.TrimPrefix(server.URL, "http") + "/ws?room=one&v=" + strconv.Itoa(gameconfig.ProtocolVersion) + "&profile=" + compatibility.GameProfile()
+	conn := roomTestSocket(t, ctx, url)
+	roomTestWelcome(t, ctx, conn)
+	waitFor(1)
+	if err := conn.Close(websocket.StatusNormalClosure, ""); err != nil {
+		t.Fatal(err)
+	}
+	waitFor(0)
 }

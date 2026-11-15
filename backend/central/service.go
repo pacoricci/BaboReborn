@@ -73,6 +73,7 @@ func (s *Service) Handler() http.Handler {
 	mux.HandleFunc("GET /identity/v1/accounts/{id}", s.account)
 	mux.HandleFunc("POST /identity/v1/access", s.accessProof)
 	mux.HandleFunc("GET /api/v1/account", s.accountState)
+	mux.HandleFunc("GET /api/v1/release", currentRelease)
 	mux.HandleFunc("GET /api/v1/rooms", s.publicRooms)
 	mux.HandleFunc("GET /api/v1/rooms/{ref}", s.publicRooms)
 	mux.HandleFunc("POST /registry/v1/publication", s.publication)

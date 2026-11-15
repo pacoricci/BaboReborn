@@ -38,14 +38,23 @@ shift
 candidate=0
 [ "$1" = --project-directory ] && candidate=1
 # Candidate validation supplies global Compose flags before the subcommand.
-while [ "$1" != config ] && [ "$1" != ps ] && [ "$1" != cp ] && [ "$1" != up ] && [ "$1" != run ] && [ "$1" != stop ]; do shift; done
+while [ "$1" != config ] && [ "$1" != ps ] && [ "$1" != cp ] && [ "$1" != up ] && [ "$1" != run ] && [ "$1" != stop ] && [ "$1" != exec ]; do shift; done
 for last; do :; done
 case "$1" in
   config) [ "$FAKE_INVALID_CONFIG" = 1 ] && [ "$candidate" = 1 ] && exit 1; printf '%s\\n' $FAKE_SERVICES ;;
-  ps) selected=$FAKE_RUNNING
+  ps) [ "$FAKE_PS_FAILURE" = 1 ] && exit 1
+    selected=$FAKE_RUNNING
     case " $* " in *" --all "*) selected=$FAKE_EXISTING ;; esac
     case " $selected " in *" $last "*) echo "id-$last" ;; esac ;;
   cp) echo "copy of $2" > "$3" ;;
+  exec)
+    case " $* " in
+      *" --request DELETE "*) rm -f .draining; printf '204' ;;
+      *)
+        [ "$FAKE_DRAIN_STATUS" = 204 ] && touch .draining
+        [ "$FAKE_DRAIN_FAILURE" = 1 ] && exit 28
+        printf '%s' "$FAKE_DRAIN_STATUS" ;;
+    esac ;;
   run) [ "$FAKE_BACKUP_FAILURE" = 1 ] && exit 1 ;;
   up) [ "$(sed -n 's/^CENTRAL_IMAGE=//p' .env)" = "$FAKE_BROKEN_IMAGE" ] && exit 1 ;;
 esac
@@ -59,7 +68,7 @@ for arg; do
 done
 file="$FAKE_HTTP_ROOT/\${url#https://}"
 [ -f "$file" ] || exit 22
-cp "$file" "$out"
+if [ -n "$out" ]; then cp "$file" "$out"; else cat "$file"; fi
 `;
 
 function fixture(
@@ -126,6 +135,9 @@ function fixture(
     FAKE_BROKEN_IMAGE: '',
     FAKE_INVALID_CONFIG: '',
     FAKE_BACKUP_FAILURE: '',
+    FAKE_DRAIN_STATUS: '204',
+    FAKE_DRAIN_FAILURE: '',
+    FAKE_PS_FAILURE: '',
   };
   return {
     install,
@@ -351,4 +363,116 @@ test('a failed deployment leaves previously stopped services stopped', (t) => {
   assert.equal(f.calls().filter((call) => call.startsWith('compose up')).length, 1);
   assert.ok(f.calls().includes('compose stop'));
   assert.match(f.read('.deploy/history'), / failed\n$/);
+});
+
+const put = (path, content) => {
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, content);
+};
+
+// A standalone community host that follows the central at portal.example.org.
+function follower(t, version = '1.2.3') {
+  const f = fixture(t, {
+    env: { COMPOSE_FILE: 'compose.server.yaml' },
+    services: 'server',
+    running: 'server',
+  });
+  put(join(f.http, 'portal.example.org/api/v1/release'), JSON.stringify({ version, notesUrl: '' }));
+  const updater = join(
+    f.http,
+    `raw.githubusercontent.com/pacoricci/BaboReborn/${sourceCommit}/deploy/docker/deploy.sh`,
+  );
+  put(updater, '#!/bin/sh\necho updated\n');
+  return { ...f, follow: (extra) => f.run(extra, '--follow') };
+}
+
+test('a follower deploys the release its central runs and updates its updater', (t) => {
+  const f = follower(t);
+  const result = f.follow();
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(imageLines(f.read('.env'))[1], `SERVER_IMAGE=${NEW.server}`);
+  assert.ok(f.calls().includes('compose stop server'));
+  const drain = f.calls().findIndex((call) => call.includes('--request POST'));
+  const stop = f.calls().indexOf('compose stop server');
+  assert.ok(drain >= 0 && drain < stop);
+  assert.equal(f.read('deploy.sh'), '#!/bin/sh\necho updated\n');
+  assert.match(f.read('.deploy/history'), new RegExp(` ${tag} deployed\\n$`));
+});
+
+test('a follower waits while players are connected', (t) => {
+  const f = follower(t);
+  const result = f.follow({ FAKE_DRAIN_STATUS: '409' });
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stderr, /waits for connected players/);
+  assert.ok(!f.calls().some((call) => /^compose (stop|up)/.test(call)));
+  assert.equal(imageLines(f.read('.env'))[1], `SERVER_IMAGE=${OLD.server}`);
+  assert.equal(existsSync(join(f.install, '.deploy/history')), false);
+});
+
+for (const status of ['000', '200', '403', '404', '500']) {
+  test(`a follower defers an unavailable or invalid drain response (${status})`, (t) => {
+    const f = follower(t);
+    const result = f.follow({ FAKE_DRAIN_STATUS: status });
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stderr, /safe drain unavailable/);
+    assert.ok(!f.calls().some((call) => /^compose (stop|up|run|cp)/.test(call)));
+    assert.equal(imageLines(f.read('.env'))[1], `SERVER_IMAGE=${OLD.server}`);
+    assert.equal(existsSync(join(f.install, '.deploy/lock')), false);
+    assert.equal(existsSync(join(f.install, '.deploy/history')), false);
+  });
+}
+
+test('a follower defers a failed drain request and releases a possibly acquired drain', (t) => {
+  const f = follower(t);
+  const result = f.follow({ FAKE_DRAIN_FAILURE: '1' });
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stderr, /could not verify empty rooms/);
+  assert.ok(!f.calls().some((call) => /^compose (stop|up|run|cp)/.test(call)));
+  assert.ok(f.calls().some((call) => call.includes('--request DELETE')));
+  assert.equal(existsSync(join(f.install, '.draining')), false);
+  assert.equal(imageLines(f.read('.env'))[1], `SERVER_IMAGE=${OLD.server}`);
+});
+
+test('a follower defers when Docker cannot report whether the server is running', (t) => {
+  const f = follower(t);
+  const result = f.follow({ FAKE_PS_FAILURE: '1' });
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stderr, /could not determine whether the server is running/);
+  assert.ok(!f.calls().some((call) => /^compose (stop|up|exec|run|cp)/.test(call)));
+  assert.equal(imageLines(f.read('.env'))[1], `SERVER_IMAGE=${OLD.server}`);
+});
+
+test('a failed follower backup reopens admission after restoring the previous release', (t) => {
+  const f = follower(t);
+  const result = f.follow({ FAKE_BACKUP_FAILURE: '1' });
+  assert.notEqual(result.status, 0);
+  assert.equal(imageLines(f.read('.env'))[1], `SERVER_IMAGE=${OLD.server}`);
+  const resume = f.calls().findIndex((call) => call.includes('--request DELETE'));
+  const restart = f.calls().findIndex((call) => call.startsWith('compose up'));
+  assert.ok(restart >= 0 && resume > restart);
+  assert.equal(existsSync(join(f.install, '.draining')), false);
+  assert.match(f.read('.deploy/history'), / rolled-back\n$/);
+});
+
+test('a current follower stays silent', (t) => {
+  const f = follower(t);
+  for (const file of COMPOSE_FILES) writeFileSync(join(f.install, file), 'new\n');
+  const env = f.read('.env').replace(OLD.central, NEW.central).replace(OLD.server, NEW.server);
+  writeFileSync(join(f.install, '.env'), env);
+  const result = f.follow();
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(result.stderr, '');
+  assert.ok(!f.calls().some((call) => /^compose (stop|up|exec)/.test(call)));
+  assert.equal(existsSync(join(f.install, '.deploy/history')), false);
+});
+
+test('only standalone community hosts follow a central running a stable release', (t) => {
+  const central = fixture(t);
+  put(join(central.http, 'portal.example.org/api/v1/release'), '{"version":"1.2.3"}');
+  assert.match(central.run({}, '--follow').stderr, /standalone community hosts only/);
+  const dev = follower(t, 'dev');
+  const result = dev.follow();
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /reports no stable release/);
+  assert.deepEqual(dev.calls(), []);
 });

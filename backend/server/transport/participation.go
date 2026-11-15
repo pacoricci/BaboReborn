@@ -6,6 +6,9 @@ import (
 	"baboreborn/backend/server/match"
 )
 
+// Humans counts admitted sockets, including spectators, independently of snapshots.
+func (s *Server) Humans() int { return int(s.humans.Load()) }
+
 func (i Identity) registered() bool {
 	return strings.HasPrefix(i.Subject, "account:") && len(i.Subject) > len("account:")
 }
@@ -60,5 +63,6 @@ func (r *roomRuntime) register(p *peer) bool {
 	}
 	p.id = player.ID
 	r.peers[p.id] = p
+	r.s.humans.Add(1)
 	return true
 }

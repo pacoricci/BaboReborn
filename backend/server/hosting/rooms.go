@@ -55,14 +55,16 @@ type room struct {
 }
 type Factory func(context.Context, Config) (*transport.Server, error)
 type Manager struct {
-	mu       sync.Mutex
-	ctx      context.Context
-	rooms    map[string]*room
-	catalog  []MapInfo
-	factory  Factory
-	maxRooms int
-	admit    transport.Admission
-	origin   string
+	mu           sync.Mutex
+	ctx          context.Context
+	rooms        map[string]*room
+	catalog      []MapInfo
+	factory      Factory
+	maxRooms     int
+	admit        transport.Admission
+	origin       string
+	updaterToken string
+	draining     bool
 }
 
 func New(ctx context.Context, catalog []MapInfo, factory Factory, maxRooms int) *Manager {
@@ -85,7 +87,6 @@ func (m *Manager) Prepare(ctx context.Context, c Config) (*transport.Server, err
 	if err != nil {
 		return nil, err
 	}
-	s.SetAdmission(m.admit)
 	s.SetOrigin(m.origin)
 	return s, nil
 }
@@ -102,6 +103,7 @@ func (m *Manager) Install(id string, s *transport.Server) error {
 		return fmt.Errorf("room limit reached")
 	}
 	ctx, cancel := context.WithCancel(m.ctx)
+	s.SetAdmission(m.admission)
 	m.rooms[id] = &room{server: s, handler: s.Handler(ctx), cancel: cancel}
 	go s.Run(ctx)
 	return nil
@@ -189,9 +191,26 @@ func (m *Manager) Directory() Directory {
 	}
 	return d
 }
+
+func (m *Manager) humans() int {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	return m.humansLocked()
+}
+func (m *Manager) humansLocked() int {
+	total := 0
+	for _, r := range m.rooms {
+		total += r.server.Humans()
+	}
+	return total
+}
 func (m *Manager) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path == "/maintenance/drain" {
+		m.updateAdmission(w, r)
+		return
+	}
 	if r.URL.Path == "/health" {
-		identity.JSON(w, http.StatusOK, map[string]any{"status": "ok", "protocol": gameconfig.ProtocolVersion})
+		identity.JSON(w, http.StatusOK, map[string]any{"status": "ok", "protocol": gameconfig.ProtocolVersion, "humans": m.humans()})
 		return
 	}
 	m.mu.Lock()

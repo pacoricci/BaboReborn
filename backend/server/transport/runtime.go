@@ -33,6 +33,7 @@ func (r *roomRuntime) remove(p *peer, code websocket.StatusCode, reason string) 
 	}
 	r.retain(p)
 	delete(r.peers, p.id)
+	r.s.humans.Add(-1)
 	r.replica.Remove(p.id)
 	r.s.world.Remove(p.id)
 	r.s.mu.Lock()
@@ -154,6 +155,7 @@ func (s *Server) run(ctx context.Context, wakes <-chan time.Time, now func() tim
 		for _, p := range r.peers {
 			p.cancel()
 		}
+		s.humans.Store(0)
 	}()
 	fail := func(err error) {
 		for _, p := range r.peers {

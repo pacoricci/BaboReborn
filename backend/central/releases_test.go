@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 
@@ -131,4 +132,14 @@ func TestRegistryReleaseAdviceThroughSignedHeartbeat(t *testing.T) {
 		t.Fatal("restart retained observation", managed, err)
 	}
 	check("current", true)
+}
+
+func TestCurrentReleaseIsPublic(t *testing.T) {
+	recommendedRelease(t)
+	response := httptest.NewRecorder()
+	(&Service{}).Handler().ServeHTTP(response, httptest.NewRequest(http.MethodGet, "/api/v1/release", nil))
+	want := `{"notesUrl":"https://github.com/pacoricci/BaboReborn/releases/tag/v2.0.0","version":"2.0.0"}`
+	if response.Code != http.StatusOK || strings.TrimSpace(response.Body.String()) != want {
+		t.Fatalf("release = %d %s, want %s", response.Code, response.Body, want)
+	}
 }

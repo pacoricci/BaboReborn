@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 # Deploy a published release to the Compose installation next to this script:
 # fetch its image digests and Compose files, back up, switch, verify, and roll
-# back to the previous release on failure. Usage: ./deploy.sh vMAJOR.MINOR.PATCH
+# back to the previous release on failure.
+#   ./deploy.sh vMAJOR.MINOR.PATCH  deploys that release now.
+#   ./deploy.sh --follow            on a standalone community host, deploys the
+#                                   release CENTRAL_ORIGIN runs once rooms are empty.
 set -euo pipefail
 umask 077
 
@@ -18,9 +21,14 @@ die() {
   exit 1
 }
 
+readonly STABLE_TAG='^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$'
+follow=false
 tag=${1:-}
-[[ $tag =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]] ||
-  die 'Usage: deploy.sh vMAJOR.MINOR.PATCH'
+if [[ $tag == --follow ]]; then
+  follow=true
+elif ! [[ $tag =~ $STABLE_TAG ]]; then
+  die 'Usage: deploy.sh vMAJOR.MINOR.PATCH | --follow'
+fi
 cd "$(dirname "$0")"
 
 # Last assignment wins, as in Compose; surrounding quotes are stripped.
@@ -52,6 +60,11 @@ backup_extension() { if [[ $1 == central ]]; then echo dump; else echo sqlite; f
 exists() { [[ -n $(docker compose ps --all --quiet "$1") ]]; }
 is_running() { [[ -n $(docker compose ps --status running --quiet "$1") ]]; }
 start_release() { docker compose up -d --no-build --pull never --wait --wait-timeout "$WAIT_TIMEOUT_SECONDS"; }
+update_admission() {
+  docker compose exec -T server curl --silent --show-error --insecure --max-time 5 \
+    --request "$1" --header @/data/updater-auth --output /dev/null --write-out '%{http_code}' \
+    https://127.0.0.1:8443/maintenance/drain
+}
 verify_public() {
   local origin attempt
   origin=$(env_value CENTRAL_ORIGIN)
@@ -73,17 +86,29 @@ case $(env_value COMPOSE_FILE) in
   *) die 'COMPOSE_FILE must select the documented central or standalone community files' ;;
 esac
 
+# Follow the running central, not the newest release: only its contracts are admitted.
+if $follow; then
+  [[ $(env_value COMPOSE_FILE) == compose.server.yaml ]] || die '--follow updates standalone community hosts only'
+  origin=$(env_value CENTRAL_ORIGIN)
+  [[ -n $origin ]] || die 'Set CENTRAL_ORIGIN in .env'
+  version=$(curl --fail --silent --show-error --max-time 15 "$origin/api/v1/release" |
+    sed -n 's/.*"version":"\([^"]*\)".*/\1/p')
+  tag=v$version
+  [[ $tag =~ $STABLE_TAG ]] || die "$origin reports no stable release"
+fi
+
 mkdir -p "$STATE"
 mkdir "$STATE/lock" 2>/dev/null || die "Another deployment holds $PWD/$STATE/lock"
 work=$(mktemp -d "$STATE/stage.XXXXXX")
 stopped=false
 switched=false
+drain_attempted=false
 backup_dir=
 
 record() { printf '%s %s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$tag" "$1" >>"$STATE/history"; }
 
 finish() {
-  local status=$?
+  local status=$? resume_status
   set +e
   if ((status != 0)); then
     if $switched; then
@@ -117,6 +142,13 @@ finish() {
       record aborted
     fi
   fi
+  # Also release a drain whose acknowledgement was lost. After a stop/rollback,
+  # the new serving process has already reopened admission with a fresh token.
+  if $drain_attempted && is_running server; then
+    if ! resume_status=$(update_admission DELETE) || [[ $resume_status != 204 ]]; then
+      log 'Could not reopen admission; restart the server before accepting players'
+    fi
+  fi
   rm -rf "$work"
   rmdir "$STATE/lock"
   exit "$status"
@@ -125,7 +157,7 @@ trap finish EXIT
 # A cancelled job or dropped SSH session must still roll back and release the lock.
 trap 'exit 130' INT TERM HUP
 
-log "Fetching $tag from $REPOSITORY"
+$follow || log "Fetching $tag from $REPOSITORY"
 fetch "https://github.com/$REPOSITORY/releases/download/$tag/images.txt" "$work/images.txt"
 central_image=$(grep -E '/baboreborn-central@sha256:[0-9a-f]{64}$' "$work/images.txt" || true)
 server_image=$(grep -E '/baboreborn-server@sha256:[0-9a-f]{64}$' "$work/images.txt" || true)
@@ -143,6 +175,8 @@ for file in "${COMPOSE_FILES[@]}"; do
   cmp -s "$work/$file" "$file" || unchanged=false
 done
 if $unchanged && [[ $(env_value CENTRAL_IMAGE) == "$central_image" && $(env_value SERVER_IMAGE) == "$server_image" ]]; then
+  # Timer runs stay silent while the host is current.
+  $follow && exit 0
   start_release
   verify_public
   record verified
@@ -167,6 +201,35 @@ for service in central server; do
   if exists "$service"; then existing+=("$service"); fi
   if is_running "$service"; then running+=("$service"); fi
 done
+
+# The server atomically checks live connections and closes admission. Unknown
+# outcomes defer to the next run; older servers require a manual bootstrap update.
+if $follow; then
+  if ! server_id=$(docker compose ps --status running --quiet server); then
+    log "$tag waits: could not determine whether the server is running"
+    exit 0
+  fi
+fi
+if $follow && [[ -n $server_id ]]; then
+  drain_attempted=true
+  if ! drain_status=$(update_admission POST); then
+    log "$tag waits: could not verify empty rooms"
+    exit 0
+  fi
+  case $drain_status in
+    204) ;;
+    409)
+      drain_attempted=false
+      log "$tag waits for connected players to leave"
+      exit 0
+      ;;
+    *)
+      drain_attempted=false
+      log "$tag waits: safe drain unavailable (HTTP $drain_status); update older servers manually"
+      exit 0
+      ;;
+  esac
+fi
 
 # Keep configuration alongside every data backup, not only the latest attempt.
 mkdir "$work/previous"
@@ -211,6 +274,16 @@ set_env SERVER_IMAGE "$server_image"
 log "Starting $tag"
 start_release
 verify_public
+
+# Keep the timer's updater at the deployed release; its failure is not the release's.
+if $follow; then
+  if fetch "https://raw.githubusercontent.com/$REPOSITORY/$source_commit/deploy/docker/deploy.sh" "$work/deploy.sh" &&
+    chmod 700 "$work/deploy.sh" && mv "$work/deploy.sh" "$(basename "$0")"; then
+    log "Updated deploy.sh to $tag"
+  else
+    log 'Kept the current deploy.sh'
+  fi
+fi
 
 record deployed
 log "Deployed $tag${backup_dir:+; backup in $backup_dir}"

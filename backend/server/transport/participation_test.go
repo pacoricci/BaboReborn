@@ -24,6 +24,32 @@ func participationRuntime(t *testing.T) *roomRuntime {
 func participant(subject string) *peer {
 	return &peer{identity: Identity{Subject: subject}, cancel: func() {}}
 }
+
+func TestHumansCountAdmissionBeforeSnapshotsAndIgnoreReplacedSockets(t *testing.T) {
+	r := participationRuntime(t)
+	first := participant("account:one")
+	if !r.register(first) {
+		t.Fatal("registration rejected")
+	}
+	if d := r.s.Info().Details; d.Players+d.Spectators != 0 {
+		t.Fatal("fixture unexpectedly refreshed discovery")
+	}
+	if got := r.s.Humans(); got != 1 {
+		t.Fatalf("live humans before the next snapshot = %d, want 1", got)
+	}
+	replacement := participant("account:one")
+	if !r.register(replacement) {
+		t.Fatal("replacement rejected")
+	}
+	r.remove(first, 0, "") // The old reader may report EOF after replacement.
+	if got := r.s.Humans(); got != 1 {
+		t.Fatalf("humans after replacement and late EOF = %d, want 1", got)
+	}
+	r.remove(replacement, 0, "")
+	if got := r.s.Humans(); got != 0 {
+		t.Fatalf("humans after disconnect = %d, want 0", got)
+	}
+}
 func TestParticipationRestoresOnlyRoundStatistics(t *testing.T) {
 	for _, disconnected := range []bool{false, true} {
 		t.Run(map[bool]string{false: "replacement", true: "disconnect"}[disconnected], func(t *testing.T) {
