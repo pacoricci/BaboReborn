@@ -12,6 +12,9 @@ on:
       release_tag:
         type: string
         required: true
+    secrets:
+      DEPLOY_SSH_KEY:
+        required: true
 
 permissions:
   contents: read
@@ -27,6 +30,8 @@ jobs:
     with:
       environment_name: production-central
       release_tag: ${{ inputs.release_tag }}
+    secrets:
+      DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
 
   community:
     needs: central
@@ -35,3 +40,5 @@ jobs:
     with:
       environment_name: production-community
       release_tag: ${{ inputs.release_tag }}
+    secrets:
+      DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}

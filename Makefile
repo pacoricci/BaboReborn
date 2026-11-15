@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 # These workflows share generated assets; keep them ordered even with make -j.
 .NOTPARALLEL:
-.PHONY: help setup dependencies tools-install hooks-install dev build-dev build build-embedded check check-ci format-check format lint lint-go test-go test-postgres test-parity test-browser measure-compression security-go precommit server central docker-build test-docker test-deploy
+.PHONY: help setup dependencies tools-install hooks-install dev build-dev build build-embedded check check-ci format-check format lint lint-go test-go test-postgres test-parity test-browser measure-compression security-go precommit server central docker-build test-docker test-deploy test-workflows
 
 DOCKER ?= docker
 DOCKER_BUILD_FLAGS ?=
@@ -14,6 +14,7 @@ help:
 	@printf '%s\n' 'make setup         Install dependencies, tools and Git hooks' 'make dev           Start the complete local identity/server stack' 'make build         Build server and central with the release frontend' 'make check         Run all quality checks, including Go vulnerabilities' 'make format        Format JavaScript/TypeScript and Go' 'make precommit     Validate staged changes' 'make dependencies  Install dependencies and tools without Git hooks'
 	@printf '%s\n' 'make docker-build  Build central and community server container images' 'make test-deploy   Validate local/external deployment configuration (Compose CLI only)' 'make test-docker   Verify both database modes, browser play and persistence (Docker + Chromium)'
 	@printf '%s\n' 'make check-ci      Run quality checks without browser tests' 'make test-release  Verify release validation against temporary Git repositories'
+	@printf '%s\n' 'make test-workflows Validate GitHub Actions workflow contracts'
 
 docker-build:
 	$(DOCKER) build $(DOCKER_BUILD_FLAGS) -f deploy/docker/Dockerfile --build-arg RELEASE_VERSION="$(RELEASE_VERSION)" --target server -t $(SERVER_IMAGE) .
@@ -21,6 +22,9 @@ docker-build:
 
 test-deploy:
 	DOCKER=$(DOCKER) node --test tests/deployment/*.test.mjs
+
+test-workflows:
+	node scripts/checks/go-tools.mjs workflows
 
 test-docker: test-deploy docker-build
 	DOCKER=$(DOCKER) CENTRAL_IMAGE=$(CENTRAL_IMAGE) SERVER_IMAGE=$(SERVER_IMAGE) node deploy/docker/smoke.mjs local
@@ -59,7 +63,7 @@ build-embedded:
 
 # Non-browser checks; GitHub Actions runs these alongside isolated browser shards.
 # Go embeds the frontend, so prepare it before any Go validation runs.
-check-ci: build format-check
+check-ci: test-workflows build format-check
 	npm run typecheck
 	$(MAKE) lint
 	npm test

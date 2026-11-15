@@ -116,3 +116,5 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       release_tag: ${{ github.ref_name }}
+    secrets:
+      DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}

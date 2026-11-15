@@ -331,6 +331,11 @@ only if community deployment is enabled. Configure these values separately in
 | `DEPLOY_KNOWN_HOSTS` | Variable | Host keys verified against the operator's trusted SSH connection.  |
 | `DEPLOY_SSH_KEY`     | Secret   | Passphrase-free private key used only for this host's deployments. |
 
+Each reusable workflow call explicitly forwards `DEPLOY_SSH_KEY`; the environment
+on the host job selects the actual key. Do not move the private key to repository
+variables or inputs. `make test-workflows` checks the required secret contracts
+with the pinned actionlint tool and runs as part of `make check` and CI.
+
 The deployment user must own the installation directory, `.env`, Compose files,
 and backup directory. Keep `.env` and backups private. Docker access grants
 administrative control of the host; use separate deployment keys and disable SSH

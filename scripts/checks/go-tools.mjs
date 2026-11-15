@@ -12,6 +12,11 @@ const tools = {
     name: 'golangci-lint',
   },
   vuln: { module: 'golang.org/x/vuln/cmd/govulncheck', version: 'v1.8.0', name: 'govulncheck' },
+  workflows: {
+    module: 'github.com/rhysd/actionlint/cmd/actionlint',
+    version: 'v1.7.12',
+    name: 'actionlint',
+  },
 };
 const directory = (tool) => join(root, 'output', 'tools', `${tool.name}-${tool.version}`);
 const executable = (tool) =>
@@ -51,8 +56,12 @@ try {
     case 'vuln':
       run(executable(tools.vuln), ['./...']);
       break;
+    case 'workflows':
+      // Keep workflow validation independent of an optional ShellCheck install.
+      run(executable(tools.workflows), ['-shellcheck=']);
+      break;
     default:
-      throw new Error('Expected install, lint, format-check, format or vuln.');
+      throw new Error('Expected install, lint, format-check, format, vuln or workflows.');
   }
 } catch (error) {
   if (error.stdout) process.stdout.write(error.stdout);
