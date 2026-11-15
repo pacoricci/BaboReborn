@@ -1,4 +1,3 @@
-import { setPreferenceScope } from '../presentation/ui/preference-scope';
 import { startWithContent as start } from '../content/runtime';
 import type { ServerContext } from '../network/context';
 import { resolveServer } from '../network/context';
@@ -8,7 +7,6 @@ export async function startWithContent(
 ): Promise<void> {
   try {
     const context = await resolveServer();
-    setPreferenceScope(context?.id ?? 'portal');
     if (context) await initializeIdentity();
     await start(() => run(context), location.origin);
   } catch (error) {

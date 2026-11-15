@@ -1,4 +1,13 @@
-import { cpSync, mkdirSync, rmSync, readFileSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
+import { gzipSync } from 'node:zlib';
 const target = new URL('../../backend/web/dist/', import.meta.url);
 rmSync(target, { recursive: true, force: true });
 mkdirSync(target, { recursive: true });
@@ -31,8 +40,6 @@ writeFileSync(
 );
 
 // Compress once during the build, keeping decompression transparent to browsers.
-const { readdirSync, statSync } = await import('node:fs');
-const { gzipSync } = await import('node:zlib');
 function precompress(directory) {
   for (const name of readdirSync(directory)) {
     const file = new URL(name, directory);

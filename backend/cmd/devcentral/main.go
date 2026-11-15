@@ -55,7 +55,7 @@ func run() (err error) {
 		return fmt.Errorf("port-offset must be 0..47441")
 	}
 	if *serverHost != "127.0.0.1" && *serverHost != "localhost" {
-		log.Fatal("Server host must be loopback")
+		return fmt.Errorf("server-host must be loopback")
 	}
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer cancel()

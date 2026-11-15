@@ -33,7 +33,7 @@ export function parseManagedRooms(raw: unknown): ManagedRoomDirectory {
       !map ||
       typeof map.ctf !== 'boolean' ||
       typeof map.id !== 'string' ||
-      !/^[a-z0-9][a-z0-9_-]{0,47}$/.test(map.id) ||
+      !/^[a-z0-9][a-z0-9-]{0,47}$/.test(map.id) ||
       typeof map.name !== 'string' ||
       !map.name ||
       map.name.length > 80

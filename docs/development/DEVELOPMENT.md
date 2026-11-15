@@ -8,7 +8,7 @@ for module responsibilities and [deployment](../deployment/DEPLOYMENT.md) for ho
 - Node.js 24 or newer, as declared in [package.json](../../package.json).
   CI and Docker builds use Node 24; `@types/node` follows that minimum runtime.
 - Go matching [go.mod](../../go.mod).
-- Make, a POSIX shell, `curl`, and `rg` (ripgrep).
+- Make, a POSIX shell, and `curl`.
 - PostgreSQL tools on `PATH`: `initdb`, `pg_ctl`, `psql`, `createdb`, `pg_dump`,
   and `pg_restore`. Scripts also detect Homebrew PostgreSQL 18 at
   `/opt/homebrew/opt/postgresql@18/bin`; set `POSTGRES_BIN` for another installation.
@@ -104,7 +104,8 @@ and logs in `.data/portal-dev/`. To run a separate fixture:
 BABOREBORN_DEV_DIRECTORY="$PWD/.data/portal-dev-alt" BABOREBORN_DEV_PORT_OFFSET=100 make dev
 ```
 
-This shifts all three HTTP ports by 100. Stop processes using a data directory
+This shifts all four loopback ports by 100, including the test identity
+provider on 18093. Stop processes using a data directory
 before maintenance. New fixtures initialize empty PostgreSQL and SQLite stores,
 local identities, and server associations. Startup rejects incompatible schemas;
 preserve the old directory and start with a fresh one.

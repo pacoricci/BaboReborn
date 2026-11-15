@@ -33,7 +33,6 @@ type Manager struct {
 	keys     jose.JSONWebKeySet
 	sessions map[string]*transport.Identity
 	client   *http.Client
-	Apply    func(context.Context, transport.Administration) error
 	Now      func() time.Time
 }
 

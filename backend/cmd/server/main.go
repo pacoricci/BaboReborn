@@ -94,7 +94,8 @@ func run() (err error) {
 	for _, info := range remote.Catalog.Maps {
 		catalog = append(catalog, hosting.MapInfo{ID: info.ID, Name: info.Name, CTF: info.CTF})
 	}
-	parsed, err := url.Parse(*central)
+	// Browsers send the canonical portal origin; compare against that form, not the raw flag.
+	parsed, err := url.Parse(auth.Origin())
 	if err != nil {
 		return err
 	}
@@ -118,7 +119,7 @@ func run() (err error) {
 	go auth.Run(ctx)
 	go admin.Run(ctx)
 	go reg.Run(ctx)
-	base := routes(rooms, transport.LatencyHandler(ctx, *central), *diagnostics)
+	base := routes(rooms, transport.LatencyHandler(ctx, auth.Origin()), *diagnostics)
 	server := &http.Server{Addr: *addr, Handler: auth.CORS(reg.Handler(admin.Handler(base))), ReadHeaderTimeout: 5 * time.Second}
 	go func() {
 		<-ctx.Done()

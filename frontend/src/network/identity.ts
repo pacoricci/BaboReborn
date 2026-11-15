@@ -159,19 +159,6 @@ export async function readIdentity(signal?: AbortSignal): Promise<ServerIdentity
     };
   }
 }
-export async function signOut(): Promise<void> {
-  const response = await fetch('/auth/logout', {
-    method: 'POST',
-    credentials: 'same-origin',
-    headers: { 'Content-Type': 'application/json' },
-  });
-  if (!response.ok) throw new Error('Unable to sign out.');
-  credential = undefined;
-  account = { account: '', expired: true, loginAvailable: true };
-  const channel = new BroadcastChannel('baboreborn.account');
-  channel.postMessage('signed-out');
-  channel.close();
-}
 export function watchAccount(onEnd: () => void): () => void {
   const channel = new BroadcastChannel('baboreborn.account');
   channel.onmessage = () => {
