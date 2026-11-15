@@ -19,7 +19,7 @@ func (s *Service) createRoom(ctx context.Context, actor, actorRole string, confi
 	if rank(actorRole) < 2 {
 		return "", fmt.Errorf("admin_required")
 	}
-	if len(s.Rooms.Directory().Rooms) >= s.Rooms.Directory().MaxRooms {
+	if directory := s.Rooms.Directory(); len(directory.Rooms) >= directory.MaxRooms {
 		return "", fmt.Errorf("room_limit_reached")
 	}
 	prepared, err := s.Rooms.Prepare(ctx, config)
@@ -171,7 +171,7 @@ func (s *Service) scheduleRoom(ctx context.Context, actor, actorRole, id string,
 			}
 		} else {
 			op.Status = "applied"
-		} //nolint:errcheck // A disconnected client can read the operation result over HTTP.
+		}
 	}()
 	return *op, nil
 }

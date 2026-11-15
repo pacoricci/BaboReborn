@@ -47,6 +47,18 @@ func run() (err error) {
 	if (*operation == "backup" || *operation == "restore") && *backup == "" {
 		return fmt.Errorf("backup-file required")
 	}
+	// Reject an unusable serve configuration before opening storage or contacting the portal.
+	if *operation == "serve" {
+		if *maxRooms < 1 || *maxRooms > 32 {
+			return fmt.Errorf("max-rooms must be 1..32")
+		}
+		if (*cert == "") != (*key == "") {
+			return fmt.Errorf("tls-cert and tls-key must be provided together")
+		}
+		if !*development && *cert == "" {
+			return fmt.Errorf("TLS is required outside loopback development")
+		}
+	}
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer cancel()
 	startup, end := context.WithTimeout(ctx, 30*time.Second)
@@ -77,15 +89,6 @@ func run() (err error) {
 	if err != nil {
 		return err
 	}
-	if *maxRooms < 1 || *maxRooms > 32 {
-		return fmt.Errorf("max-rooms must be 1..32")
-	}
-	if (*cert == "") != (*key == "") {
-		return fmt.Errorf("tls-cert and tls-key must be provided together")
-	}
-	if !*development && *cert == "" {
-		return fmt.Errorf("TLS is required outside loopback development")
-	}
 	remote, err := content.OpenRemote(startup, *central, *development)
 	if err != nil {
 		return err
@@ -94,7 +97,8 @@ func run() (err error) {
 	for _, info := range remote.Catalog.Maps {
 		catalog = append(catalog, hosting.MapInfo{ID: info.ID, Name: info.Name, CTF: info.CTF})
 	}
-	parsed, err := url.Parse(*central)
+	// Browsers send the canonical portal origin; compare against that form, not the raw flag.
+	parsed, err := url.Parse(auth.Origin())
 	if err != nil {
 		return err
 	}
@@ -118,7 +122,7 @@ func run() (err error) {
 	go auth.Run(ctx)
 	go admin.Run(ctx)
 	go reg.Run(ctx)
-	base := routes(rooms, transport.LatencyHandler(ctx, *central), *diagnostics)
+	base := routes(rooms, transport.LatencyHandler(ctx, auth.Origin()), *diagnostics)
 	server := &http.Server{Addr: *addr, Handler: auth.CORS(reg.Handler(admin.Handler(base))), ReadHeaderTimeout: 5 * time.Second}
 	go func() {
 		<-ctx.Done()

@@ -19,12 +19,12 @@ func (s *Service) login(w http.ResponseWriter, r *http.Request, returnPath strin
 		return
 	}
 	state, browser, nonce, verifier := identity.Random(), identity.Random(), identity.Random(), oauth2.GenerateVerifier()
-	_, err := s.DB.ExecContext(r.Context(), "INSERT INTO oidc_flows(state_hash,browser_hash,verifier,nonce,return_path,expires_at) VALUES($1,$2,$3,$4,$5,$6)", identity.Hash(state), identity.Hash(browser), verifier, nonce, returnPath, s.now().Add(10*time.Minute))
+	_, err := s.DB.ExecContext(r.Context(), "INSERT INTO oidc_flows(state_hash,browser_hash,verifier,nonce,return_path,expires_at) VALUES($1,$2,$3,$4,$5,$6)", identity.Hash(state), identity.Hash(browser), verifier, nonce, returnPath, s.now().Add(loginFlowLifetime))
 	if err != nil {
 		identity.Error(w, http.StatusServiceUnavailable, "storage_unavailable")
 		return
 	}
-	identity.Cookie(w, "central_flow", browser, !s.Development, 600)
+	identity.Cookie(w, "central_flow", browser, !s.Development, int(loginFlowLifetime.Seconds()))
 	http.Redirect(w, r, s.OAuth.AuthCodeURL(state, oauth2.S256ChallengeOption(verifier), oidc.Nonce(nonce)), http.StatusSeeOther)
 }
 func (s *Service) callback(w http.ResponseWriter, r *http.Request) {

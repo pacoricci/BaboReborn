@@ -21,7 +21,7 @@ import type {
 } from '../contracts/session';
 
 // Default remote playback delay behind the newest snapshot.
-const INTERPOLATION_DELAY_MS = 100;
+export const INTERPOLATION_DELAY_MS = 100;
 export class Prediction {
   player: Player | null = null;
   own: LocalPlayer | null = null;

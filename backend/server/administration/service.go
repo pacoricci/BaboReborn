@@ -72,7 +72,6 @@ func New(ctx context.Context, db *sql.DB, a *access.Manager, rooms *hosting.Mana
 	s := &Service{DB: db, Access: a, Rooms: rooms, ctx: ctx, pending: map[string]*Operation{}, operations: map[string]*Operation{}, Warning: 10 * time.Second}
 	rooms.SetAdmission(s.Admit)
 	rooms.SetOrigin(a.Origin())
-	a.Apply = rooms.Apply
 	return s
 }
 func (s *Service) now() time.Time {

@@ -61,7 +61,6 @@ export interface ManagedRoomDirectory {
 export interface ServerIdentity {
   subject: string;
   role: string;
-  loginAvailable: boolean;
   central: string;
   expired: boolean;
 }

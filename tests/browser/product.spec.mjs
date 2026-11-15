@@ -723,6 +723,7 @@ test('portal logout closes games on both community servers', async ({ page, cont
   ];
   await page.getByRole('button', { name: 'Sign out', exact: true }).click();
   await expect(page.getByText('Signed out.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Session expired. You’re browsing as Guest.')).toHaveCount(0);
   for (const game of [first, second]) {
     await expect(game).toHaveURL(/\/rooms\?notice=authentication_expired/);
     await expect(

@@ -20,7 +20,6 @@ import (
 )
 
 const ProofLifetime = 15 * time.Minute
-const RenewBefore = 5 * time.Minute
 const SessionLifetime = 30 * 24 * time.Hour
 
 type Claims struct {

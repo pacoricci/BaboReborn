@@ -41,7 +41,7 @@ func (s *Service) deleteAccount(w http.ResponseWriter, r *http.Request) {
 		identity.Error(w, http.StatusServiceUnavailable, "account_deletion_unavailable")
 		return
 	}
-	identity.Cookie(w, "central_session", "signed-out", !s.Development, int(identity.SessionLifetime.Seconds()))
+	identity.Cookie(w, "central_session", signedOutMarker, !s.Development, int(identity.SessionLifetime.Seconds()))
 	http.Redirect(w, r, "/account?notice=account_deleted", http.StatusSeeOther)
 }
 

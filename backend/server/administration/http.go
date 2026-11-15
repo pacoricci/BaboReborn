@@ -44,7 +44,7 @@ func (s *Service) Handler(next http.Handler) http.Handler {
 		if r.URL.Path == "/api/v1/me" && r.Method == "GET" {
 			if err != nil && err.Error() != "guest_identity_required" {
 				// Keep recovery navigation available without treating an expired account as a guest.
-				identity.JSON(w, http.StatusUnauthorized, map[string]any{"error": err.Error(), "loginAvailable": s.Access.Available(), "central": s.Access.Central()})
+				identity.Error(w, http.StatusUnauthorized, err.Error())
 				return
 			}
 			current, err := role(r.Context(), s.DB, who.Subject)
@@ -52,7 +52,7 @@ func (s *Service) Handler(next http.Handler) http.Handler {
 				identity.Error(w, http.StatusServiceUnavailable, "storage_unavailable")
 				return
 			}
-			identity.JSON(w, http.StatusOK, map[string]any{"subject": who.Subject, "role": current, "loginAvailable": s.Access.Available(), "central": s.Access.Central()})
+			identity.JSON(w, http.StatusOK, map[string]any{"subject": who.Subject, "role": current})
 			return
 		}
 		if err != nil {

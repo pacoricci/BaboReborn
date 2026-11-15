@@ -150,7 +150,7 @@
   </head>
   <body
     class="portal {{if .ManagementPage}}management{{end}}"
-    data-session-ended="{{and .Expired (or .SignedOut .Revoked .Deleted)}}"
+    data-session-ended="{{and .Ended (or .SignedOut .Revoked .Deleted)}}"
   >
     <script type="module" src="/assets/account.js"></script>
     <header class="product-topbar">

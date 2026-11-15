@@ -21,6 +21,7 @@ import { OnlineInput } from './input';
 import { ArenaRenderer, createArenaEngine } from '../../presentation/scene/renderer';
 import type { Shot } from '../../core/simulation';
 import { TICK_HZ } from '../../core/timing';
+import { INTERPOLATION_DELAY_MS } from '../../prediction/model';
 import { PROTOCOL } from '../../contracts/session';
 import type { ClientMessage } from '../../contracts/session';
 import { Connection } from '../../network/connection';
@@ -493,8 +494,8 @@ void startWithContent(() => {
       timeOriginMs: performance.timeOrigin,
       timeline,
       tickHz: TICK_HZ,
-      snapshotHz: 30,
-      interpolationMs: 100,
+      snapshotHz: lifecycle.session?.welcome.snapshotHz ?? null,
+      interpolationMs: INTERPOLATION_DELAY_MS,
       userAgent: navigator.userAgent,
       rendering: lifecycle.renderer
         ? {

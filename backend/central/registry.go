@@ -228,7 +228,6 @@ func (s *Service) manageServers(w http.ResponseWriter, r *http.Request) {
 				fail(http.StatusBadRequest, "invalid_server_data")
 				return
 			}
-			input.Origin = strings.TrimRight(input.Origin, "/")
 			var used int
 			err = tx.QueryRowContext(r.Context(), "SELECT count(*) FROM registered_servers WHERE id<>$1 AND status<>'removed' AND (origin=$2 OR candidate_origin=$2)", id, input.Origin).Scan(&used)
 			if err != nil || used != 0 {

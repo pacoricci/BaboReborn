@@ -37,7 +37,7 @@ func main() {
 func run() (err error) {
 	directory := flag.String("data-dir", ".data/central", "Private central data and backup directory")
 	addr := flag.String("addr", "127.0.0.1:8090", "Loopback HTTP address for development")
-	operation := flag.String("storage", "serve", "serve, initialize, backup or restore")
+	operation := flag.String("storage", "serve", "serve, initialize, keygen, backup or restore")
 	file := flag.String("backup-file", "", "Backup source/destination")
 	origin := flag.String("origin", "http://127.0.0.1:8090", "Public central origin")
 	development := flag.Bool("development", false, "Allow loopback HTTP development")

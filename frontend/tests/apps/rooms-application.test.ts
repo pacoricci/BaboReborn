@@ -14,7 +14,6 @@ const data: ManagementData = {
     role: 'owner',
     expired: false,
     central: '',
-    loginAvailable: true,
   },
   directory: { schema: 1, rooms: [], maps: [], maxRooms: 8 },
 };
