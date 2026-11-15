@@ -23,16 +23,16 @@ var homeTemplate = template.Must(template.New("home").Parse(homeHTML + web.Porta
 
 func (s *Service) home(w http.ResponseWriter, r *http.Request) {
 	data := struct {
-		Account                                              string
-		AccountPage, ManagementPage, Expired, LoginAvailable bool
-		SignedOut, Revoked, Deleted, DeleteBlocked           bool
+		Account                                                     string
+		AccountPage, ManagementPage, Ended, Expired, LoginAvailable bool
+		SignedOut, Revoked, Deleted, DeleteBlocked                  bool
 	}{AccountPage: r.URL.Path == "/account", ManagementPage: r.URL.Path == "/manage/servers", LoginAvailable: s.Verifier != nil,
 		SignedOut: r.URL.Query().Get("notice") == "signed_out", Revoked: r.URL.Query().Get("notice") == "sessions_revoked",
 		Deleted: r.URL.Query().Get("notice") == "account_deleted", DeleteBlocked: r.URL.Query().Get("notice") == "account_has_servers"}
 	if current, err := s.session(r); err == nil {
 		data.Account = current.Account
 	} else if errors.Is(err, sql.ErrNoRows) {
-		data.Expired = true
+		data.Ended, data.Expired = true, lapsed(r)
 	} else if !errors.Is(err, http.ErrNoCookie) {
 		identity.Error(w, http.StatusServiceUnavailable, "account_unavailable")
 		return

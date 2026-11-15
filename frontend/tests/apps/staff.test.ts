@@ -38,7 +38,7 @@ function deferred<T>() {
 }
 async function fixture(ports: Partial<StaffPorts> = {}, role = 'owner') {
   let data: ManagementData = {
-    identity: { subject: 'account:owner', role, expired: false, central: '', loginAvailable: true },
+    identity: { subject: 'account:owner', role, expired: false, central: '' },
     directory: {
       schema: 1,
       maxRooms: 8,

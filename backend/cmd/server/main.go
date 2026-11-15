@@ -47,6 +47,18 @@ func run() (err error) {
 	if (*operation == "backup" || *operation == "restore") && *backup == "" {
 		return fmt.Errorf("backup-file required")
 	}
+	// Reject an unusable serve configuration before opening storage or contacting the portal.
+	if *operation == "serve" {
+		if *maxRooms < 1 || *maxRooms > 32 {
+			return fmt.Errorf("max-rooms must be 1..32")
+		}
+		if (*cert == "") != (*key == "") {
+			return fmt.Errorf("tls-cert and tls-key must be provided together")
+		}
+		if !*development && *cert == "" {
+			return fmt.Errorf("TLS is required outside loopback development")
+		}
+	}
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer cancel()
 	startup, end := context.WithTimeout(ctx, 30*time.Second)
@@ -76,15 +88,6 @@ func run() (err error) {
 	auth, err := access.New(access.Config{Origin: *central, Central: *central, Development: *development, KeysPath: filepath.Join(*directory, "identity-keys.json"), Association: reg.Snapshot})
 	if err != nil {
 		return err
-	}
-	if *maxRooms < 1 || *maxRooms > 32 {
-		return fmt.Errorf("max-rooms must be 1..32")
-	}
-	if (*cert == "") != (*key == "") {
-		return fmt.Errorf("tls-cert and tls-key must be provided together")
-	}
-	if !*development && *cert == "" {
-		return fmt.Errorf("TLS is required outside loopback development")
 	}
 	remote, err := content.OpenRemote(startup, *central, *development)
 	if err != nil {

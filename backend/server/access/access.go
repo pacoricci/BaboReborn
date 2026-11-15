@@ -64,9 +64,7 @@ func (m *Manager) now() time.Time {
 	}
 	return time.Now()
 }
-func (m *Manager) Available() bool { return true }
-func (m *Manager) Central() string { return m.config.Central }
-func (m *Manager) Origin() string  { return m.config.Origin }
+func (m *Manager) Origin() string { return m.config.Origin }
 
 var guestID = regexp.MustCompile(`^[a-f0-9]{32}$`)
 
@@ -147,9 +145,6 @@ func (m *Manager) CORS(next http.Handler) http.Handler {
 	})
 }
 func (m *Manager) RefreshKeys(ctx context.Context) error {
-	if !m.Available() {
-		return nil
-	}
 	req, err := http.NewRequestWithContext(ctx, "GET", m.config.Central+"/identity/v1/keys", nil)
 	if err != nil {
 		return err
@@ -210,9 +205,6 @@ func (m *Manager) Run(ctx context.Context) {
 	}
 }
 func (m *Manager) VerifyAccount(ctx context.Context, id string) error {
-	if !m.Available() {
-		return fmt.Errorf("central_not_configured")
-	}
 	request, err := http.NewRequestWithContext(ctx, "GET", m.config.Central+"/identity/v1/accounts/"+url.PathEscape(id), nil)
 	if err != nil {
 		return err

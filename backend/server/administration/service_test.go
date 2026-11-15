@@ -517,7 +517,7 @@ func TestExpiredIdentityOffersRecoveryWithoutGuestOrStaffPrivileges(t *testing.T
 	if err := json.Unmarshal(data, &result); err != nil {
 		t.Fatal(err)
 	}
-	if status != 401 || result["error"] != "authentication_expired" || result["loginAvailable"] != true || result["central"] != f.s.Access.Central() || result["subject"] != nil || result["role"] != nil {
+	if status != 401 || result["error"] != "authentication_expired" || result["subject"] != nil || result["role"] != nil {
 		t.Fatalf("expired identity recovery leaked or lost its boundary: %d %s", status, data)
 	}
 	if status, _ := f.request(t, expired, "GET", "/api/v1/admin/roles?guest="+guest, nil); status != 401 {

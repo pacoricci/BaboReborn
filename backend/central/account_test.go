@@ -3,6 +3,7 @@ package central
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"net/http"
 	"net/http/httptest"
@@ -24,6 +25,36 @@ func deleteAccountForm(s *Service, cookie, account, confirm, origin string) *htt
 	w := httptest.NewRecorder()
 	s.Handler().ServeHTTP(w, r)
 	return w
+}
+
+func TestSignOutEndsOtherTabsWithoutReportingAnExpiredSession(t *testing.T) {
+	s := testService(t)
+	for _, tc := range []struct {
+		name, cookie string
+		expired      bool
+	}{
+		{"guest", "", false},
+		{"signed out", signedOutMarker, false},
+		{"lapsed session", "stale-credential", true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			status, body := portalRequest(t, s, tc.cookie, "GET", "/api/v1/account", nil)
+			var state struct {
+				Expired bool `json:"expired"`
+			}
+			if err := json.Unmarshal(body, &state); err != nil || status != 200 || state.Expired != tc.expired {
+				t.Fatal(status, string(body), err)
+			}
+			_, page := portalRequest(t, s, tc.cookie, "GET", "/account?notice=signed_out", nil)
+			if strings.Contains(string(page), "Session expired") != tc.expired {
+				t.Fatal("account page misreports the ended session")
+			}
+			// Only a browser that held a session may end its other tabs.
+			if strings.Contains(string(page), `data-session-ended="true"`) != (tc.cookie != "") {
+				t.Fatal("unexpected session-ended broadcast marker")
+			}
+		})
+	}
 }
 
 func TestDeleteAccountRequiresSessionOriginAndMatchingConfirmation(t *testing.T) {

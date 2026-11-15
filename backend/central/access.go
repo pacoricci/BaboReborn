@@ -38,8 +38,7 @@ func (s *Service) accountState(w http.ResponseWriter, r *http.Request) {
 			identity.Error(w, http.StatusServiceUnavailable, "storage_unavailable")
 			return
 		}
-		_, cookieErr := r.Cookie("central_session")
-		identity.JSON(w, http.StatusOK, map[string]any{"account": "", "expired": cookieErr == nil, "loginAvailable": s.Verifier != nil})
+		identity.JSON(w, http.StatusOK, map[string]any{"account": "", "expired": lapsed(r), "loginAvailable": s.Verifier != nil})
 		return
 	}
 	identity.JSON(w, http.StatusOK, map[string]any{"account": current.Account, "expired": false, "loginAvailable": s.Verifier != nil})

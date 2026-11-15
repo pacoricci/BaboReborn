@@ -153,7 +153,6 @@ export async function readIdentity(signal?: AbortSignal): Promise<ServerIdentity
     return {
       subject: '',
       role: 'player',
-      loginAvailable: account?.loginAvailable === true,
       central: location.origin,
       expired: true,
     };

@@ -194,10 +194,6 @@ func (m *Manager) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		identity.JSON(w, http.StatusOK, map[string]any{"status": "ok", "protocol": gameconfig.ProtocolVersion})
 		return
 	}
-	if r.URL.Query().Get("rooms") == "1" {
-		identity.Error(w, http.StatusGone, "use_http_room_api")
-		return
-	}
 	m.mu.Lock()
 	room := m.rooms[r.URL.Query().Get("room")]
 	m.mu.Unlock()

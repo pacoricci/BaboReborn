@@ -46,6 +46,17 @@ func (s *Service) now() time.Time {
 	}
 	return time.Now().UTC()
 }
+
+// Sign-out replaces the credential with this marker: other tabs learn that the
+// session ended, without the portal reporting a deliberate sign-out as expired.
+const signedOutMarker = "signed-out"
+
+// lapsed reports a session that ended without a sign-out in this browser.
+func lapsed(r *http.Request) bool {
+	cookie, err := r.Cookie("central_session")
+	return err == nil && cookie.Value != signedOutMarker
+}
+
 func (s *Service) session(r *http.Request) (session, error) {
 	var result session
 	cookie, err := r.Cookie("central_session")
@@ -114,7 +125,7 @@ func (s *Service) Handler() http.Handler {
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		w.Header().Set("Cache-Control", "no-store")
 		if s.Development {
-			w.Header().Set("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' blob: https: wss: http://127.0.0.1:* http://localhost:* ws://127.0.0.1:* ws://localhost:*; img-src 'self' https: http://127.0.0.1:* http://localhost:* blob: data:; form-action 'self'; frame-ancestors 'none'")
+			w.Header().Set("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' blob: https: wss: http://127.0.0.1:* http://localhost:* ws://127.0.0.1:* ws://localhost:*; img-src 'self' https: http://127.0.0.1:* http://localhost:* blob: data:; worker-src 'self' blob:; form-action 'self'; frame-ancestors 'none'")
 		} else {
 			w.Header().Set("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' blob: https: wss:; img-src 'self' https: blob: data:; worker-src 'self' blob:; form-action 'self'; frame-ancestors 'none'")
 		}
@@ -187,7 +198,7 @@ func (s *Service) revoke(w http.ResponseWriter, r *http.Request, all bool) {
 		identity.Error(w, http.StatusServiceUnavailable, "storage_unavailable")
 		return
 	}
-	identity.Cookie(w, "central_session", "signed-out", !s.Development, int(identity.SessionLifetime.Seconds()))
+	identity.Cookie(w, "central_session", signedOutMarker, !s.Development, int(identity.SessionLifetime.Seconds()))
 	notice := "signed_out"
 	if all {
 		notice = "sessions_revoked"
