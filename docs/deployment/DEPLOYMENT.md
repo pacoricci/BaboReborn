@@ -26,6 +26,7 @@ architecture automatically. Set `CENTRAL_IMAGE` and `SERVER_IMAGE` to matching
 releases. Prefer the `namespace/image@sha256:...` references in each
 [GitHub Release](https://github.com/pacoricci/BaboReborn/releases)'s `images.txt`.
 These digests pin the multiarch indexes; the file also records the source commit.
+[`deploy.sh`](#automated-updates) sets both from a release.
 
 Set `.env` domains and ports. The defaults are `https://portal.example.org` and
 `https://game.example.org:8443`; registered origins must match the public scheme,
@@ -34,14 +35,15 @@ defaulting to `0.0.0.0`. Configure DNS and inbound access for both endpoints.
 
 ## Choose the database
 
-Central reads its connection URL from `secrets/central/database-url`. Choose one
-of the following helpers from `deploy/docker/` and use it for **all** startup,
-update, backup, restore, and shutdown commands for that installation.
+Central reads its connection URL from `secrets/central/database-url`. Select the
+Compose files with `COMPOSE_FILE` in `.env`: every `docker compose` command run
+from `deploy/docker/`, and [`deploy.sh`](#automated-updates), then uses the same
+files for startup, update, backup, restore, and shutdown.
 
 For **local PostgreSQL**, add the optional database file:
 
 ```sh
-dc() { docker compose --env-file .env -f compose.yaml -f compose.postgres.yaml "$@"; }
+COMPOSE_FILE=compose.yaml:compose.postgres.yaml
 ```
 
 This starts PostgreSQL 17 with a persistent volume and makes central wait for its
@@ -57,7 +59,7 @@ network; its port is not published to the host.
 For **external PostgreSQL**, including a managed service, use only the base file:
 
 ```sh
-dc() { docker compose --env-file .env -f compose.yaml "$@"; }
+COMPOSE_FILE=compose.yaml
 ```
 
 This creates no PostgreSQL container, database volume, or local database password
@@ -88,7 +90,7 @@ provider's version and URL options before deployment, and rehearse backup and
 restore. Supported URL query options are `host`, `port`, `sslmode`, `sslrootcert`,
 `sslcert`, `sslkey`, and `connect_timeout`; other options are rejected.
 
-An existing installation using the old all-in-one `compose.yaml` must now include
+An existing installation using the old all-in-one `compose.yaml` must now select
 `compose.postgres.yaml` to retain local PostgreSQL management. Keep the same
 `COMPOSE_PROJECT_NAME`, configuration, and volumes: their names are unchanged.
 Changing the URL alone does **not** migrate a database. To move existing data,
@@ -96,14 +98,14 @@ stop central, back up the source, restore to the destination using the maintenan
 procedure below, and preserve central's signing keys. Retain the source database
 until the destination is verified; never use `down -v` for this transition.
 
-For a standalone community host, use:
+For a standalone community host, with its own `.env` and `secrets/server/`, use:
 
 ```sh
-ds() { docker compose --env-file .env -f compose.server.yaml "$@"; }
+COMPOSE_FILE=compose.server.yaml
 ```
 
-Use `ds` with its own `.env` and `secrets/server/`, or `dc --profile community` to
-include a server on central's host with either database mode.
+To include a server on central's host instead, add `COMPOSE_PROFILES=community`
+to central's `.env`; it works with either database mode.
 
 ## Central secrets and first startup
 
@@ -125,14 +127,14 @@ both credential files empty; account-based ownership management is unavailable.
 
 Containers use UID/GID **10001:10001**. Grant that identity directory traversal
 and read access to mounted configuration and private keys without exposing secrets.
-Named application volumes mount at `/data`. With the selected `dc` helper:
+Named application volumes mount at `/data`. Then:
 
 ```sh
-dc config --quiet
-dc run --rm --no-deps central -data-dir /data -storage keygen
-dc up -d --wait --wait-timeout 120 central
-dc ps
-dc logs --tail=100 central
+docker compose config --quiet
+docker compose run --rm --no-deps central -data-dir /data -storage keygen
+docker compose up -d --wait --wait-timeout 120 central
+docker compose ps
+docker compose logs --tail=100 central
 ```
 
 Local PostgreSQL starts automatically as a dependency of central. For an external
@@ -196,14 +198,14 @@ contracts.
 4. Start the standalone service:
 
    ```sh
-   ds config --quiet
-   ds up -d server
-   ds logs --tail=100 server
+   docker compose config --quiet
+   docker compose up -d server
+   docker compose logs --tail=100 server
    ```
 
 5. Wait for association, public endpoint verification, and compatible publication
    in the portal, then configure rooms through management.
-6. Clear `PAIRING_CODE_FILE`, recreate with `ds up -d server`, and remove the
+6. Clear `PAIRING_CODE_FILE`, recreate with `docker compose up -d server`, and remove the
    consumed host file. Association persists in SQLite.
 
 For invalid/expired codes or installation recovery, generate a new code, replace
@@ -239,26 +241,25 @@ requests arrive from loopback.
 
 Stop the owning application before maintenance; keep the selected local or
 external PostgreSQL database available for central's dump/restore commands.
-Use the same `dc` helper and database URL as the running installation. Both
+Use the same `.env` and database URL as the running installation. Both
 services acquire exclusive leases, and central locks its database. Backups reject
 existing destinations.
 
-These commands use `dc` for central and `ds` for a standalone community. Replace
-`ds` with `dc --profile community` for a community managed by the main Compose
-file. Use new backup filenames each time.
+Run central's commands on its host and the community's on the host that runs it.
+Use new backup filenames each time.
 
 ```sh
-dc stop central
-dc run --rm --no-deps central -data-dir /data -storage backup -backup-file /data/central-backup.dump
-dc cp central:/data/central-backup.dump backups/central-backup.dump
-dc cp central:/data/signing.pem backups/signing.pem
-dc cp central:/data/keys.json backups/keys.json
-dc up -d central
+docker compose stop central
+docker compose run --rm --no-deps central -data-dir /data -storage backup -backup-file /data/central-backup.dump
+docker compose cp central:/data/central-backup.dump backups/central-backup.dump
+docker compose cp central:/data/signing.pem backups/signing.pem
+docker compose cp central:/data/keys.json backups/keys.json
+docker compose up -d central
 
-ds stop server
-ds run --rm --no-deps server -data-dir /data -storage backup -backup-file /data/server-backup.sqlite
-ds cp server:/data/server-backup.sqlite backups/server-backup.sqlite
-ds up -d server
+docker compose stop server
+docker compose run --rm --no-deps server -data-dir /data -storage backup -backup-file /data/server-backup.sqlite
+docker compose cp server:/data/server-backup.sqlite backups/server-backup.sqlite
+docker compose up -d server
 ```
 
 `cp` uses the stopped service containers and their shared volumes. Keep private,
@@ -267,12 +268,12 @@ producing release. Central dumps exclude signing keys. Community backups include
 association, roles, sanctions, and room configuration, but not live combat.
 
 To restore, stop the service, copy the backup to its container's
-`/data/restore.dump` or `/data/restore.sqlite` with `dc cp` or `ds cp`, and make it
+`/data/restore.dump` or `/data/restore.sqlite` with `docker compose cp`, and make it
 readable by UID 10001. Run the corresponding operation:
 
 ```sh
-dc run --rm --no-deps central -data-dir /data -storage restore -backup-file /data/restore.dump
-ds run --rm --no-deps server -data-dir /data -storage restore -backup-file /data/restore.sqlite
+docker compose run --rm --no-deps central -data-dir /data -storage restore -backup-file /data/restore.dump
+docker compose run --rm --no-deps server -data-dir /data -storage restore -backup-file /data/restore.sqlite
 ```
 
 Central takes a pre-restore dump and restores transactionally. Community validates
@@ -282,12 +283,83 @@ ownership preserved. Restart restored services; check health, association, rooms
 and browser entry. Rehearse recovery on a separate installation before relying on
 backups.
 
+## Automated updates
+
+Copy [`deploy.sh`](../../deploy/docker/deploy.sh) next to `.env` and run it with a
+published release; the same command rolls back to an older one:
+
+```sh
+./deploy.sh v0.3.0
+```
+
+It requires Bash, curl, Docker Compose, an explicit `COMPOSE_FILE`, and a user
+allowed to run Docker. For that release it:
+
+1. downloads the digests and source commit from `images.txt`, fetches the Compose
+   files from that immutable commit, validates the candidate configuration, then
+   pulls the images used by this host;
+2. stops running application services and backs up existing service state with
+   the current release to `backups/<UTC time>-before-<tag>/`, including central's keys,
+   `.env`, and the previous Compose files;
+3. sets `CENTRAL_IMAGE` and `SERVER_IMAGE`, starts with `--wait`, and checks
+   `CENTRAL_ORIGIN/healthz` when central runs on the host;
+4. on failure, restores the previous `.env` and Compose files and restarts the
+   previous release.
+
+A release that changed the database schema may not restart after a failure; then
+restore the backup it took. `.deploy/history` records each outcome. Backups are
+neither pruned nor copied off-host.
+
+The release workflow calls [Deploy](../../.github/workflows/deploy.yml) after
+publication when the repository variable `DEPLOY_ENABLED` is `true`. It updates
+central first. Set the repository variable `DEPLOY_COMMUNITY_ENABLED=true` to
+also deploy community after central succeeds; otherwise that host is left
+unchanged. The whole rollout is serialized, including manual deployments. A community failure rolls
+back that host; central stays on the new release. Fix the failure and rerun Deploy
+with the same tag, or explicitly deploy the previous release to the enabled hosts.
+
+Create the `production-central` GitHub environment, and `production-community`
+only if community deployment is enabled. Configure these values separately in
+**each enabled environment**:
+
+| Setting              | Type     | Value                                                              |
+| -------------------- | -------- | ------------------------------------------------------------------ |
+| `DEPLOY_HOST`        | Variable | Host name or address.                                              |
+| `DEPLOY_PORT`        | Variable | SSH port; defaults to 22.                                          |
+| `DEPLOY_USER`        | Variable | Dedicated user allowed to run Docker.                              |
+| `DEPLOY_PATH`        | Variable | Absolute installation directory containing `.env`.                 |
+| `DEPLOY_KNOWN_HOSTS` | Variable | Host keys verified against the operator's trusted SSH connection.  |
+| `DEPLOY_SSH_KEY`     | Secret   | Passphrase-free private key used only for this host's deployments. |
+
+The deployment user must own the installation directory, `.env`, Compose files,
+and backup directory. Keep `.env` and backups private. Docker access grants
+administrative control of the host; use separate deployment keys and disable SSH
+forwarding for them. Keep application secrets readable by container UID 10001.
+Configure environment deployment policies to allow release tags and the trusted
+`main` branch used for manual runs. Required reviewers are optional when an
+approval step is desired.
+
+From Actions, run **Deploy** with a published `release_tag` to retry or roll back
+without publishing images again. This workflow becomes available after merging
+to the default branch. It deliberately accepts explicit versions rather than
+tracking a mutable `latest` image tag.
+
+For existing installations, set `COMPOSE_FILE` in `.env`, retain the same project
+name and volumes, and install `compose.postgres.yaml` before selecting it for a
+local database. Retire the previous updater (for example,
+`systemctl disable --now baboreborn-update.timer` on the coordinator) before the
+first controlled deployment. If that updater also deployed community, disabling
+it retires those updates too; keep community releases coordinated manually when
+its Actions job is disabled. Two updaters would race and bypass this workflow's
+backup and rollback. Keep the old updater files until the replacement is verified.
+
 ## Updates and troubleshooting
 
-Back up state and record image digests before updating. Build or fetch matching
-central/community images, update image settings, and recreate affected services.
-Reload clients after contract changes. Recovery requires compatible images,
-database schemas, and central keys. Preserve volumes; `down -v` deletes them.
+Without `deploy.sh`, back up state and record image digests before updating. Build
+or fetch matching central/community images, update image settings, and recreate
+affected services. Reload clients after contract changes. Recovery requires
+compatible images, database schemas, and central keys. Preserve volumes; `down -v`
+deletes them.
 
 | Symptom                             | Check                                                                                 |
 | ----------------------------------- | ------------------------------------------------------------------------------------- |

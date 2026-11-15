@@ -17,6 +17,7 @@ backend/web/portal/
 !.env.*.template
 secrets/
 .secrets/
+.deploy/
 *.key
 *.pem
 *.p12

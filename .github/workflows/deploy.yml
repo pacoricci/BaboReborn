@@ -1,0 +1,37 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Published stable release to deploy (vMAJOR.MINOR.PATCH)
+        type: string
+        required: true
+  workflow_call:
+    inputs:
+      release_tag:
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+# Keep the complete central/community rollout together, including manual retries.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  central:
+    uses: ./.github/workflows/deploy-host.yml
+    with:
+      environment_name: production-central
+      release_tag: ${{ inputs.release_tag }}
+
+  community:
+    needs: central
+    if: vars.DEPLOY_COMMUNITY_ENABLED == 'true'
+    uses: ./.github/workflows/deploy-host.yml
+    with:
+      environment_name: production-community
+      release_tag: ${{ inputs.release_tag }}
