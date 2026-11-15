@@ -186,6 +186,11 @@ including `status`, `installed`, `recommended`, `checkedAt`, `differences` and
 `notesUrl`. Release metadata is diagnostic; admission depends on the verified
 contracts.
 
+The recommended release is also public at `GET /api/v1/release`, as
+`{"version":"X.Y.Z","notesUrl":"..."}`; local builds report `dev`. Community
+updaters [follow it](#follow-central-on-a-community-host) rather than the newest
+published release, whose contracts the running central may not admit yet.
+
 ## Associate a community server
 
 1. Prepare `secrets/server/fullchain.pem` and `secrets/server/privkey.pem` for the
@@ -232,7 +237,12 @@ TLS terminates in each Go process and is required outside loopback development.
 Proxies must preserve HTTPS/WSS, WebSocket upgrades, and canonical origins. Renew
 certificates externally and restart affected services to load them.
 
-`/metrics` is public and exposes aggregate room counters. `/diagnostics` requires
+The community `/health` response includes `humans`, the current connected players and
+spectators across rooms, excluding bots. The updater uses an authenticated
+`POST /maintenance/drain` to check this count and close admission atomically;
+it returns `204` when empty or `409` while occupied. `DELETE` reopens admission.
+Each serving process writes a fresh private curl header file, `updater-auth`,
+inside its data directory. `/metrics` is public and exposes aggregate room counters. `/diagnostics` requires
 `-diagnostics` and accepts only loopback requests without an `Origin` inside the
 container namespace. Keep it disabled behind same-host proxies, whose forwarded
 requests arrive from loopback.
@@ -357,6 +367,39 @@ first controlled deployment. If that updater also deployed community, disabling
 it retires those updates too; keep community releases coordinated manually when
 its Actions job is disabled. Two updaters would race and bypass this workflow's
 backup and rollback. Keep the old updater files until the replacement is verified.
+
+### Follow central on a community host
+
+Operators of standalone community hosts, including third parties, can opt in to
+updates that track the central they are associated with. Nothing outside the
+host can trigger them. Download `deploy.sh` and the systemd units from a release
+that includes them, then enable the timer for the installation directory:
+
+```sh
+base=https://raw.githubusercontent.com/pacoricci/BaboReborn/v0.3.0/deploy/docker
+curl -fsSL -o /opt/baboreborn/deploy.sh "$base/deploy.sh"
+chmod 700 /opt/baboreborn/deploy.sh
+sudo curl -fsSL -o '/etc/systemd/system/baboreborn-follow@.service' "$base/systemd/baboreborn-follow@.service"
+sudo curl -fsSL -o '/etc/systemd/system/baboreborn-follow@.timer' "$base/systemd/baboreborn-follow@.timer"
+sudo systemctl daemon-reload
+sudo systemctl enable --now "baboreborn-follow@$(systemd-escape --path /opt/baboreborn).timer"
+```
+
+Every 15 minutes, `./deploy.sh --follow` reads the release from
+`CENTRAL_ORIGIN/api/v1/release`. When it differs from the installed one, it asks
+the server to close admission only if no humans are connected, then deploys it
+as above, with backup and rollback, and replaces itself with that release's
+`deploy.sh`. Failed or unrecognized drain responses defer the update. Aborted
+deployments reopen admission; restarting the process also reopens it. Servers
+without authenticated drain support need one manual update before following.
+Runs that find the host current log
+nothing; `journalctl -u 'baboreborn-follow@*'` shows the rest.
+
+The units run as root; add `User=` with `systemctl edit` to use a deployment user
+that owns the installation and may run Docker. Disable the timer to pause updates;
+`./deploy.sh vX.Y.Z` still deploys a chosen release manually, and the next timer
+run returns the host to central's release. Do not enable it on central's host or
+on a community host deployed by Actions.
 
 ## Updates and troubleshooting
 

@@ -1,0 +1,10 @@
+# Deploys the release the community host's central runs, once its rooms are empty.
+# The instance is the escaped installation path: systemd-escape --path /opt/baboreborn
+[Unit]
+Description=Follow the BaboReborn central release for %f
+Wants=network-online.target
+After=network-online.target docker.service
+
+[Service]
+Type=oneshot
+ExecStart=%f/deploy.sh --follow

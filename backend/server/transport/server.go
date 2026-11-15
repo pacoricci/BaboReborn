@@ -62,6 +62,7 @@ type registration struct {
 }
 type Server struct {
 	done            chan struct{}
+	humans          atomic.Int32
 	retirement      atomic.Pointer[roomClosure]
 	ContentRevision string
 	origin          string

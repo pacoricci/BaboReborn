@@ -1,8 +1,10 @@
 package central
 
 import (
+	"net/http"
 	"time"
 
+	"baboreborn/backend/identity"
 	"baboreborn/backend/registry"
 	"baboreborn/backend/release"
 )
@@ -69,4 +71,10 @@ func (s *Service) serverRelease(d registry.Descriptor) releaseStatus {
 		result.Status = "compatible"
 	}
 	return result
+}
+
+// Community updaters follow the running central rather than the newest published
+// release, which may carry contracts this central does not accept yet.
+func currentRelease(w http.ResponseWriter, _ *http.Request) {
+	identity.JSON(w, http.StatusOK, map[string]string{"version": release.Version, "notesUrl": release.Notes(release.Version)})
 }

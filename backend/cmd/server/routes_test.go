@@ -18,6 +18,7 @@ func TestRoutesServeDiagnosticsOnlyWhenEnabled(t *testing.T) {
 		{"/diagnostics", true, http.StatusTeapot},
 		{"/ws", false, http.StatusTeapot},
 		{"/health", false, http.StatusTeapot},
+		{"/maintenance/drain", false, http.StatusTeapot},
 		{"/metrics", false, http.StatusTeapot},
 		{"/latency", false, http.StatusAccepted},
 		{"/unknown", true, http.StatusNotFound},
